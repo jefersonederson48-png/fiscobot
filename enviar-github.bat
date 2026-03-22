@@ -18,8 +18,8 @@ git remote remove origin 2>nul
 echo Configurando o link do seu GitHub...
 git remote add origin https://github.com/jefersonederson48-png/fiscobot.git
 
-echo Enviando os arquivos para a nuvem...
-git push -u origin main
+echo Enviando os arquivos para a nuvem de forma forçada...
+git push -u origin main --force
 
 echo ==============================================
 echo Sucesso! Tudo foi enviado para o GitHub.
