@@ -25,6 +25,9 @@ const { IpFilter } = require('express-ipfilter');
 
 app.use(express.json({ limit:'10mb' }));
 
+// Rota de Saude (Health Check) - Deve vir ANTES do Filtro de IP para a nuvem conseguir monitorar
+app.get('/api/health', (_, r) => r.json({ status: 'ok', uptime: process.uptime() }));
+
 // Lista de IPs permitidos (incluindo Localhost, redes locais e os solicitados)
 const allowedIps = [
   '127.0.0.1', '::1', '::ffff:127.0.0.1',
@@ -34,9 +37,6 @@ const allowedIps = [
 app.use(IpFilter(allowedIps, { mode: 'allow', log: false }));
 
 app.use(express.static(path.join(__dirname,'public')));
-
-// Rota de Saude (Health Check)
-app.get('/api/health', (_, r) => r.json({ status: 'ok', uptime: process.uptime() }));
 
 // Garante pastas de dados
 [DATA_DIR, CERT_DIR].forEach(d => {
