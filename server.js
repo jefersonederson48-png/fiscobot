@@ -25,8 +25,12 @@ const { IpFilter } = require('express-ipfilter');
 
 app.use(express.json({ limit:'10mb' }));
 
-// Lista de IPs permitidos (incluindo Localhost e os solicitados)
-const allowedIps = ['127.0.0.1', '::1', '::ffff:127.0.0.1', '74.220.48.0/24', '74.220.56.0/24'];
+// Lista de IPs permitidos (incluindo Localhost, redes locais e os solicitados)
+const allowedIps = [
+  '127.0.0.1', '::1', '::ffff:127.0.0.1',
+  '192.168.0.0/16', '10.0.0.0/8', '172.16.0.0/12', // Redes LAN
+  '74.220.48.0/24', '74.220.56.0/24'
+];
 app.use(IpFilter(allowedIps, { mode: 'allow', log: false }));
 
 app.use(express.static(path.join(__dirname,'public')));
