@@ -35,6 +35,9 @@ app.use(IpFilter(allowedIps, { mode: 'allow', log: false }));
 
 app.use(express.static(path.join(__dirname,'public')));
 
+// Rota de Saude (Health Check)
+app.get('/api/health', (_, r) => r.json({ status: 'ok', uptime: process.uptime() }));
+
 // Garante pastas de dados
 [DATA_DIR, CERT_DIR].forEach(d => {
   if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });

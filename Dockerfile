@@ -1,19 +1,16 @@
-FROM node:18
+FROM node:20-slim
 
-# Cria o diretório do aplicativo dentro do container
+# Instala ferramentas básicas se necessário
+RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /usr/src/app
 
-# Copia os arquivos de configuração de dependências
 COPY package*.json ./
-
-# Instala apenas dependências principais (ignorando o Electron que só serve pro PC local)
 RUN npm install --omit=dev
 
-# Copia todo o resto do código da sua máquina para o container
 COPY . .
 
-# Expõe a porta que o FiscoBot usa
+# A porta do Render é dinâmica via PORT, mas o app usa 3737 como default
 EXPOSE 3737
 
-# Comando para iniciar o servidor
-CMD [ "node", "server.js" ]
+CMD [ "npm", "start" ]
