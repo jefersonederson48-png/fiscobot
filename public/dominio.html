@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FiscoBot × Domínio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060c17;--bg2:#090f1c;--bg3:#0d1628;
+  --panel:rgba(11,20,37,.95);--panel2:rgba(13,24,44,.98);
+  --border:rgba(140,168,220,.1);--borderem:rgba(201,168,76,.3);
+  --gold:#c9a84c;--gold2:#e2c46a;--golddim:rgba(201,168,76,.1);
+  --teal:#0d8a8a;--teal2:#0fb3b3;--tealdim:rgba(13,138,138,.12);
+  --tealborder:rgba(13,138,138,.3);
+  --t1:#e8f0ff;--t2:#7a95c0;--t3:#3f5070;--t4:#2a3a55;
+  --green:#34d399;--greendim:rgba(52,211,153,.12);
+  --yellow:#fbbf24;--yellowdim:rgba(251,191,36,.1);
+  --red:#f87171;--reddim:rgba(248,113,113,.1);
+  --blue:#60a5fa;--bluedim:rgba(96,165,250,.1);
+  --ff:'Syne',sans-serif;--fm:'IBM Plex Mono',monospace;
+  --r:12px;--rl:16px;
+  --shadow:0 24px 64px rgba(0,0,0,.4);
+}
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:var(--ff);background:var(--bg);color:var(--t1);
+  display:flex;flex-direction:column;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% 0%,rgba(13,138,138,.08),transparent 60%),
+    radial-gradient(ellipse 40% 60% at 90% 90%,rgba(201,168,76,.06),transparent 50%);
+}
+
+/* ── Top bar (Domínio-style) ─────────────────────── */
+#topbar{
+  height:48px;background:rgba(6,30,30,.98);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;
+  padding:0 20px;gap:0;flex-shrink:0;
+  backdrop-filter:blur(20px);position:relative;
+}
+#topbar::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(13,179,179,.4) 30%,rgba(201,168,76,.3) 70%,transparent);
+}
+.topbar-brand{
+  display:flex;align-items:center;gap:10px;
+  padding-right:20px;border-right:1px solid rgba(255,255,255,.08);
+  margin-right:4px;
+}
+.tb-ico{
+  width:32px;height:32px;background:linear-gradient(135deg,var(--teal),var(--teal2));
+  border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:800;color:#fff;flex-shrink:0;
+  box-shadow:0 0 16px rgba(13,138,138,.4);
+}
+.topbar-brand span{font-size:14px;font-weight:800;color:var(--t1);letter-spacing:-.2px}
+.topbar-brand small{font-size:9.5px;color:var(--t3);font-family:var(--fm);display:block;margin-top:1px}
+
+.tb-nav{display:flex;align-items:center;gap:2px;flex:1}
+.tb-nav-btn{
+  display:flex;align-items:center;gap:6px;
+  padding:6px 12px;border-radius:8px;
+  border:none;background:transparent;
+  color:var(--t2);font-size:12px;font-weight:600;
+  font-family:var(--ff);cursor:pointer;transition:all .15s;
+  white-space:nowrap;
+}
+.tb-nav-btn:hover{background:rgba(255,255,255,.06);color:var(--t1)}
+.tb-nav-btn.active{background:var(--tealdim);color:var(--teal2);border:1px solid var(--tealborder)}
+
+.tb-right{
+  display:flex;align-items:center;gap:8px;
+  padding-left:16px;border-left:1px solid rgba(255,255,255,.08);
+}
+.tb-info{text-align:right}
+.tb-info .tb-user{font-size:11.5px;font-weight:700;color:var(--t1)}
+.tb-info .tb-company{font-size:10px;color:var(--t3);font-family:var(--fm)}
+.tb-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--green);box-shadow:0 0 8px var(--green);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.7;transform:scale(1.15)}}
+
+/* ── Layout ──────────────────────────────────────── */
+#body{display:flex;flex:1;overflow:hidden}
+
+/* ── Left panel ──────────────────────────────────── */
+#leftPanel{
+  width:64px;flex-shrink:0;
+  background:rgba(6,20,20,.95);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;align-items:center;
+  padding:12px 0;gap:6px;
+  position:relative;
+}
+#leftPanel::after{
+  content:'';position:absolute;right:0;top:10%;bottom:10%;
+  width:1px;background:linear-gradient(180deg,transparent,rgba(13,138,138,.3) 50%,transparent);
+}
+.lp-btn{
+  width:42px;height:42px;border-radius:10px;border:1px solid transparent;
+  background:transparent;color:var(--t3);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;transition:all .18s;position:relative;
+}
+.lp-btn:hover{background:var(--tealdim);color:var(--teal2);border-color:var(--tealborder)}
+.lp-btn.active{background:var(--tealdim);color:var(--teal2);border-color:var(--tealborder)}
+.lp-sep{width:28px;height:1px;background:var(--border);margin:4px 0}
+
+/* ── Main area ───────────────────────────────────── */
+#main{
+  flex:1;overflow-y:auto;overflow-x:hidden;
+  padding:24px 28px;display:flex;flex-direction:column;gap:20px;
+}
+#main::-webkit-scrollbar{width:4px}
+#main::-webkit-scrollbar-thumb{background:var(--t4);border-radius:99px}
+
+/* ── Right panel (quick tools) ───────────────────── */
+#rightPanel{
+  width:52px;flex-shrink:0;
+  background:rgba(6,20,20,.95);
+  border-left:1px solid var(--border);
+  display:flex;flex-direction:column;align-items:center;
+  padding:16px 0;gap:8px;position:relative;
+}
+.rp-btn{
+  width:34px;height:34px;border-radius:9px;border:1px solid transparent;
+  background:transparent;color:var(--t3);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;transition:all .18s;position:relative;
+}
+.rp-btn:hover{background:rgba(255,255,255,.06);color:var(--t1);border-color:var(--border)}
+.rp-badge{
+  position:absolute;top:-4px;right:-4px;
+  background:#f59e0b;color:#1a0a00;
+  font-size:8px;font-weight:800;
+  border-radius:99px;padding:1px 4px;font-family:var(--fm);
+  line-height:1.4;
+}
+
+/* ── Status bar ──────────────────────────────────── */
+#statusbar{
+  height:34px;background:rgba(4,16,16,.98);
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;
+  padding:0 16px;gap:16px;flex-shrink:0;
+  font-size:11px;font-family:var(--fm);
+  position:relative;
+}
+#statusbar::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(13,138,138,.3) 50%,transparent);
+}
+.sb-module{
+  display:flex;align-items:center;gap:6px;
+  color:var(--t3);cursor:pointer;transition:color .15s;padding:2px 6px;
+  border-radius:5px;
+}
+.sb-module:hover{color:var(--t1);background:rgba(255,255,255,.04)}
+.sb-module .sb-dot{
+  width:7px;height:7px;border-radius:50%;flex-shrink:0;
+}
+.sb-module .sb-dot.on{background:var(--green);box-shadow:0 0 5px var(--green)}
+.sb-module .sb-dot.warn{background:var(--yellow)}
+.sb-module .sb-dot.off{background:var(--t4)}
+.sb-sep{width:1px;height:18px;background:var(--border)}
+.sb-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+
+/* ── Secção hero ─────────────────────────────────── */
+.hero-strip{
+  display:flex;align-items:center;gap:20px;
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:var(--rl);padding:20px 24px;
+  position:relative;overflow:hidden;box-shadow:var(--shadow);
+}
+.hero-strip::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 100% at 0% 50%,rgba(13,138,138,.08),transparent);
+  pointer-events:none;
+}
+.hero-strip::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(13,179,179,.5) 30%,rgba(201,168,76,.3) 70%,transparent);
+}
+.hero-ico{
+  width:52px;height:52px;background:linear-gradient(135deg,var(--teal),var(--teal2));
+  border-radius:14px;display:flex;align-items:center;justify-content:center;
+  font-size:22px;box-shadow:0 0 28px rgba(13,138,138,.35);flex-shrink:0;
+}
+.hero-txt h2{font-size:18px;font-weight:800;letter-spacing:-.4px;margin-bottom:4px}
+.hero-txt p{font-size:12px;color:var(--t2);line-height:1.6}
+.hero-stats{
+  margin-left:auto;display:flex;gap:20px;flex-shrink:0;
+}
+.hero-stat{text-align:center}
+.hero-stat .val{font-size:28px;font-weight:800;letter-spacing:-1px;line-height:1;color:var(--t1)}
+.hero-stat .lbl{font-size:9.5px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;font-family:var(--fm);margin-top:4px}
+
+/* ── Módulos Domínio ─────────────────────────────── */
+.modules-grid{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:12px;
+}
+.module-card{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:var(--rl);padding:18px 14px;
+  cursor:pointer;transition:all .2s;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  position:relative;overflow:hidden;text-align:center;
+}
+.module-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 0%,rgba(13,138,138,.08),transparent 70%);
+  opacity:0;transition:opacity .2s;
+}
+.module-card:hover{
+  border-color:var(--tealborder);
+  box-shadow:0 8px 32px rgba(13,138,138,.15);
+  transform:translateY(-2px);
+}
+.module-card:hover::before{opacity:1}
+.module-card:active{transform:translateY(0)}
+.module-ico{
+  width:40px;height:40px;border-radius:11px;
+  background:var(--tealdim);border:1px solid var(--tealborder);
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+  transition:all .2s;
+}
+.module-card:hover .module-ico{background:rgba(13,138,138,.2);box-shadow:0 0 16px rgba(13,138,138,.3)}
+.module-name{font-size:11.5px;font-weight:700;color:var(--t1);line-height:1.3}
+.module-desc{font-size:10px;color:var(--t3);font-family:var(--fm)}
+.module-status{
+  position:absolute;top:10px;right:10px;
+  width:6px;height:6px;border-radius:50%;
+  background:var(--green);box-shadow:0 0 5px var(--green);
+}
+
+/* ── Automações grid ─────────────────────────────── */
+.section-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:14px;
+}
+.section-title{font-size:13px;font-weight:800;color:var(--t1);letter-spacing:-.2px}
+.section-sub{font-size:11px;color:var(--t3);margin-top:2px}
+
+.automacoes-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+.auto-card{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:var(--rl);padding:16px 18px;
+  cursor:pointer;transition:all .2s;
+  position:relative;overflow:hidden;
+}
+.auto-card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--teal),var(--teal2));
+  transform:scaleX(0);transform-origin:left;transition:transform .25s;
+}
+.auto-card:hover{border-color:var(--tealborder);background:rgba(13,138,138,.05)}
+.auto-card:hover::after{transform:scaleX(1)}
+.auto-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
+.auto-ico-wrap{
+  width:36px;height:36px;border-radius:9px;
+  background:var(--tealdim);border:1px solid var(--tealborder);
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+}
+.auto-badge{
+  font-size:9px;font-weight:700;padding:2px 7px;border-radius:99px;
+  font-family:var(--fm);text-transform:uppercase;letter-spacing:.5px;
+  border:1px solid transparent;
+}
+.auto-badge.novo{background:var(--golddim);color:var(--gold);border-color:var(--borderem)}
+.auto-badge.ok{background:var(--greendim);color:var(--green);border-color:rgba(52,211,153,.25)}
+.auto-badge.beta{background:var(--bluedim);color:var(--blue);border-color:rgba(96,165,250,.25)}
+.auto-name{font-size:13px;font-weight:800;color:var(--t1);margin-bottom:4px;letter-spacing:-.2px}
+.auto-desc{font-size:11.5px;color:var(--t2);line-height:1.6}
+.auto-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:12px;padding-top:10px;border-top:1px solid var(--border);
+}
+.auto-meta{font-size:10px;color:var(--t3);font-family:var(--fm)}
+.auto-btn{
+  display:flex;align-items:center;gap:5px;
+  padding:5px 12px;border-radius:7px;border:none;
+  background:var(--tealdim);border:1px solid var(--tealborder);
+  color:var(--teal2);font-size:11px;font-weight:700;
+  font-family:var(--ff);cursor:pointer;transition:all .15s;
+}
+.auto-btn:hover{background:rgba(13,138,138,.2)}
+
+/* ── Painel split ────────────────────────────────── */
+.split{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}
+.panel{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:var(--rl);padding:18px 20px;box-shadow:var(--shadow);
+}
+.panel-hd{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border);
+}
+.panel-hd h3{font-size:13px;font-weight:800;letter-spacing:-.2px;margin-bottom:3px}
+.panel-hd p{font-size:11px;color:var(--t3)}
+
+/* ── Log de atividades ───────────────────────────── */
+.log-list{display:flex;flex-direction:column;gap:8px}
+.log-row{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:10px 12px;border-radius:10px;
+  background:var(--panel2);border:1px solid var(--border);
+  transition:border-color .15s;
+}
+.log-row:hover{border-color:var(--tealborder)}
+.log-ico{
+  width:28px;height:28px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;font-size:12px;
+  flex-shrink:0;border:1px solid transparent;
+}
+.log-ico.ok{background:var(--greendim);border-color:rgba(52,211,153,.2)}
+.log-ico.warn{background:var(--yellowdim);border-color:rgba(251,191,36,.2)}
+.log-ico.err{background:var(--reddim);border-color:rgba(248,113,113,.2)}
+.log-ico.info{background:var(--bluedim);border-color:rgba(96,165,250,.2)}
+.log-body{flex:1;min-width:0}
+.log-title{font-size:12px;font-weight:700;color:var(--t1);margin-bottom:2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.log-meta{font-size:10.5px;color:var(--t3);font-family:var(--fm)}
+.log-time{font-size:9.5px;color:var(--t4);font-family:var(--fm);flex-shrink:0;margin-top:2px}
+
+/* ── Status conexão ──────────────────────────────── */
+.conn-card{
+  background:var(--panel2);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;
+  display:flex;align-items:center;gap:12px;margin-bottom:8px;
+  transition:border-color .15s;
+}
+.conn-card:hover{border-color:var(--tealborder)}
+.conn-ico{
+  width:34px;height:34px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;font-size:15px;
+  flex-shrink:0;
+}
+.conn-ico.teal{background:var(--tealdim);border:1px solid var(--tealborder)}
+.conn-ico.gold{background:var(--golddim);border:1px solid var(--borderem)}
+.conn-ico.green{background:var(--greendim);border:1px solid rgba(52,211,153,.25)}
+.conn-info{flex:1}
+.conn-name{font-size:12px;font-weight:700;color:var(--t1);margin-bottom:2px}
+.conn-detail{font-size:10.5px;color:var(--t3);font-family:var(--fm)}
+.conn-status{
+  font-size:9.5px;font-weight:700;padding:3px 8px;border-radius:99px;
+  font-family:var(--fm);text-transform:uppercase;letter-spacing:.5px;
+}
+.conn-status.on{background:var(--greendim);color:var(--green);border:1px solid rgba(52,211,153,.2)}
+.conn-status.off{background:var(--reddim);color:var(--red);border:1px solid rgba(248,113,113,.2)}
+.conn-status.warn{background:var(--yellowdim);color:var(--yellow);border:1px solid rgba(251,191,36,.2)}
+
+/* ── Botões ──────────────────────────────────────── */
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 15px;border-radius:9px;border:none;
+  font-size:12px;font-weight:700;font-family:var(--ff);cursor:pointer;
+  color:var(--t1);transition:all .15s;white-space:nowrap;
+}
+.btn-teal{background:linear-gradient(135deg,var(--teal),var(--teal2));color:#fff;box-shadow:0 4px 16px rgba(13,138,138,.3)}
+.btn-teal:hover{box-shadow:0 6px 24px rgba(13,138,138,.45);transform:translateY(-1px)}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--t2)}
+.btn-ghost:hover{border-color:var(--tealborder);color:var(--teal2);background:var(--tealdim)}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#06100a}
+.btn-gold:hover{box-shadow:0 4px 20px rgba(201,168,76,.35);transform:translateY(-1px)}
+.btn:active{transform:scale(.98)}
+
+/* ── Toast ───────────────────────────────────────── */
+#toast{
+  position:fixed;bottom:50px;left:50%;
+  transform:translateX(-50%) translateY(8px);
+  background:var(--panel2);border:1px solid var(--tealborder);
+  color:var(--t1);padding:8px 18px;border-radius:99px;
+  font-size:12px;font-weight:600;opacity:0;pointer-events:none;
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:999;
+  font-family:var(--ff);box-shadow:var(--shadow);white-space:nowrap;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.gold{border-color:var(--borderem);color:var(--gold)}
+
+/* ── Modal de automação ──────────────────────────── */
+#autoModal{
+  position:fixed;inset:0;background:rgba(3,8,18,.75);
+  backdrop-filter:blur(8px);z-index:200;
+  display:none;align-items:center;justify-content:center;
+}
+#autoModal.open{display:flex}
+.modal-box{
+  width:480px;max-height:80vh;overflow-y:auto;
+  background:var(--panel);border:1px solid var(--tealborder);
+  border-radius:18px;box-shadow:var(--shadow);
+  animation:popIn .2s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes popIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+.modal-head{
+  padding:20px 22px 16px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.modal-head h3{font-size:15px;font-weight:800}
+.modal-close{
+  width:28px;height:28px;border-radius:7px;border:1px solid var(--border);
+  background:transparent;color:var(--t3);cursor:pointer;font-size:14px;
+  display:flex;align-items:center;justify-content:center;transition:all .15s;
+}
+.modal-close:hover{border-color:rgba(248,113,113,.4);color:var(--red)}
+.modal-body{padding:20px 22px}
+.modal-field{margin-bottom:14px}
+.modal-field label{display:block;font-size:10.5px;font-weight:700;color:var(--t3);
+  text-transform:uppercase;letter-spacing:1px;font-family:var(--fm);margin-bottom:6px}
+.modal-field input,.modal-field select,.modal-field textarea{
+  width:100%;background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--r);padding:9px 12px;color:var(--t1);
+  font-size:12.5px;font-family:var(--ff);outline:none;transition:border-color .2s;
+}
+.modal-field input:focus,.modal-field select:focus,.modal-field textarea:focus{border-color:var(--tealborder)}
+.modal-field textarea{resize:vertical;min-height:80px}
+.modal-foot{padding:14px 22px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
+
+/* ── Animações ───────────────────────────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.hero-strip{animation:fadeUp .35s ease both}
+.modules-grid .module-card:nth-child(1){animation:fadeUp .3s .04s ease both}
+.modules-grid .module-card:nth-child(2){animation:fadeUp .3s .08s ease both}
+.modules-grid .module-card:nth-child(3){animation:fadeUp .3s .12s ease both}
+.modules-grid .module-card:nth-child(4){animation:fadeUp .3s .16s ease both}
+.modules-grid .module-card:nth-child(5){animation:fadeUp .3s .20s ease both}
+.modules-grid .module-card:nth-child(6){animation:fadeUp .3s .24s ease both}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header id="topbar">
+  <div class="topbar-brand">
+    <div class="tb-ico">D</div>
+    <div>
+      <span>Domínio Sistemas</span>
+      <small>via FiscoBot Pro</small>
+    </div>
+  </div>
+
+  <nav class="tb-nav">
+    <button class="tb-nav-btn active" data-tab="dashboard">▦ Dashboard</button>
+    <button class="tb-nav-btn" data-tab="automacoes">⚙ Automações</button>
+    <button class="tb-nav-btn" data-tab="exportacao">📤 Exportação</button>
+    <button class="tb-nav-btn" data-tab="configuracoes">⚙ Configurar</button>
+  </nav>
+
+  <div class="tb-right">
+    <div class="tb-info">
+      <div class="tb-user" id="tbUser">FiscoBot Pro</div>
+      <div class="tb-company" id="tbCompany">Integração ativa</div>
+    </div>
+    <div class="tb-dot" id="connDot"></div>
+  </div>
+</header>
+
+<!-- BODY -->
+<div id="body">
+
+  <!-- LEFT PANEL (Domínio-style icon rail) -->
+  <div id="leftPanel">
+    <button class="lp-btn active" title="Dashboard">▦</button>
+    <button class="lp-btn" title="Empresas">🏢</button>
+    <button class="lp-btn" title="Fiscal">📋</button>
+    <button class="lp-btn" title="Contábil">📊</button>
+    <button class="lp-btn" title="Pessoal">👥</button>
+    <div class="lp-sep"></div>
+    <button class="lp-btn" title="Lupa / Pesquisa">🔍</button>
+    <button class="lp-btn" title="Downloads">⬇</button>
+    <div class="lp-sep"></div>
+    <button class="lp-btn" title="Configurações" style="margin-top:auto">⚙</button>
+  </div>
+
+  <!-- MAIN -->
+  <main id="main">
+
+    <!-- Hero -->
+    <div class="hero-strip">
+      <div class="hero-ico">🔗</div>
+      <div class="hero-txt">
+        <h2>FiscoBot × Domínio Sistemas</h2>
+        <p>Automação inteligente integrada ao seu sistema contábil. Exporte dados, execute macros e confira NF-e sem sair do fluxo.</p>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="val" id="statModules">6</div>
+          <div class="lbl">Módulos</div>
+        </div>
+        <div class="hero-stat">
+          <div class="val" id="statAuto">5</div>
+          <div class="lbl">Automações</div>
+        </div>
+        <div class="hero-stat">
+          <div class="val" id="statStatus">OK</div>
+          <div class="lbl">Status</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Módulos Domínio -->
+    <div>
+      <div class="section-header">
+        <div>
+          <div class="section-title">Módulos Domínio</div>
+          <div class="section-sub">Acesso rápido integrado ao sistema</div>
+        </div>
+        <button class="btn btn-ghost" id="btnAbrirDominio">Abrir Domínio</button>
+      </div>
+      <div class="modules-grid">
+        <div class="module-card" data-module="fiscal">
+          <div class="module-status"></div>
+          <div class="module-ico">📋</div>
+          <div class="module-name">Fiscal</div>
+          <div class="module-desc">Entradas · Saídas · SPED</div>
+        </div>
+        <div class="module-card" data-module="contabil">
+          <div class="module-status"></div>
+          <div class="module-ico">📊</div>
+          <div class="module-name">Contábil</div>
+          <div class="module-desc">Lançamentos · Balanço</div>
+        </div>
+        <div class="module-card" data-module="pessoal">
+          <div class="module-status"></div>
+          <div class="module-ico">👥</div>
+          <div class="module-name">Pessoal</div>
+          <div class="module-desc">eSocial · Folha · FGTS</div>
+        </div>
+        <div class="module-card" data-module="patrimonio">
+          <div class="module-status" style="background:var(--yellow);box-shadow:0 0 5px var(--yellow)"></div>
+          <div class="module-ico">🏛</div>
+          <div class="module-name">Patrimônio</div>
+          <div class="module-desc">Bens · Depreciação</div>
+        </div>
+        <div class="module-card" data-module="escrita">
+          <div class="module-status"></div>
+          <div class="module-ico">✏️</div>
+          <div class="module-name">Escrita</div>
+          <div class="module-desc">Escrituração · NF-e</div>
+        </div>
+        <div class="module-card" data-module="relatorios">
+          <div class="module-status"></div>
+          <div class="module-ico">📈</div>
+          <div class="module-name">Relatórios</div>
+          <div class="module-desc">DCTF · GIA · EFD</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Automações -->
+    <div>
+      <div class="section-header">
+        <div>
+          <div class="section-title">Automações disponíveis</div>
+          <div class="section-sub">Fluxos automatizados para o Domínio</div>
+        </div>
+        <button class="btn btn-teal" id="btnNovaAuto">+ Nova automação</button>
+      </div>
+      <div class="automacoes-grid">
+
+        <div class="auto-card" data-auto="exportar-csv">
+          <div class="auto-top">
+            <div class="auto-ico-wrap">📤</div>
+            <span class="auto-badge ok">Pronto</span>
+          </div>
+          <div class="auto-name">Exportar CSV fiscal</div>
+          <div class="auto-desc">Exporta o livro de entradas ou saídas em CSV para conferência de NF-e na SEFAZ.</div>
+          <div class="auto-footer">
+            <span class="auto-meta">Fiscal → Conferência NF-e</span>
+            <button class="auto-btn" data-action="exportar-csv">▶ Executar</button>
+          </div>
+        </div>
+
+        <div class="auto-card" data-auto="conferir-nfe">
+          <div class="auto-top">
+            <div class="auto-ico-wrap">⚖️</div>
+            <span class="auto-badge ok">Pronto</span>
+          </div>
+          <div class="auto-name">Conferência NF-e × SEFAZ</div>
+          <div class="auto-desc">Compara notas do Domínio com a situação real na SEFAZ e lista divergências.</div>
+          <div class="auto-footer">
+            <span class="auto-meta">Requer certificado A1</span>
+            <button class="auto-btn" data-action="conferir-nfe">▶ Executar</button>
+          </div>
+        </div>
+
+        <div class="auto-card" data-auto="sped">
+          <div class="auto-top">
+            <div class="auto-ico-wrap">💾</div>
+            <span class="auto-badge novo">Novo</span>
+          </div>
+          <div class="auto-name">Gerar e transmitir SPED</div>
+          <div class="auto-desc">Automatiza a geração do arquivo EFD-ICMS/IPI e transmissão no portal SPED.</div>
+          <div class="auto-footer">
+            <span class="auto-meta">Fiscal → SPED RFB</span>
+            <button class="auto-btn" data-action="sped">▶ Executar</button>
+          </div>
+        </div>
+
+        <div class="auto-card" data-auto="esocial">
+          <div class="auto-top">
+            <div class="auto-ico-wrap">👥</div>
+            <span class="auto-badge beta">Beta</span>
+          </div>
+          <div class="auto-name">Envio eSocial</div>
+          <div class="auto-desc">Envia eventos S-1200 e S-2200 pendentes no módulo Pessoal do Domínio.</div>
+          <div class="auto-footer">
+            <span class="auto-meta">Pessoal → eSocial.gov.br</span>
+            <button class="auto-btn" data-action="esocial">▶ Executar</button>
+          </div>
+        </div>
+
+        <div class="auto-card" data-auto="dctf">
+          <div class="auto-top">
+            <div class="auto-ico-wrap">📑</div>
+            <span class="auto-badge ok">Pronto</span>
+          </div>
+          <div class="auto-name">Preenchimento DCTF</div>
+          <div class="auto-desc">Usa AutoFill para preencher campos da DCTF com dados da empresa selecionada.</div>
+          <div class="auto-footer">
+            <span class="auto-meta">eCAC → DCTF Web</span>
+            <button class="auto-btn" data-action="dctf">▶ Executar</button>
+          </div>
+        </div>
+
+        <div class="auto-card" data-auto="relatorio">
+          <div class="auto-top">
+            <div class="auto-ico-wrap">📈</div>
+            <span class="auto-badge novo">Novo</span>
+          </div>
+          <div class="auto-name">Relatório de divergências</div>
+          <div class="auto-desc">Gera relatório consolidado de todas as divergências SEFAZ × Domínio em PDF.</div>
+          <div class="auto-footer">
+            <span class="auto-meta">Relatório exportável</span>
+            <button class="auto-btn" data-action="relatorio">▶ Executar</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Split: Log + Conexões -->
+    <div class="split">
+
+      <!-- Log -->
+      <div class="panel">
+        <div class="panel-hd">
+          <div>
+            <h3>Atividade recente</h3>
+            <p>Últimas operações executadas</p>
+          </div>
+          <button class="btn btn-ghost" id="btnClearLog" style="font-size:11px;padding:5px 10px">Limpar</button>
+        </div>
+        <div class="log-list" id="activityLog">
+          <div class="log-row">
+            <div class="log-ico ok">✓</div>
+            <div class="log-body">
+              <div class="log-title">FiscoBot integração iniciada</div>
+              <div class="log-meta">Conexão com servidor local · porta 3737</div>
+            </div>
+            <div class="log-time" id="initTime"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conexões -->
+      <div class="panel">
+        <div class="panel-hd">
+          <div>
+            <h3>Conexões ativas</h3>
+            <p>Status dos sistemas integrados</p>
+          </div>
+        </div>
+        <div>
+          <div class="conn-card">
+            <div class="conn-ico teal">⚡</div>
+            <div class="conn-info">
+              <div class="conn-name">FiscoBot Pro</div>
+              <div class="conn-detail">localhost:3737 · servidor Express</div>
+            </div>
+            <span class="conn-status on" id="connFiscobot">Online</span>
+          </div>
+          <div class="conn-card">
+            <div class="conn-ico gold">🔏</div>
+            <div class="conn-info">
+              <div class="conn-name">Certificado A1</div>
+              <div class="conn-detail" id="certDetail">Verificando...</div>
+            </div>
+            <span class="conn-status warn" id="connCert">Verificando</span>
+          </div>
+          <div class="conn-card">
+            <div class="conn-ico green">🌐</div>
+            <div class="conn-info">
+              <div class="conn-name">SEFAZ WebService</div>
+              <div class="conn-detail">Consulta NF-e · NF-e Consulta2</div>
+            </div>
+            <span class="conn-status on" id="connSefaz">Disponível</span>
+          </div>
+          <div class="conn-card">
+            <div class="conn-ico teal">🧠</div>
+            <div class="conn-info">
+              <div class="conn-name">Agente IA (Léo)</div>
+              <div class="conn-detail" id="iaDetail">Verificando API Key...</div>
+            </div>
+            <span class="conn-status warn" id="connIA">Verificando</span>
+          </div>
+        </div>
+
+        <div style="margin-top:14px;display:flex;gap:8px">
+          <button class="btn btn-ghost" onclick="window.open('/','_blank')" style="flex:1;font-size:11px">
+            ← Voltar ao FiscoBot
+          </button>
+          <button class="btn btn-gold" onclick="window.open('/conferencia','_blank')" style="font-size:11px">
+            ⚖️ Conferência NF-e
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- RIGHT PANEL -->
+  <div id="rightPanel">
+    <button class="rp-btn" title="Configurações">⚙</button>
+    <button class="rp-btn" title="Upload" onclick="addLog('Upload iniciado','info')">☁️</button>
+    <button class="rp-btn" title="Executar macro">▶</button>
+    <button class="rp-btn" title="Notificações">
+      🔔
+      <span class="rp-badge" id="notifBadge">3</span>
+    </button>
+    <button class="rp-btn" title="Suporte" onclick="window.open('/ajuda','_blank')">❓</button>
+    <button class="rp-btn" title="Agente IA" onclick="window.open('/','_blank')" style="margin-top:auto">🧠</button>
+  </div>
+
+</div>
+
+<!-- STATUS BAR (Domínio-style) -->
+<footer id="statusbar">
+  <div class="sb-module" onclick="addLog('Onvio verificado','ok')">
+    <div class="sb-dot on"></div> Onvio
+  </div>
+  <div class="sb-sep"></div>
+  <div class="sb-module">
+    <div class="sb-dot warn"></div> Suporte
+  </div>
+  <div class="sb-sep"></div>
+  <div class="sb-module" onclick="window.open('https://esocial.gov.br','_blank')">
+    <div class="sb-dot on"></div> eSocial
+  </div>
+  <div class="sb-sep"></div>
+  <div class="sb-module">
+    <div class="sb-dot warn"></div> OnBalance
+  </div>
+  <div class="sb-sep"></div>
+  <div class="sb-module" onclick="window.open('/conferencia','_blank')">
+    <div class="sb-dot on"></div> Docs Fiscais
+  </div>
+
+  <div class="sb-right">
+    <div class="sb-module" id="sbAgente">
+      <div class="sb-dot off"></div> Agente IA
+    </div>
+    <div class="sb-sep"></div>
+    <div style="font-size:10.5px;color:var(--t3);font-family:var(--fm)" id="sbTime"></div>
+  </div>
+</footer>
+
+<!-- MODAL automação -->
+<div id="autoModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="modalTitle">Nova automação</h3>
+      <button class="modal-close" id="btnModalClose">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-field">
+        <label>Nome da automação</label>
+        <input type="text" id="modalName" placeholder="Ex: Exportar SPED mensal">
+      </div>
+      <div class="modal-field">
+        <label>Módulo Domínio</label>
+        <select id="modalModule">
+          <option>Fiscal</option>
+          <option>Contábil</option>
+          <option>Pessoal</option>
+          <option>Patrimônio</option>
+          <option>Relatórios</option>
+        </select>
+      </div>
+      <div class="modal-field">
+        <label>Descrição</label>
+        <textarea id="modalDesc" placeholder="Descreva o que esta automação faz..."></textarea>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" id="btnModalCancel">Cancelar</button>
+      <button class="btn btn-teal" id="btnModalSave">💾 Salvar automação</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+'use strict';
+
+// ── Helpers ───────────────────────────────────────────────
+function toast(msg, type='', dur=2500) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = type ? `show ${type}` : 'show';
+  clearTimeout(t._t); t._t = setTimeout(() => t.className = '', dur);
+}
+
+function addLog(title, type='info', meta='') {
+  const list = document.getElementById('activityLog');
+  const icons = { ok:'✓', warn:'⚠', err:'✕', info:'ℹ' };
+  const now = new Date().toTimeString().slice(0,5);
+  const row = document.createElement('div'); row.className = 'log-row';
+  row.innerHTML = `
+    <div class="log-ico ${type}">${icons[type]||'ℹ'}</div>
+    <div class="log-body">
+      <div class="log-title">${title}</div>
+      ${meta ? `<div class="log-meta">${meta}</div>` : ''}
+    </div>
+    <div class="log-time">${now}</div>`;
+  list.insertBefore(row, list.firstChild);
+  // Mantém no máximo 12 entradas
+  while (list.children.length > 12) list.removeChild(list.lastChild);
+}
+
+// ── Relógio ───────────────────────────────────────────────
+function updateClock() {
+  const el = document.getElementById('sbTime');
+  if (el) el.textContent = new Date().toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+}
+setInterval(updateClock, 1000); updateClock();
+document.getElementById('initTime').textContent = new Date().toTimeString().slice(0,5);
+
+// ── Verifica conexões ─────────────────────────────────────
+async function checkConnections() {
+  // Certificados
+  try {
+    const r  = await fetch('/api/certs'); const d = await r.json();
+    const n  = (d.certs||[]).length;
+    const el = document.getElementById('connCert');
+    const dt = document.getElementById('certDetail');
+    if (n > 0) {
+      el.textContent = 'Ativo'; el.className = 'conn-status on';
+      dt.textContent = `${n} certificado${n>1?'s':''} importado${n>1?'s':''}`;
+      addLog(`${n} certificado(s) A1 encontrado(s)`, 'ok', 'Consultas SEFAZ liberadas');
+    } else {
+      el.textContent = 'Ausente'; el.className = 'conn-status off';
+      dt.textContent = 'Nenhum certificado importado';
+      addLog('Nenhum certificado A1 encontrado', 'warn', 'Importe um .pfx na aba Certificados');
+    }
+  } catch { 
+    document.getElementById('connCert').textContent = 'Erro';
+    document.getElementById('connCert').className = 'conn-status off';
+  }
+
+  // API Key (IA)
+  try {
+    const r = await fetch('/api/key/exists'); const d = await r.json();
+    const ia = document.getElementById('connIA');
+    const dt = document.getElementById('iaDetail');
+    const sb = document.getElementById('sbAgente');
+    if (d.exists) {
+      ia.textContent = 'Ativo'; ia.className = 'conn-status on';
+      dt.textContent = 'Claude API Key configurada';
+      sb.querySelector('.sb-dot').className = 'sb-dot on';
+      addLog('Agente IA (Léo) disponível', 'ok', 'API Key válida detectada');
+    } else {
+      ia.textContent = 'Inativo'; ia.className = 'conn-status off';
+      dt.textContent = 'Configure a API Key no FiscoBot';
+    }
+  } catch {}
+}
+
+checkConnections();
+
+// ── Módulos clique ────────────────────────────────────────
+document.querySelectorAll('.module-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const m = card.dataset.module;
+    const msgs = {
+      fiscal:    ['Módulo Fiscal', 'Abrindo livro de entradas e saídas'],
+      contabil:  ['Módulo Contábil', 'Abrindo escrituração contábil'],
+      pessoal:   ['Módulo Pessoal', 'Abrindo folha de pagamento e eSocial'],
+      patrimonio:['Módulo Patrimônio', 'Abrindo controle de bens'],
+      escrita:   ['Módulo Escrita', 'Abrindo escrituração fiscal'],
+      relatorios:['Módulo Relatórios', 'Abrindo gerador de relatórios'],
+    };
+    const [title, detail] = msgs[m] || ['Módulo', 'Acessando...'];
+    toast(`${title} selecionado`, '', 1800);
+    addLog(title, 'info', detail);
+  });
+});
+
+// ── Automações ────────────────────────────────────────────
+document.querySelectorAll('.auto-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const action = btn.dataset.action;
+    btn.textContent = '⏳';
+    btn.disabled = true;
+
+    const routes = {
+      'exportar-csv': () => { window.open('/conferencia', '_blank'); return 'CSV para conferência NF-e aberto'; },
+      'conferir-nfe': () => { window.open('/conferencia', '_blank'); return 'Conferência NF-e iniciada'; },
+      'sped':         () => { window.open('https://www.sped.rfb.gov.br', '_blank'); return 'Portal SPED aberto'; },
+      'esocial':      () => { window.open('https://esocial.gov.br', '_blank'); return 'Portal eSocial aberto'; },
+      'dctf':         () => { window.open('https://cav.receita.fazenda.gov.br', '_blank'); return 'eCAC / DCTF aberto'; },
+      'relatorio':    () => { window.open('/conferencia', '_blank'); return 'Relatório de divergências iniciado'; },
+    };
+
+    await new Promise(r => setTimeout(r, 800));
+    const msg = routes[action] ? routes[action]() : 'Automação executada';
+    addLog(msg, 'ok', `Automação: ${action}`);
+    toast(`✓ ${msg}`, 'gold');
+    btn.textContent = '▶ Executar';
+    btn.disabled = false;
+  });
+});
+
+// ── Abrir Domínio ─────────────────────────────────────────
+document.getElementById('btnAbrirDominio')?.addEventListener('click', () => {
+  toast('Procure o Domínio na barra de tarefas do Windows', '', 3000);
+  addLog('Acesso ao Domínio Sistemas', 'info', 'Use o atalho na barra de tarefas');
+});
+
+// ── Nova automação (modal) ────────────────────────────────
+const modal = document.getElementById('autoModal');
+document.getElementById('btnNovaAuto')?.addEventListener('click', () => modal.classList.add('open'));
+document.getElementById('btnModalClose')?.addEventListener('click', () => modal.classList.remove('open'));
+document.getElementById('btnModalCancel')?.addEventListener('click', () => modal.classList.remove('open'));
+modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('open'); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') modal.classList.remove('open'); });
+
+document.getElementById('btnModalSave')?.addEventListener('click', () => {
+  const name = document.getElementById('modalName').value.trim();
+  if (!name) { toast('Digite um nome para a automação', '', 2000); return; }
+  const module = document.getElementById('modalModule').value;
+  addLog(`Nova automação criada: "${name}"`, 'ok', `Módulo: ${module}`);
+  toast(`✓ Automação "${name}" salva!`, 'gold');
+  modal.classList.remove('open');
+  document.getElementById('modalName').value = '';
+  document.getElementById('modalDesc').value = '';
+  document.getElementById('statAuto').textContent =
+    parseInt(document.getElementById('statAuto').textContent) + 1;
+});
+
+// ── Limpar log ────────────────────────────────────────────
+document.getElementById('btnClearLog')?.addEventListener('click', () => {
+  document.getElementById('activityLog').innerHTML = '';
+  addLog('Log limpo', 'info');
+});
+
+// ── Nav tabs ──────────────────────────────────────────────
+document.querySelectorAll('.tb-nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tb-nav-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    toast(`Seção: ${btn.textContent.trim()}`, '', 1500);
+  });
+});
+
+// ── Badge de notificações ─────────────────────────────────
+document.querySelector('.rp-btn[title="Notificações"]').addEventListener('click', () => {
+  document.getElementById('notifBadge').style.display = 'none';
+  toast('Notificações lidas', '', 1500);
+});
+</script>
+</body>
+</html>

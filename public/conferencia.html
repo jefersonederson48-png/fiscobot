@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Conferência NF-e × SEFAZ · FiscoBot Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060c17;--bg2:#090f1c;--bg3:#0d1628;
+  --panel:rgba(11,20,37,.95);--panel2:rgba(13,24,44,.98);
+  --border:rgba(140,168,220,.1);--borderem:rgba(201,168,76,.3);
+  --gold:#c9a84c;--gold2:#e2c46a;--golddim:rgba(201,168,76,.1);
+  --t1:#e8f0ff;--t2:#7a95c0;--t3:#3f5070;--t4:#2a3a55;
+  --green:#34d399;--greendim:rgba(52,211,153,.1);
+  --yellow:#fbbf24;--yellowdim:rgba(251,191,36,.1);
+  --red:#f87171;--reddim:rgba(248,113,113,.1);
+  --blue:#60a5fa;--bluedim:rgba(96,165,250,.1);
+  --orange:#fb923c;
+  --ff:'Syne',sans-serif;--fm:'IBM Plex Mono',monospace;
+  --r:10px;--rl:14px;
+  --shadow:0 20px 56px rgba(0,0,0,.4);
+}
+html,body{height:100%;background:var(--bg);color:var(--t1);font-family:var(--ff)}
+body{
+  background-image:
+    radial-gradient(ellipse 60% 40% at 50% 0%,rgba(201,168,76,.06),transparent 50%),
+    radial-gradient(ellipse 40% 50% at 100% 80%,rgba(96,165,250,.04),transparent 50%);
+}
+
+/* ── Layout ─────────────────────────── */
+#shell{display:flex;flex-direction:column;height:100vh}
+#topbar{
+  height:50px;background:rgba(6,12,23,.95);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 20px;gap:14px;
+  flex-shrink:0;backdrop-filter:blur(20px);position:relative;
+}
+#topbar::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,168,76,.4) 40%,rgba(96,165,250,.2) 70%,transparent);
+}
+.tb-back{
+  display:flex;align-items:center;gap:7px;
+  padding:5px 10px;border-radius:8px;border:1px solid var(--border);
+  background:transparent;color:var(--t2);font-size:11.5px;font-weight:600;
+  cursor:pointer;font-family:var(--ff);transition:all .15s;text-decoration:none;
+}
+.tb-back:hover{border-color:var(--borderem);color:var(--gold);background:var(--golddim)}
+.tb-sep{width:1px;height:20px;background:var(--border)}
+.tb-title{font-size:14px;font-weight:800;letter-spacing:-.3px;display:flex;align-items:center;gap:8px}
+.tb-title .ico{
+  width:28px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gold2));
+  border-radius:7px;display:flex;align-items:center;justify-content:center;
+  font-size:13px;box-shadow:0 0 14px rgba(201,168,76,.35);
+}
+.tb-spacer{flex:1}
+.tb-badge{
+  display:flex;align-items:center;gap:6px;
+  padding:4px 10px;border-radius:99px;font-size:10.5px;font-weight:700;
+  font-family:var(--fm);border:1px solid transparent;
+}
+.tb-badge.sieg{background:rgba(96,165,250,.1);border-color:rgba(96,165,250,.25);color:var(--blue)}
+.tb-badge.sefaz{background:var(--greendim);border-color:rgba(52,211,153,.25);color:var(--green)}
+.tb-badge.off{background:var(--reddim);border-color:rgba(248,113,113,.25);color:var(--red)}
+.tb-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+
+#body{display:flex;flex:1;overflow:hidden}
+
+/* ── Config sidebar ─────────────────── */
+#sidebar{
+  width:300px;flex-shrink:0;
+  background:var(--panel);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow-y:auto;padding:20px 16px;gap:16px;
+}
+#sidebar::-webkit-scrollbar{width:3px}
+#sidebar::-webkit-scrollbar-thumb{background:var(--t4);border-radius:99px}
+
+.sec-lbl{
+  font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--t3);
+  text-transform:uppercase;font-family:var(--fm);margin-bottom:8px;
+}
+.inp{
+  width:100%;background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--r);padding:8px 10px;color:var(--t1);
+  font-size:12px;font-family:var(--ff);outline:none;transition:border-color .2s;
+}
+.inp:focus{border-color:var(--borderem)}
+.inp::placeholder{color:var(--t3)}
+.inp-row{display:flex;gap:6px}
+.inp-row .inp{flex:1}
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+.field label{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;font-family:var(--fm)}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  border:none;cursor:pointer;border-radius:var(--r);
+  font-size:12px;font-weight:700;font-family:var(--ff);color:var(--t1);
+  transition:all .18s;white-space:nowrap;padding:8px 14px;
+}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#06100a;box-shadow:0 4px 18px rgba(201,168,76,.25)}
+.btn-gold:hover{box-shadow:0 6px 26px rgba(201,168,76,.4);transform:translateY(-1px)}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--t2)}
+.btn-ghost:hover{border-color:var(--borderem);color:var(--gold);background:var(--golddim)}
+.btn-green{background:linear-gradient(135deg,#059669,var(--green));color:#022416}
+.btn-green:hover{box-shadow:0 4px 18px rgba(52,211,153,.3);transform:translateY(-1px)}
+.btn-red{background:var(--reddim);border:1px solid rgba(248,113,113,.3);color:var(--red)}
+.btn-blue{background:var(--bluedim);border:1px solid rgba(96,165,250,.3);color:var(--blue)}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-full{width:100%}
+
+.config-card{
+  background:var(--panel2);border:1px solid var(--border);
+  border-radius:var(--rl);padding:14px;
+}
+.key-row{display:flex;gap:6px;align-items:center}
+.key-dot{width:8px;height:8px;border-radius:50%;background:var(--t4);flex-shrink:0;transition:all .3s}
+.key-dot.ok{background:var(--green);box-shadow:0 0 6px var(--green)}
+.key-dot.err{background:var(--red)}
+
+.tipo-sel{display:flex;gap:6px}
+.tipo-btn{
+  flex:1;padding:7px;border-radius:var(--r);border:1px solid var(--border);
+  background:transparent;color:var(--t3);font-size:11.5px;font-weight:700;
+  cursor:pointer;font-family:var(--ff);transition:all .15s;
+}
+.tipo-btn.on{background:var(--golddim);border-color:var(--borderem);color:var(--gold)}
+
+.periodo-sel{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.prd-btn{
+  padding:6px 8px;border-radius:var(--r);border:1px solid var(--border);
+  background:transparent;color:var(--t3);font-size:11px;font-weight:700;
+  cursor:pointer;font-family:var(--fm);transition:all .15s;text-align:center;
+}
+.prd-btn.on{background:var(--golddim);border-color:var(--borderem);color:var(--gold)}
+
+.cert-mini{
+  display:flex;align-items:center;gap:8px;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--r);padding:8px 10px;font-size:11px;
+}
+.cert-mini .dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 5px var(--green);flex-shrink:0}
+.cert-mini .nm{flex:1;color:var(--t2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--fm)}
+
+/* ── Main ───────────────────────────── */
+#main{flex:1;overflow-y:auto;overflow-x:hidden;padding:22px 24px;display:flex;flex-direction:column;gap:18px}
+#main::-webkit-scrollbar{width:4px}
+#main::-webkit-scrollbar-thumb{background:var(--t4);border-radius:99px}
+
+/* Hero de progresso */
+.prog-hero{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:var(--rl);padding:22px 26px;
+  display:flex;flex-direction:column;gap:14px;
+  box-shadow:var(--shadow);position:relative;overflow:hidden;
+}
+.prog-hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 80% at 0% 50%,rgba(201,168,76,.06),transparent);
+  pointer-events:none;
+}
+.prog-hero::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,168,76,.5) 40%,rgba(96,165,250,.3) 70%,transparent);
+}
+.ph-top{display:flex;align-items:center;gap:16px}
+.ph-ico{
+  width:48px;height:48px;border-radius:13px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  box-shadow:0 0 24px rgba(201,168,76,.35);
+}
+.ph-txt h2{font-size:18px;font-weight:800;letter-spacing:-.4px;margin-bottom:4px}
+.ph-txt p{font-size:12px;color:var(--t2);font-family:var(--fm)}
+.ph-stats{margin-left:auto;display:flex;gap:20px;flex-shrink:0}
+.ph-stat .val{font-size:28px;font-weight:800;letter-spacing:-1px;line-height:1}
+.ph-stat .lbl{font-size:9.5px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;font-family:var(--fm);margin-top:3px}
+
+.prog-bar-wrap{display:flex;flex-direction:column;gap:6px}
+.prog-bar-track{height:6px;background:var(--bg3);border-radius:99px;overflow:hidden;border:1px solid var(--border)}
+.prog-bar-fill{height:100%;width:0%;border-radius:99px;transition:width .4s ease;
+  background:linear-gradient(90deg,var(--gold),var(--gold2),var(--green))}
+.prog-label{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-family:var(--fm)}
+.prog-label .pct{color:var(--gold);font-weight:700}
+.prog-label .info{color:var(--t3)}
+
+/* Status flow */
+.status-flow{display:flex;align-items:center;gap:0}
+.sf-step{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 14px;background:var(--bg3);border:1px solid var(--border);
+  font-size:11px;font-weight:700;color:var(--t3);font-family:var(--fm);
+}
+.sf-step:first-child{border-radius:var(--r) 0 0 var(--r)}
+.sf-step:last-child{border-radius:0 var(--r) var(--r) 0}
+.sf-step.done{background:var(--greendim);border-color:rgba(52,211,153,.25);color:var(--green)}
+.sf-step.active{background:var(--golddim);border-color:var(--borderem);color:var(--gold)}
+.sf-step.err{background:var(--reddim);border-color:rgba(248,113,113,.25);color:var(--red)}
+.sf-ico{font-size:13px}
+.sf-arr{width:1px;height:22px;background:var(--border)}
+
+/* KPIs de resumo */
+.kpis-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.kpi{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:var(--rl);padding:16px;
+  cursor:pointer;transition:all .2s;
+}
+.kpi:hover{border-color:var(--borderem);transform:translateY(-2px)}
+.kpi.sel{border-color:var(--borderem);background:var(--golddim)}
+.kpi .lbl{font-size:9.5px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;font-family:var(--fm);margin-bottom:10px}
+.kpi .val{font-size:30px;font-weight:800;letter-spacing:-1px;line-height:1;margin-bottom:6px}
+.kpi .sub{font-size:10.5px;color:var(--t3);font-family:var(--fm)}
+.kpi.critico .val{color:var(--red)}
+.kpi.atencao .val{color:var(--orange)}
+.kpi.revisar .val{color:var(--blue)}
+.kpi.ok-card .val{color:var(--green)}
+
+/* Tabela */
+.tbl-wrap{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:var(--rl);overflow:hidden;box-shadow:var(--shadow);
+}
+.tbl-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;border-bottom:1px solid var(--border);gap:12px;
+}
+.tbl-header h3{font-size:13px;font-weight:800;letter-spacing:-.2px}
+.tbl-header p{font-size:11px;color:var(--t3)}
+.tbl-actions{display:flex;gap:8px;align-items:center;flex-shrink:0}
+
+.search-inp{
+  background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);
+  padding:6px 12px;color:var(--t1);font-size:11.5px;font-family:var(--ff);
+  outline:none;width:200px;transition:border-color .2s;
+}
+.search-inp:focus{border-color:var(--borderem)}
+.search-inp::placeholder{color:var(--t3)}
+
+.tbl-scroll{overflow-x:auto;max-height:420px;overflow-y:auto}
+.tbl-scroll::-webkit-scrollbar{width:4px;height:4px}
+.tbl-scroll::-webkit-scrollbar-thumb{background:var(--t4);border-radius:99px}
+
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead{position:sticky;top:0;z-index:1}
+th{
+  padding:10px 14px;text-align:left;
+  font-size:9.5px;font-weight:700;color:var(--t3);
+  text-transform:uppercase;letter-spacing:1px;font-family:var(--fm);
+  background:var(--bg3);border-bottom:1px solid var(--border);
+  white-space:nowrap;
+}
+td{
+  padding:11px 14px;border-bottom:1px solid rgba(140,168,220,.06);
+  color:var(--t2);vertical-align:middle;
+}
+td:first-child{color:var(--t1);font-weight:600}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+
+.badge{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:3px 9px;border-radius:99px;font-size:10px;font-weight:700;
+  font-family:var(--fm);text-transform:uppercase;letter-spacing:.3px;
+  border:1px solid transparent;white-space:nowrap;
+}
+.badge::before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.b-green{background:var(--greendim);color:var(--green);border-color:rgba(52,211,153,.2)}
+.b-green::before{background:var(--green);box-shadow:0 0 4px var(--green)}
+.b-red{background:var(--reddim);color:var(--red);border-color:rgba(248,113,113,.2)}
+.b-red::before{background:var(--red);box-shadow:0 0 4px var(--red)}
+.b-yellow{background:var(--yellowdim);color:var(--yellow);border-color:rgba(251,191,36,.2)}
+.b-yellow::before{background:var(--yellow)}
+.b-blue{background:var(--bluedim);color:var(--blue);border-color:rgba(96,165,250,.2)}
+.b-blue::before{background:var(--blue)}
+.b-orange{background:rgba(251,146,60,.1);color:var(--orange);border-color:rgba(251,146,60,.2)}
+.b-orange::before{background:var(--orange)}
+.b-gray{background:rgba(148,163,184,.08);color:#94a3b8;border-color:rgba(148,163,184,.15)}
+.b-gray::before{background:#94a3b8}
+
+.tbl-footer{
+  padding:10px 18px;border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:10.5px;color:var(--t3);font-family:var(--fm);
+}
+
+/* Estado vazio */
+.empty-view{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:60px 20px;text-align:center;
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:var(--rl);box-shadow:var(--shadow);
+}
+.empty-view .ico{font-size:48px;margin-bottom:16px;opacity:.6}
+.empty-view h3{font-size:18px;font-weight:800;margin-bottom:8px;letter-spacing:-.3px}
+.empty-view p{font-size:12.5px;color:var(--t2);max-width:380px;line-height:1.7;margin-bottom:20px}
+
+/* Toast */
+#toast{
+  position:fixed;bottom:24px;left:50%;
+  transform:translateX(-50%) translateY(8px);
+  background:var(--panel2);border:1px solid var(--borderem);
+  color:var(--t1);padding:8px 18px;border-radius:99px;
+  font-size:12px;font-weight:600;opacity:0;pointer-events:none;
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:999;
+  font-family:var(--ff);box-shadow:var(--shadow);white-space:nowrap;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.err{border-color:rgba(248,113,113,.4);color:var(--red)}
+#toast.ok{border-color:rgba(52,211,153,.4);color:var(--green)}
+
+/* Animações */
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{animation:spin .8s linear infinite;display:inline-block}
+</style>
+</head>
+<body>
+<div id="shell">
+
+  <!-- TOPBAR -->
+  <header id="topbar">
+    <a class="tb-back" href="javascript:history.back()">← FiscoBot</a>
+    <div class="tb-sep"></div>
+    <div class="tb-title">
+      <div class="ico">⚖️</div>
+      Conferência NF-e × SEFAZ
+    </div>
+    <div class="tb-spacer"></div>
+    <div class="tb-badge sieg" id="badgeSieg"><div class="tb-dot"></div> SIEG Hub</div>
+    <div class="tb-badge sefaz" id="badgeSefaz"><div class="tb-dot"></div> SEFAZ</div>
+    <div class="tb-badge off" id="badgeCert"><div class="tb-dot"></div> Sem certificado</div>
+  </header>
+
+  <div id="body">
+
+    <!-- SIDEBAR CONFIG -->
+    <aside id="sidebar">
+      <div>
+        <div class="sec-lbl">API Key — SIEG Hub</div>
+        <div class="config-card">
+          <div class="key-row" style="margin-bottom:8px">
+            <div class="key-dot" id="siegDot"></div>
+            <input class="inp" id="siegKeyInp" type="password" placeholder="Cole sua API Key do SIEG..." style="flex:1;font-size:11px">
+          </div>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-gold btn-full" id="btnSaveSieg" style="font-size:11px">✓ Salvar</button>
+            <button class="btn btn-ghost" id="btnClearSieg" style="font-size:11px;padding:8px 10px">✕</button>
+          </div>
+          <p style="font-size:10px;color:var(--t3);margin-top:8px;font-family:var(--fm);line-height:1.5">
+            Acesse <strong style="color:var(--blue)">hub.sieg.com</strong> → Configurações → API Key
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <div class="sec-lbl">Certificado A1</div>
+        <div id="certPanel">
+          <div class="empty-cert" style="font-size:11px;color:var(--t3);font-family:var(--fm);padding:8px 4px">
+            Verificando certificados...
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="sec-lbl">Empresa</div>
+        <div class="field">
+          <label>CNPJ</label>
+          <input class="inp" id="cnpjInp" placeholder="00.000.000/0001-00" maxlength="18">
+        </div>
+      </div>
+
+      <div>
+        <div class="sec-lbl">Tipo de nota</div>
+        <div class="tipo-sel">
+          <button class="tipo-btn on" data-tipo="ambos">Ambos</button>
+          <button class="tipo-btn" data-tipo="entrada">Entrada</button>
+          <button class="tipo-btn" data-tipo="saida">Saída</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="sec-lbl">Período</div>
+        <div class="periodo-sel" style="margin-bottom:8px">
+          <button class="prd-btn" data-dias="7">7 dias</button>
+          <button class="prd-btn on" data-dias="30">30 dias</button>
+          <button class="prd-btn" data-dias="60">60 dias</button>
+          <button class="prd-btn" data-dias="0">Personalizado</button>
+        </div>
+        <div id="customDates" style="display:none;flex-direction:column;gap:6px">
+          <div class="field"><label>De</label><input class="inp" type="date" id="dateIni"></div>
+          <div class="field"><label>Até</label><input class="inp" type="date" id="dateFim"></div>
+        </div>
+      </div>
+
+      <div style="margin-top:auto;display:flex;flex-direction:column;gap:8px">
+        <button class="btn btn-gold btn-full" id="btnConferir" style="padding:11px;font-size:13px">
+          ⚡ Iniciar conferência
+        </button>
+        <button class="btn btn-ghost btn-full" id="btnExportar" disabled>
+          ⬇ Exportar CSV
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main id="main">
+
+      <!-- Estado inicial (vazio) -->
+      <div id="viewEmpty" class="empty-view">
+        <div class="ico">⚖️</div>
+        <h3>Conferência NF-e automática</h3>
+        <p>Configure a <strong>API Key do SIEG Hub</strong> e o <strong>CNPJ</strong> na sidebar, depois clique em <strong>⚡ Iniciar conferência</strong>. O FiscoBot busca as notas automaticamente e confere cada uma na SEFAZ.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+          <div style="padding:12px 16px;background:var(--panel2);border:1px solid var(--border);border-radius:var(--r);text-align:center;min-width:120px">
+            <div style="font-size:20px;margin-bottom:4px">1️⃣</div>
+            <div style="font-size:11px;font-weight:700;color:var(--t1);margin-bottom:2px">Busca SIEG</div>
+            <div style="font-size:10px;color:var(--t3);font-family:var(--fm)">API automática</div>
+          </div>
+          <div style="padding:12px 16px;background:var(--panel2);border:1px solid var(--border);border-radius:var(--r);text-align:center;min-width:120px">
+            <div style="font-size:20px;margin-bottom:4px">2️⃣</div>
+            <div style="font-size:11px;font-weight:700;color:var(--t1);margin-bottom:2px">Confere SEFAZ</div>
+            <div style="font-size:10px;color:var(--t3);font-family:var(--fm)">WebService real</div>
+          </div>
+          <div style="padding:12px 16px;background:var(--panel2);border:1px solid var(--border);border-radius:var(--r);text-align:center;min-width:120px">
+            <div style="font-size:20px;margin-bottom:4px">3️⃣</div>
+            <div style="font-size:11px;font-weight:700;color:var(--t1);margin-bottom:2px">Relatório</div>
+            <div style="font-size:10px;color:var(--t3);font-family:var(--fm)">Divergências</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progresso (oculto inicialmente) -->
+      <div id="viewProgress" style="display:none;flex-direction:column;gap:16px">
+        <div class="prog-hero">
+          <div class="ph-top">
+            <div class="ph-ico" id="phIco">⚡</div>
+            <div class="ph-txt">
+              <h2 id="phTitle">Iniciando conferência...</h2>
+              <p id="phSub" style="color:var(--t3);font-family:var(--fm)">Aguarde</p>
+            </div>
+            <div class="ph-stats">
+              <div class="ph-stat"><div class="val" id="phDone">0</div><div class="lbl">Conferidas</div></div>
+              <div class="ph-stat"><div class="val" id="phTotal">—</div><div class="lbl">Total</div></div>
+              <div class="ph-stat"><div class="val" id="phPct">0%</div><div class="lbl">Progresso</div></div>
+            </div>
+          </div>
+          <div class="prog-bar-wrap">
+            <div class="prog-bar-track"><div class="prog-bar-fill" id="progBar"></div></div>
+            <div class="prog-label">
+              <span class="pct" id="progPct">0%</span>
+              <span class="info" id="progInfo">Conectando ao SIEG Hub...</span>
+            </div>
+          </div>
+          <div class="status-flow">
+            <div class="sf-step" id="sf1"><span class="sf-ico">📡</span> SIEG Hub</div>
+            <div class="sf-arr"></div>
+            <div class="sf-step" id="sf2"><span class="sf-ico">🔍</span> SEFAZ</div>
+            <div class="sf-arr"></div>
+            <div class="sf-step" id="sf3"><span class="sf-ico">📊</span> Análise</div>
+            <div class="sf-arr"></div>
+            <div class="sf-step" id="sf4"><span class="sf-ico">✅</span> Concluído</div>
+          </div>
+        </div>
+
+        <!-- Preview em tempo real durante processamento -->
+        <div class="tbl-wrap" id="previewWrap" style="display:none">
+          <div class="tbl-header">
+            <div><h3>Conferindo em tempo real</h3><p>Notas processadas até agora</p></div>
+          </div>
+          <div class="tbl-scroll">
+            <table>
+              <thead><tr>
+                <th>Empresa</th><th>Nº</th><th>Data</th><th>Valor</th><th>Tipo</th><th>SIEG</th><th>SEFAZ</th><th>Divergência</th>
+              </tr></thead>
+              <tbody id="previewBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resultado (oculto inicialmente) -->
+      <div id="viewResult" style="display:none;flex-direction:column;gap:16px">
+
+        <!-- KPIs -->
+        <div class="kpis-row">
+          <div class="kpi" data-filtro="TODOS">
+            <div class="lbl">Total</div>
+            <div class="val" id="kpiTotal">0</div>
+            <div class="sub">notas conferidas</div>
+          </div>
+          <div class="kpi critico" data-filtro="CRITICO">
+            <div class="lbl">🔴 Críticos</div>
+            <div class="val" id="kpiCritico">0</div>
+            <div class="sub">divergência grave</div>
+          </div>
+          <div class="kpi atencao" data-filtro="ATENCAO">
+            <div class="lbl">🟠 Atenção</div>
+            <div class="val" id="kpiAtencao">0</div>
+            <div class="sub">requer verificação</div>
+          </div>
+          <div class="kpi revisar" data-filtro="REVISAR">
+            <div class="lbl">🔵 Revisar</div>
+            <div class="val" id="kpiRevisar">0</div>
+            <div class="sub">erro na consulta</div>
+          </div>
+          <div class="kpi ok-card" data-filtro="OK">
+            <div class="lbl">✅ OK</div>
+            <div class="val" id="kpiOk">0</div>
+            <div class="sub">sem divergência</div>
+          </div>
+        </div>
+
+        <!-- Tabela resultado -->
+        <div class="tbl-wrap">
+          <div class="tbl-header">
+            <div>
+              <h3>Relatório de divergências</h3>
+              <p id="resultSubtitle">Domínio × SEFAZ</p>
+            </div>
+            <div class="tbl-actions">
+              <input class="search-inp" id="searchInp" placeholder="🔎 Buscar empresa, CNPJ...">
+            </div>
+          </div>
+          <div class="tbl-scroll">
+            <table>
+              <thead><tr>
+                <th>Empresa</th>
+                <th>CNPJ</th>
+                <th>Nº / Série</th>
+                <th>Data</th>
+                <th>Valor</th>
+                <th>Tipo</th>
+                <th>Status SIEG</th>
+                <th>Status SEFAZ</th>
+                <th>Divergência</th>
+              </tr></thead>
+              <tbody id="resultBody"></tbody>
+            </table>
+          </div>
+          <div class="tbl-footer">
+            <span id="resultCount">0 resultado(s)</span>
+            <span id="resultTime"></span>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+'use strict';
+
+// ── Toast ────────────────────────────────────────────────
+function toast(msg, type='', dur=2800) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = type ? `show ${type}` : 'show';
+  clearTimeout(t._t); t._t = setTimeout(() => t.className='', dur);
+}
+
+// ── Formata valor BRL ─────────────────────────────────────
+const fmtBRL = v => isNaN(v) ? '—' : Number(v).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+
+// ── Formata CNPJ ──────────────────────────────────────────
+function fmtCNPJ(v) {
+  const n = (v||'').replace(/\D/g,'');
+  if (n.length !== 14) return v;
+  return n.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,'$1.$2.$3/$4-$5');
+}
+document.getElementById('cnpjInp').addEventListener('input', e => {
+  let v = e.target.value.replace(/\D/g,'');
+  if (v.length > 14) v = v.slice(0,14);
+  e.target.value = fmtCNPJ(v);
+});
+
+// ── Divergência ───────────────────────────────────────────
+function getDivergencia(interno, sefaz) {
+  const i = (interno||'').toLowerCase().trim();
+  const s = (sefaz||'').toLowerCase().trim();
+  if (!sefaz||sefaz==='—') return {nivel:-1,tipo:'AGUARDANDO',label:'Aguardando',cls:'b-gray'};
+  if (s==='sem certificado') return {nivel:-1,tipo:'AGUARDANDO',label:'Sem certificado',cls:'b-gray'};
+  if (s==='chave inválida')  return {nivel:1, tipo:'REVISAR',  label:'Chave inválida',cls:'b-blue'};
+  if (i===s||(i==='ativa'&&s==='autorizada')) return {nivel:0,tipo:'OK',label:'Sem divergência',cls:'b-green'};
+  if ((i==='ativa'||i==='autorizada')&&s==='cancelada')     return {nivel:3,tipo:'CRITICO',label:'Ativa / Cancelada SEFAZ',cls:'b-red'};
+  if ((i==='ativa'||i==='autorizada')&&s==='denegada')      return {nivel:3,tipo:'CRITICO',label:'Ativa / Denegada SEFAZ',cls:'b-red'};
+  if ((i==='ativa'||i==='autorizada')&&s==='não encontrada')return {nivel:2,tipo:'ATENCAO',label:'Não encontrada SEFAZ',cls:'b-orange'};
+  if ((i==='ativa'||i==='autorizada')&&s==='inutilizada')   return {nivel:2,tipo:'ATENCAO',label:'Inutilizada na SEFAZ',cls:'b-orange'};
+  if (i==='cancelada'&&s==='autorizada') return {nivel:2,tipo:'ATENCAO',label:'Cancelada / Autorizada SEFAZ',cls:'b-orange'};
+  if (s==='erro') return {nivel:1,tipo:'REVISAR',label:'Erro consulta',cls:'b-blue'};
+  return {nivel:1,tipo:'REVISAR',label:`${interno} / ${sefaz}`,cls:'b-blue'};
+}
+
+// ── Tipo badge ────────────────────────────────────────────
+function tipoBadge(tipo) {
+  if (!tipo||tipo==='—') return `<span class="badge b-gray">—</span>`;
+  const t = tipo.toLowerCase();
+  return t.includes('saí')||t==='saida'||t==='1'
+    ? `<span class="badge b-blue">Saída</span>`
+    : `<span class="badge b-green">Entrada</span>`;
+}
+
+// ── Estado das views ──────────────────────────────────────
+function showView(id) {
+  ['viewEmpty','viewProgress','viewResult'].forEach(v => {
+    const el = document.getElementById(v);
+    el.style.display = v===id ? 'flex' : 'none';
+    if (v===id && (id==='viewEmpty'||id==='viewResult')) el.style.flexDirection='column';
+  });
+}
+showView('viewEmpty');
+
+// ── Progresso helpers ─────────────────────────────────────
+function setStep(step, state) { // step: 1-4, state: 'active'|'done'|'err'|''
+  const el = document.getElementById('sf'+step);
+  if (!el) return;
+  el.className = 'sf-step' + (state?' '+state:'');
+}
+function setProgress(done, total, info) {
+  const pct = total > 0 ? Math.round((done/total)*100) : 0;
+  document.getElementById('progBar').style.width = pct+'%';
+  document.getElementById('progPct').textContent  = pct+'%';
+  document.getElementById('progInfo').textContent = info||'';
+  document.getElementById('phDone').textContent  = done;
+  document.getElementById('phTotal').textContent = total||'—';
+  document.getElementById('phPct').textContent   = pct+'%';
+}
+
+// ── Configurações SIEG ────────────────────────────────────
+async function loadConfig() {
+  try {
+    const r = await fetch('/api/sieg/config');
+    const d = await r.json();
+    if (d.cnpj) document.getElementById('cnpjInp').value = fmtCNPJ(d.cnpj);
+    if (d.temKey) {
+      document.getElementById('siegKeyInp').value = '••••••••••••••••';
+      document.getElementById('siegDot').className = 'key-dot ok';
+      document.getElementById('badgeSieg').className = 'tb-badge sieg';
+      document.getElementById('badgeSieg').innerHTML = '<div class="tb-dot"></div> SIEG Hub ✓';
+    }
+  } catch {}
+
+  // Verifica certificados
+  try {
+    const r = await fetch('/api/certs');
+    const d = await r.json();
+    const certs = d.certs || [];
+    const certPanel = document.getElementById('certPanel');
+    const badgeCert = document.getElementById('badgeCert');
+    if (certs.length > 0) {
+      certPanel.innerHTML = certs.map(c => `
+        <div class="cert-mini">
+          <div class="dot"></div>
+          <div class="nm">${c.name}</div>
+          <span style="font-size:9.5px;color:var(--t3);font-family:var(--fm)">${c.type||'A1'}</span>
+        </div>`).join('');
+      badgeCert.className = 'tb-badge sefaz';
+      badgeCert.innerHTML = `<div class="tb-dot"></div> Cert. A1 (${certs.length})`;
+    } else {
+      certPanel.innerHTML = '<div style="font-size:11px;color:var(--t3);font-family:var(--fm);padding:4px">Nenhum certificado — <a href="/" style="color:var(--blue)">importar</a></div>';
+    }
+  } catch {}
+}
+loadConfig();
+
+// ── Salvar API Key SIEG ───────────────────────────────────
+document.getElementById('btnSaveSieg').addEventListener('click', async () => {
+  const raw = document.getElementById('siegKeyInp').value.trim();
+  if (raw === '••••••••••••••••') { toast('Key já salva','ok'); return; }
+  if (!raw || raw.length < 8) { toast('API Key inválida','err'); return; }
+  const r = await fetch('/api/sieg/key/save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:raw})});
+  const d = await r.json();
+  if (d.ok) {
+    document.getElementById('siegKeyInp').value = '••••••••••••••••';
+    document.getElementById('siegDot').className = 'key-dot ok';
+    document.getElementById('badgeSieg').className = 'tb-badge sieg';
+    document.getElementById('badgeSieg').innerHTML = '<div class="tb-dot"></div> SIEG Hub ✓';
+    toast('API Key do SIEG salva!','ok');
+  } else { toast('Erro: '+(d.error||'falha'),'err'); }
+});
+document.getElementById('btnClearSieg').addEventListener('click', async () => {
+  await fetch('/api/sieg/key',{method:'DELETE'});
+  document.getElementById('siegKeyInp').value = '';
+  document.getElementById('siegDot').className = 'key-dot';
+  document.getElementById('badgeSieg').className = 'tb-badge off';
+  document.getElementById('badgeSieg').innerHTML = '<div class="tb-dot"></div> SIEG Hub';
+  toast('API Key removida');
+});
+
+// ── Tipo de nota ──────────────────────────────────────────
+let tipoSel = 'ambos';
+document.querySelectorAll('.tipo-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tipo-btn').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    tipoSel = btn.dataset.tipo;
+  });
+});
+
+// ── Período ───────────────────────────────────────────────
+let diasSel = 30;
+document.querySelectorAll('.prd-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.prd-btn').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    diasSel = parseInt(btn.dataset.dias);
+    document.getElementById('customDates').style.display = diasSel===0 ? 'flex' : 'none';
+  });
+});
+
+function getDatas() {
+  const hoje = new Date();
+  if (diasSel === 0) {
+    return {
+      inicio: document.getElementById('dateIni').value || new Date(hoje.getFullYear(),hoje.getMonth(),1).toISOString().slice(0,10),
+      fim:    document.getElementById('dateFim').value  || hoje.toISOString().slice(0,10),
+    };
+  }
+  const ini = new Date(hoje); ini.setDate(hoje.getDate()-diasSel);
+  return { inicio: ini.toISOString().slice(0,10), fim: hoje.toISOString().slice(0,10) };
+}
+
+// ── Dados coletados ───────────────────────────────────────
+let todasNotas = [];
+let filtroAtivo = 'TODOS';
+let buscaAtiva  = '';
+
+// ── Filtros KPI ───────────────────────────────────────────
+document.querySelectorAll('.kpi[data-filtro]').forEach(kpi => {
+  kpi.addEventListener('click', () => {
+    document.querySelectorAll('.kpi').forEach(k => k.classList.remove('sel'));
+    kpi.classList.add('sel');
+    filtroAtivo = kpi.dataset.filtro;
+    renderTabela();
+  });
+});
+document.getElementById('searchInp').addEventListener('input', e => {
+  buscaAtiva = e.target.value.toLowerCase();
+  renderTabela();
+});
+
+// ── Render tabela ─────────────────────────────────────────
+function renderTabela(notas) {
+  if (notas) todasNotas = notas;
+  const lista = todasNotas.filter(n => {
+    const div = getDivergencia(n.statusInterno, n.statusSEFAZ);
+    const passaFiltro = filtroAtivo==='TODOS' || div.tipo===filtroAtivo;
+    const passaBusca  = !buscaAtiva ||
+      (n.empresa||'').toLowerCase().includes(buscaAtiva) ||
+      (n.cnpj||'').includes(buscaAtiva) ||
+      (n.numero||'').includes(buscaAtiva);
+    return passaFiltro && passaBusca;
+  });
+
+  const tbody = document.getElementById('resultBody');
+  tbody.innerHTML = lista.map(n => {
+    const div = getDivergencia(n.statusInterno, n.statusSEFAZ);
+    const sefazCls = n.statusSEFAZ==='Autorizada'?'b-green':n.statusSEFAZ==='Cancelada'?'b-red':n.statusSEFAZ==='Denegada'?'b-red':'b-gray';
+    return `<tr>
+      <td>${n.empresa||'—'}</td>
+      <td style="font-family:var(--fm);font-size:11px">${fmtCNPJ(n.cnpj)||'—'}</td>
+      <td style="font-family:var(--fm);font-size:11px">${n.numero||'—'}${n.serie&&n.serie!=='—'?' / '+n.serie:''}</td>
+      <td style="font-family:var(--fm);font-size:11px;white-space:nowrap">${n.data||'—'}</td>
+      <td style="font-family:var(--fm);font-size:11px;white-space:nowrap">${fmtBRL(n.valor)}</td>
+      <td>${tipoBadge(n.tipo)}</td>
+      <td><span class="badge ${n.statusInterno==='Ativa'?'b-green':'b-gray'}">${n.statusInterno||'—'}</span></td>
+      <td><span class="badge ${sefazCls}">${n.statusSEFAZ||'—'}</span></td>
+      <td><span class="badge ${div.cls}">${div.label}</span></td>
+    </tr>`;
+  }).join('');
+
+  if (!lista.length) {
+    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--t3)">Nenhum resultado encontrado.</td></tr>`;
+  }
+  document.getElementById('resultCount').textContent = `${lista.length} de ${todasNotas.length} nota(s)`;
+}
+
+// ── Preview em tempo real ─────────────────────────────────
+function appendPreviewRow(nota) {
+  const div = getDivergencia(nota.statusInterno, nota.statusSEFAZ);
+  const sefazCls = nota.statusSEFAZ==='Autorizada'?'b-green':nota.statusSEFAZ==='Cancelada'?'b-red':'b-gray';
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td>${nota.empresa||'—'}</td>
+    <td style="font-family:var(--fm);font-size:11px">${nota.numero||'—'}</td>
+    <td style="font-family:var(--fm);font-size:11px;white-space:nowrap">${nota.data||'—'}</td>
+    <td style="font-family:var(--fm);font-size:11px;white-space:nowrap">${fmtBRL(nota.valor)}</td>
+    <td>${tipoBadge(nota.tipo)}</td>
+    <td><span class="badge ${nota.statusInterno==='Ativa'?'b-green':'b-gray'}">${nota.statusInterno||'—'}</span></td>
+    <td><span class="badge ${sefazCls}">${nota.statusSEFAZ||'—'}</span></td>
+    <td><span class="badge ${div.cls}">${div.label}</span></td>`;
+  const tbody = document.getElementById('previewBody');
+  tbody.insertBefore(tr, tbody.firstChild);
+  if (tbody.children.length > 8) tbody.removeChild(tbody.lastChild);
+}
+
+// ── Iniciar conferência ───────────────────────────────────
+document.getElementById('btnConferir').addEventListener('click', async () => {
+  const cnpj = document.getElementById('cnpjInp').value.replace(/\D/g,'');
+  if (!cnpj || cnpj.length !== 14) {
+    toast('CNPJ inválido — preencha com 14 dígitos','err'); return;
+  }
+
+  // Verifica key SIEG
+  const kCheck = await fetch('/api/sieg/key/exists').then(r=>r.json()).catch(()=>({exists:false}));
+  if (!kCheck.exists) {
+    toast('Configure a API Key do SIEG Hub primeiro','err'); return;
+  }
+
+  // Salva config
+  await fetch('/api/sieg/config',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cnpj,diasPeriodo:diasSel})});
+
+  todasNotas = [];
+  filtroAtivo = 'TODOS';
+  buscaAtiva  = '';
+  document.getElementById('searchInp').value = '';
+
+  // Mostra progresso
+  showView('viewProgress');
+  document.getElementById('phTitle').textContent = 'Conectando ao SIEG Hub...';
+  document.getElementById('phSub').textContent   = `CNPJ ${fmtCNPJ(cnpj)} · ${getDatas().inicio} → ${getDatas().fim}`;
+  document.getElementById('previewWrap').style.display = 'none';
+  document.getElementById('previewBody').innerHTML = '';
+  setProgress(0, 0, 'Iniciando...');
+  setStep(1,'active'); setStep(2,''); setStep(3,''); setStep(4,'');
+  document.getElementById('btnConferir').disabled = true;
+  document.getElementById('btnConferir').textContent = '⏳ Conferindo...';
+  document.getElementById('btnExportar').disabled = true;
+
+  const { inicio, fim } = getDatas();
+
+  try {
+    const res = await fetch('/api/sieg/conferir', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ cnpj: fmtCNPJ(cnpj), dataInicio: inicio, dataFim: fim, tipo: tipoSel }),
+    });
+
+    if (!res.ok) {
+      const d = await res.json();
+      toast('Erro: '+(d.error||`HTTP ${res.status}`),'err');
+      showView('viewEmpty');
+      return;
+    }
+
+    const reader = res.body.getReader();
+    const dec    = new TextDecoder();
+    let buf = '', ev = '';
+    let totalNotas = 0, doneNotas = 0;
+
+    while (true) {
+      const {done, value} = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, {stream:true});
+      const lines = buf.split('\n'); buf = lines.pop();
+
+      for (const line of lines) {
+        if (line.startsWith('event: ')) { ev = line.slice(7).trim(); continue; }
+        if (!line.startsWith('data: '))  continue;
+        try {
+          const d = JSON.parse(line.slice(6));
+
+          if (ev === 'status') {
+            document.getElementById('phTitle').textContent = d.mensagem || '';
+            setProgress(doneNotas, totalNotas, d.mensagem||'');
+            if (d.mensagem?.includes('SIEG')) { setStep(1,'done'); setStep(2,'active'); }
+          }
+
+          if (ev === 'resultado') {
+            totalNotas = d.total || totalNotas;
+            doneNotas  = (d.idx||0) + 1;
+            todasNotas.push(d);
+            setProgress(doneNotas, totalNotas, `Conferindo nota ${doneNotas} de ${totalNotas}...`);
+            document.getElementById('phTitle').textContent = `Conferindo NF-e na SEFAZ...`;
+
+            // Mostra preview
+            document.getElementById('previewWrap').style.display = 'block';
+            appendPreviewRow(d);
+
+            setStep(1,'done'); setStep(2,'active');
+          }
+
+          if (ev === 'erro-global') {
+            toast('❌ '+(d.mensagem||'Erro'),'err',5000);
+            document.getElementById('phTitle').textContent = '❌ '+d.mensagem;
+            setStep(1,'err'); setStep(2,'err');
+          }
+
+          if (ev === 'concluido') {
+            totalNotas = d.total || todasNotas.length;
+            setProgress(totalNotas, totalNotas, 'Análise concluída!');
+            setStep(1,'done'); setStep(2,'done'); setStep(3,'done'); setStep(4,'done');
+            document.getElementById('phTitle').textContent = `✅ Conferência concluída — ${totalNotas} nota(s)`;
+            setTimeout(() => finalizarResultado(), 800);
+          }
+        } catch {}
+      }
+    }
+  } catch(e) {
+    toast('Erro de conexão: '+e.message,'err');
+    showView('viewEmpty');
+  } finally {
+    document.getElementById('btnConferir').disabled = false;
+    document.getElementById('btnConferir').textContent = '⚡ Iniciar conferência';
+  }
+});
+
+// ── Finalizar resultado ───────────────────────────────────
+function finalizarResultado() {
+  if (!todasNotas.length) { showView('viewEmpty'); return; }
+
+  showView('viewResult');
+  document.querySelectorAll('.kpi').forEach(k => k.classList.remove('sel'));
+  document.querySelector('.kpi[data-filtro="TODOS"]').classList.add('sel');
+  filtroAtivo = 'TODOS';
+
+  const critico = todasNotas.filter(n=>getDivergencia(n.statusInterno,n.statusSEFAZ).nivel===3).length;
+  const atencao = todasNotas.filter(n=>getDivergencia(n.statusInterno,n.statusSEFAZ).nivel===2).length;
+  const revisar = todasNotas.filter(n=>getDivergencia(n.statusInterno,n.statusSEFAZ).nivel===1).length;
+  const ok      = todasNotas.filter(n=>getDivergencia(n.statusInterno,n.statusSEFAZ).nivel===0).length;
+
+  document.getElementById('kpiTotal').textContent   = todasNotas.length;
+  document.getElementById('kpiCritico').textContent = critico;
+  document.getElementById('kpiAtencao').textContent = atencao;
+  document.getElementById('kpiRevisar').textContent = revisar;
+  document.getElementById('kpiOk').textContent      = ok;
+
+  document.getElementById('resultSubtitle').textContent =
+    `${todasNotas.length} nota(s) · ${critico} crítica(s) · Gerado em ${new Date().toLocaleString('pt-BR')}`;
+  document.getElementById('resultTime').textContent = new Date().toLocaleTimeString('pt-BR');
+
+  renderTabela(todasNotas);
+  document.getElementById('btnExportar').disabled = false;
+
+  if (critico > 0) toast(`⚠️ ${critico} nota(s) com divergência crítica!`, 'err', 5000);
+  else toast(`✅ Conferência concluída — ${ok} OK`, 'ok');
+}
+
+// ── Exportar CSV ──────────────────────────────────────────
+document.getElementById('btnExportar').addEventListener('click', () => {
+  if (!todasNotas.length) return;
+  const linhas = [
+    'Empresa;CNPJ;Nº;Série;Data;Valor;Tipo;Status SIEG;Status SEFAZ;Divergência',
+    ...todasNotas.map(n => {
+      const div = getDivergencia(n.statusInterno, n.statusSEFAZ);
+      return [n.empresa,fmtCNPJ(n.cnpj),n.numero,n.serie,n.data,n.valor,n.tipo,n.statusInterno,n.statusSEFAZ,div.label].join(';');
+    })
+  ];
+  const blob = new Blob(['\ufeff'+linhas.join('\n')], {type:'text/csv;charset=utf-8;'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `conferencia_nfe_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  toast('CSV exportado!','ok');
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FiscoBot Pro 5.0 — Dashboard</title>
+  <link rel="stylesheet" href="/dashboard.css"/>
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <h1>FiscoBot Pro</h1>
+        <p>Automação Fiscal</p>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Navegação</div>
+      <div class="menu">
+        <button class="menu-item active" data-section="dashboard">
+          <span class="menu-icon">▦</span> Dashboard
+        </button>
+        <button class="menu-item" data-section="empresas">
+          <span class="menu-icon">⊞</span> Empresas
+        </button>
+        <button class="menu-item" data-section="obrigacoes">
+          <span class="menu-icon">◷</span> Obrigações
+          <span class="menu-badge" id="sidebarBadge">0</span>
+        </button>
+        <button class="menu-item" data-section="certificados">
+          <span class="menu-icon">◈</span> Certificados
+        </button>
+        <button class="menu-item" data-section="automacoes">
+          <span class="menu-icon">⟳</span> Automações
+        </button>
+        <button class="menu-item" data-section="inteligencia">
+          <span class="menu-icon">◎</span> Inteligência
+        </button>
+      </div>
+
+      <div class="nav-section-label" style="margin-top:8px">Ferramentas</div>
+      <div class="menu">
+        <button class="menu-item" onclick="window.location.href='/'">
+          <span class="menu-icon">←</span> Voltar ao FiscoBot
+        </button>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sf-row">
+        <span class="sf-label">Servidor</span>
+        <span class="sf-val"><span class="online-dot"></span>Online</span>
+      </div>
+      <div class="sf-row">
+        <span class="sf-label">Versão</span>
+        <span class="sf-val">v5.0.0</span>
+      </div>
+      <div class="sf-row">
+        <span class="sf-label">Modo</span>
+        <span class="sf-val">Desktop</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Main ── -->
+  <main class="main-content">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <p class="eyebrow" id="topbarEyebrow">Painel Fiscal</p>
+        <h2 id="topbarTitle">Visão Operacional</h2>
+      </div>
+      <div class="topbar-right">
+        <span class="topbar-time" id="topbarTime">--:--:--</span>
+        <button id="btnRefresh" class="btn btn-secondary btn-sm">
+          <span id="refreshIcon">↺</span> Atualizar
+        </button>
+        <button id="btnAnalyze" class="btn btn-primary btn-sm">
+          ◎ Analisar situação
+        </button>
+      </div>
+    </header>
+
+    <div class="page-content">
+
+      <!-- ══ SEÇÃO: DASHBOARD ══ -->
+      <div id="sec-dashboard" class="page-section">
+
+        <section class="hero animate-in">
+          <div class="hero-left">
+            <span class="hero-tag">● Foco do dia</span>
+            <h3 id="heroMessage">Carregando resumo operacional...</h3>
+            <p class="hero-sub" id="heroSubtitle">Conectando com os dados do sistema.</p>
+          </div>
+          <div class="hero-badges">
+            <span class="pill danger"  id="badgeCritical">— críticas</span>
+            <span class="pill warning" id="badgeDue">— próximas</span>
+            <span class="pill success" id="badgeCerts">— certificados</span>
+          </div>
+        </section>
+
+        <section class="kpis animate-in" style="animation-delay:.05s">
+          <article class="kpi-card">
+            <span class="kpi-label">Empresas</span>
+            <strong id="kpiCompanies">—</strong>
+            <small>monitoradas</small>
+          </article>
+          <article class="kpi-card">
+            <span class="kpi-label">Críticas</span>
+            <strong id="kpiCritical">—</strong>
+            <small>pendências</small>
+          </article>
+          <article class="kpi-card">
+            <span class="kpi-label">Obrigações</span>
+            <strong id="kpiDue">—</strong>
+            <small>próximos vencimentos</small>
+          </article>
+          <article class="kpi-card">
+            <span class="kpi-label">Certificados</span>
+            <strong id="kpiCerts">—</strong>
+            <small>A1 ativos</small>
+          </article>
+        </section>
+
+        <div class="content-grid animate-in" style="animation-delay:.1s">
+          <section class="panel panel-large">
+            <div class="panel-header">
+              <div class="panel-header-left">
+                <h3>Alertas &amp; Prioridades</h3>
+                <p>O que exige atenção agora</p>
+              </div>
+            </div>
+            <div id="alertsList" class="item-list"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <div class="panel-header-left">
+                <h3>Tarefas Fiscais</h3>
+                <p>Checklist operacional</p>
+              </div>
+              <button id="btnAddTask" class="btn btn-ghost btn-sm">+ Nova</button>
+            </div>
+            <div id="tasksList" class="item-list"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <div class="panel-header-left">
+                <h3>Certificados A1</h3>
+                <p>Integração com /api/certs</p>
+              </div>
+            </div>
+            <div id="certsList" class="item-list"></div>
+          </section>
+
+          <section class="panel panel-large">
+            <div class="panel-header">
+              <div class="panel-header-left">
+                <h3>Empresas</h3>
+                <p>Base multiempresa</p>
+              </div>
+              <button id="btnSeed" class="btn btn-ghost btn-sm">Carregar exemplo</button>
+            </div>
+            <div id="companiesList"></div>
+          </section>
+
+          <section class="panel panel-full">
+            <div class="panel-header">
+              <div class="panel-header-left">
+                <h3>Inteligência Fiscal</h3>
+                <p>Análise automática do risco operacional</p>
+              </div>
+              <button id="btnCopyAnalysis" class="btn-icon btn-sm" title="Copiar">⎘</button>
+            </div>
+            <div class="analysis-wrap">
+              <div id="analysisBox" class="analysis-box empty">
+                <span style="font-size:20px;opacity:.3">◎</span>
+                Clique em <strong>Analisar situação</strong> para gerar um diagnóstico automático.
+              </div>
+            </div>
+          </section>
+        </div>
+      </div><!-- /sec-dashboard -->
+
+      <!-- ══ SEÇÃO: EMPRESAS ══ -->
+      <div id="sec-empresas" class="page-section" style="display:none"></div>
+
+      <!-- ══ SEÇÃO: OBRIGAÇÕES ══ -->
+      <div id="sec-obrigacoes" class="page-section" style="display:none"></div>
+
+      <!-- ══ SEÇÃO: CERTIFICADOS ══ -->
+      <div id="sec-certificados" class="page-section" style="display:none"></div>
+
+      <!-- ══ SEÇÃO: AUTOMAÇÕES ══ -->
+      <div id="sec-automacoes" class="page-section" style="display:none"></div>
+
+      <!-- ══ SEÇÃO: INTELIGÊNCIA ══ -->
+      <div id="sec-inteligencia" class="page-section" style="display:none"></div>
+
+    </div><!-- /page-content -->
+  </main>
+</div>
+
+<script src="/dashboard.js"></script>
+</body>
+</html>

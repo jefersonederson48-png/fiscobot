@@ -1,0 +1,2085 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FiscoBot Pro 5.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════════════════
+   FISCOBOT PRO 5.0 — Design System
+════════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  /* Base */
+  --bg:       #050a14;
+  --bg2:      #07101f;
+  --bg3:      #0a1628;
+  --bg4:      #0d1e36;
+
+  /* Panels */
+  --panel:    rgba(9,17,32,.96);
+  --panel2:   rgba(11,22,40,.98);
+  --glass:    rgba(255,255,255,.03);
+
+  /* Borders */
+  --b0:       rgba(120,160,220,.06);
+  --b1:       rgba(120,160,220,.12);
+  --b2:       rgba(120,160,220,.2);
+  --bgold:    rgba(201,168,76,.3);
+  --bgoldhi:  rgba(201,168,76,.55);
+
+  /* Brand gold */
+  --gold:     #c9a84c;
+  --gold2:    #e2c46a;
+  --gold3:    #f5d98a;
+  --golddim:  rgba(201,168,76,.09);
+  --goldmed:  rgba(201,168,76,.18);
+
+  /* Semantic */
+  --green:    #2dd4aa;
+  --greend:   rgba(45,212,170,.1);
+  --greenbr:  rgba(45,212,170,.25);
+  --red:      #ff6b8a;
+  --redd:     rgba(255,107,138,.1);
+  --redbr:    rgba(255,107,138,.25);
+  --blue:     #5ba4f5;
+  --blued:    rgba(91,164,245,.1);
+  --bluebr:   rgba(91,164,245,.25);
+  --orange:   #fb923c;
+  --oranged:  rgba(251,146,60,.1);
+
+  /* Text */
+  --t1:       #ecf2ff;
+  --t2:       #8aa4cc;
+  --t3:       #4a6080;
+  --t4:       #2a3a55;
+
+  /* Typography */
+  --ff:       'Syne', sans-serif;
+  --fm:       'JetBrains Mono', monospace;
+
+  /* Geometry */
+  --r:        9px;
+  --rl:       13px;
+  --rxl:      18px;
+
+  /* Shadows */
+  --shd:      0 20px 60px rgba(0,0,0,.45);
+  --shd2:     0 8px 32px rgba(0,0,0,.35);
+  --glow:     0 0 40px rgba(201,168,76,.12);
+}
+
+/* ── Reset ─────────────────────────────────────────────── */
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--t1);font-family:var(--ff)}
+button{font:inherit;cursor:pointer}
+a{text-decoration:none;color:inherit}
+input,select,textarea{font:inherit}
+
+/* ── Background grid ────────────────────────────────────── */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background-image:
+    linear-gradient(rgba(201,168,76,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,168,76,.025) 1px, transparent 1px);
+  background-size:48px 48px;
+  mask-image:radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 80%);
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 45% at 15% 0%, rgba(201,168,76,.09), transparent 55%),
+    radial-gradient(ellipse 50% 40% at 85% 100%, rgba(91,164,245,.07), transparent 55%),
+    radial-gradient(ellipse 40% 30% at 50% 50%, rgba(45,212,170,.04), transparent 60%);
+}
+
+/* ── App Shell ──────────────────────────────────────────── */
+#app{
+  position:relative;z-index:1;
+  display:grid;
+  grid-template-rows:48px 1fr 28px;
+  grid-template-columns:56px 260px 1fr;
+  height:100vh;
+}
+
+/* ─────────────────────────────────────────────────────────
+   ICON RAIL (coluna 1, todas as linhas)
+───────────────────────────────────────────────────────── */
+#rail{
+  grid-row:1/-1;grid-column:1;
+  background:rgba(5,10,20,.98);
+  border-right:1px solid var(--b0);
+  display:flex;flex-direction:column;align-items:center;
+  padding:12px 0;gap:4px;position:relative;z-index:10;
+}
+#rail::after{
+  content:'';position:absolute;right:0;top:5%;bottom:5%;width:1px;
+  background:linear-gradient(180deg,transparent,rgba(201,168,76,.2) 40%,rgba(201,168,76,.2) 60%,transparent);
+}
+/* ── Rail logo v5.0 ── */
+.rail-logo{
+  width:40px;height:40px;
+  border-radius:11px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:8px;flex-shrink:0;cursor:pointer;
+  position:relative;
+  transform:rotateX(8deg) rotateZ(-1deg);
+  transform-style:preserve-3d;
+  transition:all .4s cubic-bezier(.34,1.4,.64,1);
+  animation:railLogoFloat 4s ease-in-out infinite;
+  overflow:visible;
+}
+.rail-logo svg{display:block;filter:drop-shadow(0 6px 14px rgba(201,168,76,.55))}
+.rail-logo:hover{transform:translateY(-5px) rotateX(5deg) scale(1.1);animation:none}
+.rail-logo:hover svg{filter:drop-shadow(0 10px 22px rgba(201,168,76,.75)) brightness(1.1)}
+@keyframes railLogoFloat{
+  0%,100%{transform:translateY(0) rotateX(8deg) rotateZ(-1deg)}
+  50%{transform:translateY(-4px) rotateX(10deg) rotateZ(-2deg)}
+}
+
+.rail-sep{width:24px;height:1px;background:var(--b1);margin:4px 0}
+
+/* ── Ícone IA 3D relevo animado ── */
+.ia-relief{
+  position:relative;width:40px;height:40px;
+  transform-style:preserve-3d;cursor:pointer;
+  transition:transform .35s cubic-bezier(.34,1.5,.64,1),filter .35s;
+  animation:iaFloat 3.8s ease-in-out infinite;
+}
+.ia-relief:hover{transform:translateY(-8px) rotateX(8deg) rotateZ(-1.5deg) scale(1.1)!important;filter:brightness(1.15);animation:none}
+.ia-relief:active{transform:translateY(-3px) scale(1.03)!important;transition-duration:.1s}
+@keyframes iaFloat{
+  0%,100%{transform:translateY(0) rotateX(7deg) rotateZ(-1deg)}
+  50%{transform:translateY(-5px) rotateX(9deg) rotateZ(-1.5deg)}
+}
+.ia-face{
+  width:40px;height:40px;border-radius:11px;
+  background:linear-gradient(150deg,#e0c0ff 0%,#b070ff 22%,#8030e0 48%,#4c10a0 72%,#200860 100%);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;position:relative;overflow:hidden;z-index:2;
+  box-shadow:0 2px 0 rgba(255,255,255,.28) inset,0 -2px 0 rgba(0,0,0,.38) inset;
+}
+.ia-face::before{content:'';position:absolute;inset:0;border-radius:11px;
+  background:linear-gradient(155deg,rgba(255,255,255,.38) 0%,rgba(255,255,255,.08) 30%,transparent 55%,rgba(0,0,0,.18) 100%);
+  z-index:3;pointer-events:none}
+.ia-face::after{content:'';position:absolute;top:2px;left:12%;right:12%;height:1.5px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);
+  border-radius:99px;z-index:4;pointer-events:none}
+.ia-shd{
+  position:absolute;width:100%;height:100%;border-radius:11px;z-index:1;
+  background:linear-gradient(150deg,#8030e0,#4c10a0,#200860);
+  transform:translateY(8px) scaleX(.96) scaleY(.92);
+  filter:blur(2px) brightness(.25);
+  box-shadow:0 10px 0 rgba(22,4,60,.8),0 12px 4px rgba(0,0,0,.5);
+}
+.ia-proj{
+  position:absolute;bottom:-14px;left:50%;
+  width:32px;height:10px;border-radius:50%;
+  transform:translateX(-50%) scaleX(.82) scaleY(.32);
+  background:radial-gradient(ellipse,rgba(168,85,247,.5),transparent 70%);
+  z-index:0;
+  animation:iaProjFloat 3.8s ease-in-out infinite;
+}
+@keyframes iaProjFloat{
+  0%,100%{opacity:.38;transform:translateX(-50%) scaleX(.82) scaleY(.32)}
+  50%{opacity:.2;transform:translateX(-50%) scaleX(.68) scaleY(.24) translateY(4px)}
+}
+.ia-relief:hover .ia-proj{animation:none;opacity:.55}
+
+/* Versão menor para nav-item */
+.ia-relief-sm{
+  position:relative;width:18px;height:18px;
+  transform-style:preserve-3d;
+  animation:iaFloat 3.8s ease-in-out infinite;
+  display:inline-flex;flex-shrink:0;
+}
+.ia-face-sm{
+  width:18px;height:18px;border-radius:5px;
+  background:linear-gradient(150deg,#b070ff 0%,#8030e0 50%,#200860 100%);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;position:relative;overflow:hidden;z-index:2;
+}
+.ia-face-sm::before{content:'';position:absolute;inset:0;border-radius:5px;
+  background:linear-gradient(155deg,rgba(255,255,255,.35) 0%,transparent 55%);
+  z-index:3;pointer-events:none}
+
+
+/* ════════════════════════════════════════════════
+   MODELO 3 — Solid 3D Relief · Rail + Ícones
+════════════════════════════════════════════════ */
+
+/* ── Rail base ── */
+.ri{
+  width:40px;height:40px;border-radius:11px;
+  border:none;background:transparent;font-size:16px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .28s cubic-bezier(.34,1.4,.64,1);
+  position:relative;overflow:hidden;cursor:pointer;
+  transform:rotateX(8deg) rotateZ(-1deg);
+  transform-style:preserve-3d;
+}
+/* Gloss face */
+.ri::before{
+  content:'';position:absolute;inset:0;border-radius:11px;
+  background:linear-gradient(150deg,rgba(255,255,255,.32) 0%,rgba(255,255,255,.07) 35%,transparent 58%,rgba(0,0,0,.15) 100%);
+  z-index:3;pointer-events:none;
+}
+/* Top shine */
+.ri::after{
+  content:'';position:absolute;top:1.5px;left:12%;right:12%;height:1.5px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.65),transparent);
+  border-radius:99px;z-index:4;pointer-events:none;
+}
+.ri:hover{
+  transform:translateY(-7px) rotateX(5deg) rotateZ(-1deg) scale(1.08)!important;
+  filter:brightness(1.1);
+  animation:none!important;
+}
+.ri:active{transform:translateY(-2px) scale(1.02)!important;transition-duration:.1s}
+.ri-badge{
+  position:absolute;top:-3px;right:-3px;
+  background:var(--red);color:#fff;
+  font-size:8px;font-weight:700;font-family:var(--fm);
+  border-radius:99px;padding:1px 4px;min-width:14px;text-align:center;
+  line-height:1.4;border:1px solid var(--bg);z-index:10;
+}
+/* Tooltip */
+.ri[title]::after{
+  content:attr(title);position:absolute;left:calc(100% + 10px);top:50%;
+  transform:translateY(-50%);
+  background:var(--panel2);border:1px solid var(--b2);
+  color:var(--t1);font-size:11px;font-weight:600;font-family:var(--fm);
+  padding:4px 10px;border-radius:6px;white-space:nowrap;
+  opacity:0;pointer-events:none;transition:opacity .15s;z-index:100;
+  height:auto;width:auto;background-image:none;
+}
+.ri:hover[title]::after{opacity:1}
+
+/* Levitação animada base */
+@keyframes riFloat{0%,100%{transform:rotateX(8deg) rotateZ(-1deg)}50%{transform:translateY(-4px) rotateX(10deg) rotateZ(-1.5deg)}}
+
+/* ── Cores individuais por ícone ── */
+/* Gold — Home / Conferência */
+.ri-gold{
+  background:linear-gradient(150deg,#fff0a0 0%,#e8c44a 22%,#c9a84c 48%,#9a7020 72%,#6e4808 100%);
+  box-shadow:0 2px 0 rgba(255,255,255,.28) inset,0 -2px 0 rgba(0,0,0,.38) inset,
+    0 6px 0 #4a2e02,0 8px 3px rgba(0,0,0,.45),0 14px 28px rgba(201,168,76,.4);
+  animation:riFloat 4s ease-in-out infinite;
+}
+.ri-gold.on,.ri-gold:hover{box-shadow:0 2px 0 rgba(255,255,255,.28) inset,0 -2px 0 rgba(0,0,0,.38) inset,0 3px 0 #4a2e02,0 5px 2px rgba(0,0,0,.4),0 10px 24px rgba(201,168,76,.5)}
+
+/* Blue — Portais / Domínio */
+.ri-blue{
+  background:linear-gradient(150deg,#c0e0ff 0%,#5ba4f5 25%,#2872d0 52%,#143880 76%,#081838 100%);
+  box-shadow:0 2px 0 rgba(255,255,255,.28) inset,0 -2px 0 rgba(0,0,0,.38) inset,
+    0 6px 0 #04123e,0 8px 3px rgba(0,0,0,.45),0 14px 28px rgba(91,164,245,.35);
+  animation:riFloat 4.3s .2s ease-in-out infinite;
+}
+.ri-blue.on,.ri-blue:hover{box-shadow:0 2px 0 rgba(255,255,255,.28) inset,0 -2px 0 rgba(0,0,0,.38) inset,0 3px 0 #04123e,0 5px 2px rgba(0,0,0,.4),0 10px 24px rgba(91,164,245,.5)}
+
+/* Green — Certificados */
+.ri-green{
+  background:linear-gradient(150deg,#a0ffe8 0%,#2dd4aa 25%,#18a880 52%,#0e6e55 76%,#084038 100%);
+  box-shadow:0 2px 0 rgba(255,255,255,.28) inset,0 -2px 0 rgba(0,0,0,.38) inset,
+    0 6px 0 #042e22,0 8px 3px rgba(0,0,0,.45),0 14px 28px rgba(45,212,170,.35);
+  animation:riFloat 3.7s .5s ease-in-out infinite;
+}
+.ri-green.on,.ri-green:hover{box-shadow:0 2px 0 rgba(255,255,255,.28) inset,0 -2px 0 rgba(0,0,0,.38) inset,0 3px 0 #042e22,0 5px 2px rgba(0,0,0,.4),0 10px 24px rgba(45,212,170,.5)}
+
+/* Orange — Macros / Downloads */
+.ri-orange{
+  background:linear-gradient(150deg,#ffe0b0 0%,#fb923c 25%,#d05010 52%,#882008 76%,#381004 100%);
+  box-shadow:0 2px 0 rgba(255,255,255,.28) inset,0 -2px 0 rgba(0,0,0,.38) inset,
+    0 6px 0 #1e0802,0 8px 3px rgba(0,0,0,.45),0 14px 28px rgba(251,146,60,.35);
+  animation:riFloat 4.1s .8s ease-in-out infinite;
+}
+.ri-orange.on,.ri-orange:hover{box-shadow:0 2px 0 rgba(255,255,255,.28) inset,0 -2px 0 rgba(0,0,0,.38) inset,0 3px 0 #1e0802,0 5px 2px rgba(0,0,0,.4),0 10px 24px rgba(251,146,60,.5)}
+
+/* Red — SEFAZ */
+.ri-red{
+  background:linear-gradient(150deg,#ffc0d0 0%,#ff6b8a 25%,#d42050 52%,#880828 76%,#380210 100%);
+  box-shadow:0 2px 0 rgba(255,255,255,.28) inset,0 -2px 0 rgba(0,0,0,.38) inset,
+    0 6px 0 #1c0208,0 8px 3px rgba(0,0,0,.45),0 14px 28px rgba(255,107,138,.35);
+  animation:riFloat 3.9s 1.1s ease-in-out infinite;
+}
+.ri-red.on,.ri-red:hover{box-shadow:0 2px 0 rgba(255,255,255,.28) inset,0 -2px 0 rgba(0,0,0,.38) inset,0 3px 0 #1c0208,0 5px 2px rgba(0,0,0,.4),0 10px 24px rgba(255,107,138,.5)}
+
+/* Teal — Dashboard */
+.ri-teal{
+  background:linear-gradient(150deg,#a0f0e8 0%,#10c0c0 25%,#0a8888 52%,#065050 76%,#022828 100%);
+  box-shadow:0 2px 0 rgba(255,255,255,.28) inset,0 -2px 0 rgba(0,0,0,.38) inset,
+    0 6px 0 #011414,0 8px 3px rgba(0,0,0,.45),0 14px 28px rgba(16,192,192,.35);
+  animation:riFloat 4.2s .4s ease-in-out infinite;
+}
+.ri-teal.on,.ri-teal:hover{box-shadow:0 2px 0 rgba(255,255,255,.28) inset,0 -2px 0 rgba(0,0,0,.38) inset,0 3px 0 #011414,0 5px 2px rgba(0,0,0,.4),0 10px 24px rgba(16,192,192,.5)}
+
+/* Purple — Usuários */
+.ri-purple{
+  background:linear-gradient(150deg,#d4a0ff 0%,#a855f7 28%,#7020c8 52%,#3c0888 76%,#180240 100%);
+  box-shadow:0 2px 0 rgba(255,255,255,.28) inset,0 -2px 0 rgba(0,0,0,.38) inset,
+    0 6px 0 #0c0130,0 8px 3px rgba(0,0,0,.45),0 14px 28px rgba(168,85,247,.35);
+  animation:riFloat 4.4s 1.3s ease-in-out infinite;
+}
+.ri-purple.on,.ri-purple:hover{box-shadow:0 2px 0 rgba(255,255,255,.28) inset,0 -2px 0 rgba(0,0,0,.38) inset,0 3px 0 #0c0130,0 5px 2px rgba(0,0,0,.4),0 10px 24px rgba(168,85,247,.5)}
+.ri-slate{
+  background:linear-gradient(150deg,#d0e0ff 0%,#8090c0 25%,#506090 52%,#283448 76%,#0e1824 100%);
+  box-shadow:0 2px 0 rgba(255,255,255,.2) inset,0 -2px 0 rgba(0,0,0,.38) inset,
+    0 6px 0 #040810,0 8px 3px rgba(0,0,0,.45),0 14px 28px rgba(80,96,144,.3);
+  animation:riFloat 4.5s .6s ease-in-out infinite;
+}
+.ri-slate.on,.ri-slate:hover{box-shadow:0 2px 0 rgba(255,255,255,.2) inset,0 -2px 0 rgba(0,0,0,.38) inset,0 3px 0 #040810,0 5px 2px rgba(0,0,0,.4),0 10px 24px rgba(80,96,144,.5)}
+
+/* ── Portal card icons 3D ── */
+.pc-ico{
+  width:44px;height:44px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+  flex-shrink:0;position:relative;overflow:hidden;
+  transition:all .28s cubic-bezier(.34,1.4,.64,1);
+  transform:rotateX(8deg) rotateZ(-1deg);
+  transform-style:preserve-3d;
+}
+.pc-ico::before{content:'';position:absolute;inset:0;border-radius:12px;
+  background:linear-gradient(150deg,rgba(255,255,255,.3) 0%,rgba(255,255,255,.06) 35%,transparent 58%,rgba(0,0,0,.14) 100%);
+  z-index:3;pointer-events:none}
+.pc-ico::after{content:'';position:absolute;top:1.5px;left:11%;right:11%;height:1.5px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent);
+  border-radius:99px;z-index:4;pointer-events:none}
+.portal-card:hover .pc-ico{
+  transform:translateY(-5px) rotateX(5deg) scale(1.07)!important;
+  filter:brightness(1.1);
+}
+/* Portal icon colors */
+.pci-gold{background:linear-gradient(150deg,#fff0a0,#e8c44a,#c9a84c,#9a7020,#6e4808);
+  box-shadow:0 2px 0 rgba(255,255,255,.25) inset,0 -1px 0 rgba(0,0,0,.3) inset,0 5px 0 #4a2e02,0 7px 14px rgba(201,168,76,.4)}
+.pci-teal{background:linear-gradient(150deg,#a0ffe8,#2dd4aa,#18a880,#0e6e55,#084038);
+  box-shadow:0 2px 0 rgba(255,255,255,.25) inset,0 -1px 0 rgba(0,0,0,.3) inset,0 5px 0 #042e22,0 7px 14px rgba(45,212,170,.4)}
+.pci-blue{background:linear-gradient(150deg,#c0e0ff,#5ba4f5,#2872d0,#143880,#081838);
+  box-shadow:0 2px 0 rgba(255,255,255,.25) inset,0 -1px 0 rgba(0,0,0,.3) inset,0 5px 0 #04123e,0 7px 14px rgba(91,164,245,.4)}
+.pci-navy{background:linear-gradient(150deg,#506090,#283448,#141c28,#0a1020,#060810);
+  box-shadow:0 2px 0 rgba(255,255,255,.15) inset,0 -1px 0 rgba(0,0,0,.4) inset,0 5px 0 #020408,0 7px 14px rgba(40,52,72,.5)}
+.pci-purple{background:linear-gradient(150deg,#d4a0ff,#a855f7,#7020c8,#3c0888,#180240);
+  box-shadow:0 2px 0 rgba(255,255,255,.25) inset,0 -1px 0 rgba(0,0,0,.3) inset,0 5px 0 #0c0130,0 7px 14px rgba(168,85,247,.4)}
+.pci-green{background:linear-gradient(150deg,#a0ffe8,#34d399,#059669,#065040,#022818);
+  box-shadow:0 2px 0 rgba(255,255,255,.25) inset,0 -1px 0 rgba(0,0,0,.3) inset,0 5px 0 #011a0c,0 7px 14px rgba(52,211,153,.4)}
+.pci-orange{background:linear-gradient(150deg,#ffe0b0,#fb923c,#d05010,#882008,#381004);
+  box-shadow:0 2px 0 rgba(255,255,255,.25) inset,0 -1px 0 rgba(0,0,0,.3) inset,0 5px 0 #1e0802,0 7px 14px rgba(251,146,60,.4)}
+.pci-cyan{background:linear-gradient(150deg,#a0f8ff,#22d3ee,#0891b2,#0e5470,#042838);
+  box-shadow:0 2px 0 rgba(255,255,255,.25) inset,0 -1px 0 rgba(0,0,0,.3) inset,0 5px 0 #01141e,0 7px 14px rgba(6,182,212,.4)}
+.pci-red{background:linear-gradient(150deg,#ffc0d0,#ff6b8a,#d42050,#880828,#380210);
+  box-shadow:0 2px 0 rgba(255,255,255,.25) inset,0 -1px 0 rgba(0,0,0,.3) inset,0 5px 0 #1c0208,0 7px 14px rgba(255,107,138,.4)}
+.pci-gold2{background:linear-gradient(150deg,#fff0a0,#c9a84c,#a07020,#6e4808,#3a2204);
+  box-shadow:0 2px 0 rgba(255,255,255,.22) inset,0 -1px 0 rgba(0,0,0,.3) inset,0 5px 0 #1e1002,0 7px 14px rgba(201,168,76,.35)}
+.pci-indigo{background:linear-gradient(150deg,#c0c8ff,#6070f0,#3040c8,#181880,#080840);
+  box-shadow:0 2px 0 rgba(255,255,255,.25) inset,0 -1px 0 rgba(0,0,0,.3) inset,0 5px 0 #020230,0 7px 14px rgba(99,102,241,.4)}
+.pci-slate{background:linear-gradient(150deg,#d0e0ff,#8090c0,#506090,#283448,#0e1824);
+  box-shadow:0 2px 0 rgba(255,255,255,.2) inset,0 -1px 0 rgba(0,0,0,.3) inset,0 5px 0 #040810,0 7px 14px rgba(80,96,144,.35)}
+
+
+/* ─────────────────────────────────────────────────────────
+   SIDEBAR (coluna 2, linhas 1-3)
+───────────────────────────────────────────────────────── */
+#sidebar{
+  grid-row:1/-1;grid-column:2;
+  background:var(--panel);
+  border-right:1px solid var(--b1);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  position:relative;z-index:9;
+}
+#sidebar::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,168,76,.4),transparent);
+}
+
+/* Sidebar header */
+.sb-head{
+  padding:14px 14px 12px;
+  border-bottom:1px solid var(--b0);
+  flex-shrink:0;
+}
+.sb-brand{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.sb-brand-name{font-size:14px;font-weight:800;letter-spacing:-.3px;line-height:1.2}
+.sb-brand-ver{
+  font-size:9px;font-weight:700;font-family:var(--fm);
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  letter-spacing:.5px;
+}
+.sb-brand-sub{font-size:9.5px;color:var(--t3);font-family:var(--fm);margin-top:1px}
+
+/* Search */
+.sb-search{
+  display:flex;align-items:center;gap:8px;
+  background:var(--bg3);border:1px solid var(--b1);border-radius:var(--r);
+  padding:7px 10px;cursor:text;transition:border-color .2s;
+}
+.sb-search:focus-within{border-color:var(--bgold)}
+.sb-search input{
+  flex:1;background:transparent;border:none;outline:none;
+  font-size:11.5px;color:var(--t1);font-family:var(--fm);
+}
+.sb-search input::placeholder{color:var(--t3)}
+.sb-search-ico{font-size:12px;color:var(--t3);flex-shrink:0}
+.sb-search-kbd{
+  font-size:9px;color:var(--t4);font-family:var(--fm);
+  background:var(--bg);border:1px solid var(--b1);
+  border-radius:4px;padding:1px 5px;flex-shrink:0;
+}
+
+/* Nav sections */
+.sb-scroll{flex:1;overflow-y:auto;padding:10px 10px 0}
+.sb-scroll::-webkit-scrollbar{width:3px}
+.sb-scroll::-webkit-scrollbar-thumb{background:var(--t4);border-radius:99px}
+.sb-sec{font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--t4);text-transform:uppercase;font-family:var(--fm);padding:10px 6px 5px}
+.nav-item{
+  display:flex;align-items:center;gap:9px;
+  padding:8px 10px;border-radius:var(--r);border:1px solid transparent;
+  background:transparent;color:var(--t2);font-size:12px;font-weight:600;
+  transition:all .16s;width:100%;text-align:left;margin-bottom:2px;
+}
+.nav-item .ni-ico{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+.nav-item .ni-badge{
+  margin-left:auto;font-size:9px;font-weight:700;font-family:var(--fm);
+  padding:1px 6px;border-radius:99px;
+}
+.nav-item:hover{background:var(--golddim);color:var(--t1);border-color:var(--b1)}
+.nav-item.on{background:var(--goldmed);color:var(--gold);border-color:var(--bgold)}
+.nav-item.on::before{
+  content:'';position:absolute;left:0;top:20%;bottom:20%;
+  width:2px;background:var(--gold);border-radius:0 2px 2px 0;
+}
+.nav-item{position:relative}
+
+/* ── Portal cards 3D v5.0 ── */
+.portal-card{
+  background:var(--panel);border:1px solid var(--b0);border-radius:var(--rl);
+  padding:15px 13px;cursor:pointer;
+  transition:all .25s cubic-bezier(.34,1.4,.64,1);
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;gap:10px;
+  transform-style:preserve-3d;
+}
+/* Gloss top face */
+.portal-card::before{
+  content:'';position:absolute;inset:0;border-radius:var(--rl);
+  background:linear-gradient(150deg,rgba(255,255,255,.06) 0%,transparent 50%);
+  pointer-events:none;z-index:1;opacity:0;transition:opacity .2s;
+}
+/* Gold bottom accent */
+.portal-card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--gold),var(--gold2));
+  transform:scaleX(0);transform-origin:left;transition:transform .25s;z-index:2;
+}
+.portal-card:hover{
+  border-color:var(--bgold);
+  background:linear-gradient(150deg,rgba(201,168,76,.12),rgba(201,168,76,.04));
+  transform:translateY(-4px);
+  box-shadow:
+    0 1px 0 rgba(255,220,80,.15) inset,
+    0 8px 0 rgba(100,70,5,.5),
+    0 10px 4px rgba(0,0,0,.4),
+    0 16px 36px rgba(0,0,0,.45),
+    0 0 28px rgba(201,168,76,.15);
+}
+.portal-card:hover::before{opacity:1}
+.portal-card:hover::after{transform:scaleX(1)}
+.portal-card:active{transform:translateY(-1px)!important}
+
+/* Sidebar footer */
+.sb-foot{
+  padding:10px 12px;border-top:1px solid var(--b0);flex-shrink:0;
+  display:flex;flex-direction:column;gap:6px;
+}
+.sb-company{
+  background:var(--bg3);border:1px solid var(--b1);border-radius:var(--r);
+  padding:9px 10px;cursor:pointer;transition:border-color .2s;
+}
+.sb-company:hover{border-color:var(--bgold)}
+.sb-co-name{font-size:11.5px;font-weight:700;color:var(--t1);margin-bottom:2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-co-meta{font-size:9.5px;color:var(--t3);font-family:var(--fm);display:flex;align-items:center;gap:5px}
+.sb-co-dot{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 5px var(--green)}
+.sb-user-row{display:flex;align-items:center;gap:8px;padding:2px 2px}
+.sb-user-av{
+  width:26px;height:26px;border-radius:7px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:800;color:#05100a;flex-shrink:0;
+}
+.sb-user-info{flex:1;min-width:0}
+.sb-user-name{font-size:11px;font-weight:700;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-user-role{font-size:9.5px;color:var(--t3);font-family:var(--fm)}
+
+/* ─────────────────────────────────────────────────────────
+   TOPBAR (linha 1, coluna 3)
+───────────────────────────────────────────────────────── */
+#topbar{
+  grid-row:1;grid-column:3;
+  background:rgba(5,10,20,.9);
+  border-bottom:1px solid var(--b1);
+  backdrop-filter:blur(20px);
+  display:flex;align-items:center;padding:0 20px;gap:10px;
+  position:relative;z-index:8;
+}
+#topbar::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,168,76,.3) 30%,rgba(91,164,245,.2) 70%,transparent);
+}
+.tb-breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t3)}
+.tb-breadcrumb .sep{color:var(--t4)}
+.tb-breadcrumb .cur{color:var(--t1);font-weight:700}
+.tb-spacer{flex:1}
+.tb-pill{
+  display:flex;align-items:center;gap:5px;
+  padding:4px 10px;border-radius:99px;
+  font-size:10.5px;font-weight:700;font-family:var(--fm);
+  border:1px solid transparent;cursor:default;
+}
+.tb-pill.ok{background:var(--greend);border-color:var(--greenbr);color:var(--green)}
+.tb-pill.warn{background:var(--oranged);border-color:rgba(251,146,60,.3);color:var(--orange)}
+.tp-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+.tb-action{
+  width:32px;height:32px;border-radius:8px;border:1px solid var(--b1);
+  background:transparent;color:var(--t3);font-size:14px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .18s;position:relative;
+}
+.tb-action:hover{border-color:var(--bgold);color:var(--gold);background:var(--golddim)}
+.tb-notif-badge{
+  position:absolute;top:-3px;right:-3px;
+  background:var(--red);color:#fff;font-size:8px;font-weight:700;
+  border-radius:99px;padding:1px 4px;font-family:var(--fm);
+  border:1px solid var(--bg);line-height:1.4;
+}
+
+/* Electron window controls */
+#winControls{display:none;align-items:center;gap:2px;margin-left:6px}
+.wc-btn{
+  width:26px;height:26px;border-radius:6px;border:1px solid var(--b1);
+  background:transparent;color:var(--t3);cursor:pointer;font-size:11px;
+  display:flex;align-items:center;justify-content:center;transition:all .18s;
+}
+.wc-btn:hover{background:rgba(255,255,255,.08);color:var(--t1)}
+.wc-btn.close:hover{background:rgba(255,107,138,.2);border-color:var(--redbr);color:var(--red)}
+
+/* ─────────────────────────────────────────────────────────
+   MAIN CONTENT (linha 2, coluna 3)
+───────────────────────────────────────────────────────── */
+#main{
+  grid-row:2;grid-column:3;
+  overflow-y:auto;overflow-x:hidden;
+  display:flex;flex-direction:column;
+  position:relative;
+}
+#main::-webkit-scrollbar{width:4px}
+#main::-webkit-scrollbar-thumb{background:var(--t4);border-radius:99px}
+
+/* ── Sections (abas do main) ──────────────────────────── */
+.main-section{display:none;flex-direction:column;gap:0;flex:1}
+.main-section.on{display:flex}
+
+/* ─────────────────────────────────────────────────────────
+   HOME SECTION
+───────────────────────────────────────────────────────── */
+/* Hero strip */
+.home-hero{
+  padding:28px 28px 20px;
+  display:flex;align-items:flex-end;justify-content:space-between;gap:20px;
+  position:relative;overflow:hidden;flex-shrink:0;
+}
+.home-hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 100% at 0% 50%,rgba(201,168,76,.06),transparent 60%);
+  pointer-events:none;
+}
+.hero-left{}
+.hero-eyebrow{
+  font-size:9.5px;font-weight:700;letter-spacing:2px;color:var(--gold);
+  text-transform:uppercase;font-family:var(--fm);margin-bottom:8px;
+  display:flex;align-items:center;gap:7px;
+}
+.hero-eyebrow::before{content:'';width:20px;height:1px;background:var(--gold);opacity:.6}
+.hero-title{font-size:28px;font-weight:800;letter-spacing:-.7px;line-height:1.15;margin-bottom:6px}
+.hero-title span{
+  background:linear-gradient(135deg,var(--gold) 30%,var(--gold3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero-sub{font-size:12.5px;color:var(--t2);line-height:1.7;max-width:400px}
+.hero-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+
+/* Quick actions */
+.qa-btn{
+  display:flex;align-items:center;gap:8px;
+  padding:9px 16px;border-radius:var(--rl);border:1px solid var(--b1);
+  background:var(--panel2);color:var(--t2);font-size:12px;font-weight:700;
+  transition:all .2s;white-space:nowrap;
+}
+.qa-btn:hover{border-color:var(--bgold);color:var(--gold);background:var(--golddim);transform:translateY(-1px)}
+.qa-btn.primary{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#05100a;border-color:transparent}
+.qa-btn.primary:hover{box-shadow:0 6px 24px rgba(201,168,76,.4);color:#05100a}
+
+/* Stats ribbon */
+.stats-ribbon{
+  display:grid;grid-template-columns:repeat(5,1fr);
+  gap:0;padding:0 28px 20px;flex-shrink:0;
+}
+.stat-item{
+  padding:14px 16px;background:var(--panel);border:1px solid var(--b0);
+  cursor:pointer;transition:all .2s;position:relative;overflow:hidden;
+}
+.stat-item:first-child{border-radius:var(--rl) 0 0 var(--rl)}
+.stat-item:last-child{border-radius:0 var(--rl) var(--rl) 0;border-right:1px solid var(--b0)}
+.stat-item + .stat-item{border-left:none}
+.stat-item:hover{background:var(--golddim);border-color:var(--bgold);z-index:1}
+.stat-item:hover + .stat-item{border-left-color:transparent}
+.stat-lbl{font-size:9.5px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;font-family:var(--fm);margin-bottom:8px}
+.stat-val{font-size:26px;font-weight:800;letter-spacing:-1px;line-height:1;margin-bottom:4px}
+.stat-meta{font-size:10px;color:var(--t3);font-family:var(--fm)}
+.stat-bar{
+  position:absolute;bottom:0;left:0;height:2px;
+  background:linear-gradient(90deg,var(--gold),var(--gold2));
+  border-radius:99px;transition:width .6s ease;
+}
+
+/* Portal grid */
+.portals-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px 12px;flex-shrink:0;
+}
+.ph-title{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1.5px;font-family:var(--fm)}
+.ph-count{font-size:10px;color:var(--t4);font-family:var(--fm)}
+
+.portals-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:10px;padding:0 28px 20px;flex-shrink:0;
+}
+.pc-top{display:flex;align-items:center;gap:10px}
+/* pc-ico agora usa o sistema 3D definido acima (.pc-ico, .pci-*) */
+.pc-name{font-size:12.5px;font-weight:800;color:var(--t1);letter-spacing:-.2px}
+.pc-url{font-size:10px;color:var(--t3);font-family:var(--fm);margin-top:2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pc-status{
+  display:flex;align-items:center;gap:5px;
+  font-size:9px;font-weight:700;font-family:var(--fm);
+  color:var(--green);letter-spacing:.5px;text-transform:uppercase;
+  margin-top:auto;
+}
+.pc-status-dot{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.5}}
+
+/* Activity feed */
+.home-bottom{
+  display:grid;grid-template-columns:1.1fr .9fr;gap:14px;
+  padding:0 28px 28px;flex:1;min-height:0;
+}
+.feed-panel{
+  background:var(--panel);border:1px solid var(--b0);
+  border-radius:var(--rl);display:flex;flex-direction:column;overflow:hidden;
+}
+.panel-hd{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;border-bottom:1px solid var(--b0);flex-shrink:0;
+}
+.panel-hd h3{font-size:12.5px;font-weight:800;letter-spacing:-.2px}
+.panel-hd p{font-size:10.5px;color:var(--t3);margin-top:2px}
+.panel-body{flex:1;overflow-y:auto;padding:12px}
+.panel-body::-webkit-scrollbar{width:3px}
+.panel-body::-webkit-scrollbar-thumb{background:var(--t4);border-radius:99px}
+
+/* Activity items */
+.act-item{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:9px 10px;border-radius:8px;border:1px solid transparent;
+  transition:all .15s;margin-bottom:6px;
+}
+.act-item:hover{background:var(--glass);border-color:var(--b0)}
+.act-ico{
+  width:26px;height:26px;border-radius:7px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:11px;
+  border:1px solid transparent;
+}
+.act-ico.ok{background:var(--greend);border-color:var(--greenbr)}
+.act-ico.warn{background:var(--oranged);border-color:rgba(251,146,60,.3)}
+.act-ico.err{background:var(--redd);border-color:var(--redbr)}
+.act-ico.info{background:var(--blued);border-color:var(--bluebr)}
+.act-ico.gold{background:var(--golddim);border-color:var(--bgold)}
+.act-body{flex:1;min-width:0}
+.act-title{font-size:11.5px;font-weight:700;color:var(--t1);margin-bottom:2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.act-meta{font-size:10px;color:var(--t3);font-family:var(--fm)}
+.act-time{font-size:9.5px;color:var(--t4);font-family:var(--fm);flex-shrink:0;margin-top:2px}
+
+/* Mini quick links */
+.quick-links{display:flex;flex-direction:column;gap:6px}
+.ql-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;background:var(--bg3);border:1px solid var(--b0);
+  border-radius:var(--r);cursor:pointer;transition:all .18s;
+}
+.ql-item:hover{border-color:var(--bgold);background:var(--golddim)}
+.ql-ico{width:28px;height:28px;border-radius:7px;background:var(--goldmed);border:1px solid var(--bgold);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.ql-name{font-size:12px;font-weight:700;color:var(--t1)}
+.ql-sub{font-size:10px;color:var(--t3);font-family:var(--fm);margin-top:1px}
+.ql-arr{color:var(--t4);font-size:12px;margin-left:auto}
+.ql-item:hover .ql-arr{color:var(--gold)}
+
+/* ─────────────────────────────────────────────────────────
+   DRAWER (panel lateral flutuante)
+───────────────────────────────────────────────────────── */
+#drawer{
+  position:fixed;top:0;right:0;bottom:0;width:380px;
+  background:var(--panel2);border-left:1px solid var(--b1);
+  display:none;flex-direction:column;z-index:200;
+  box-shadow:-24px 0 80px rgba(0,0,0,.5);
+  animation:slideIn .22s cubic-bezier(.34,1.25,.64,1);
+}
+@keyframes slideIn{from{transform:translateX(100%)}to{transform:none}}
+#drawer.open{display:flex}
+.drawer-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.4);
+  backdrop-filter:blur(2px);z-index:199;display:none;
+}
+.drawer-overlay.open{display:block}
+.dw-tabs{
+  display:flex;border-bottom:1px solid var(--b1);flex-shrink:0;
+  background:rgba(5,10,20,.8);
+}
+.dw-tab{
+  flex:1;padding:12px 8px;border:none;background:transparent;
+  color:var(--t3);font-size:11px;font-weight:700;font-family:var(--fm);
+  cursor:pointer;transition:all .18s;border-bottom:2px solid transparent;
+  letter-spacing:.3px;
+}
+.dw-tab:hover{color:var(--t1)}
+.dw-tab.on{color:var(--gold);border-bottom-color:var(--gold)}
+.dw-close{
+  width:36px;border:none;background:transparent;color:var(--t3);font-size:15px;
+  cursor:pointer;transition:color .18s;flex-shrink:0;padding:0 10px;
+}
+.dw-close:hover{color:var(--red)}
+.dw-body{flex:1;overflow-y:auto;padding:14px}
+.dw-body::-webkit-scrollbar{width:3px}
+.dw-body::-webkit-scrollbar-thumb{background:var(--t4);border-radius:99px}
+.dw-section{display:none}
+.dw-section.on{display:block}
+
+/* Drawer common */
+.dw-lbl{font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--t3);text-transform:uppercase;font-family:var(--fm);margin:12px 0 6px}
+.dw-inp{
+  width:100%;background:var(--bg3);border:1px solid var(--b1);
+  border-radius:var(--r);padding:8px 10px;color:var(--t1);
+  font-size:12px;font-family:var(--fm);outline:none;transition:border-color .2s;
+}
+.dw-inp:focus{border-color:var(--bgold)}
+.dw-inp::placeholder{color:var(--t3)}
+.dw-row{display:flex;gap:6px;margin-bottom:6px}
+.btn-dw{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 12px;border-radius:var(--r);border:1px solid var(--b1);
+  background:transparent;color:var(--t2);font-size:11.5px;font-weight:700;
+  font-family:var(--ff);cursor:pointer;transition:all .18s;
+}
+.btn-dw.gold{background:var(--golddim);border-color:var(--bgold);color:var(--gold)}
+.btn-dw.gold:hover{background:var(--goldmed)}
+.btn-dw.full{width:100%;justify-content:center;padding:9px}
+.btn-dw:hover{border-color:var(--bgold);color:var(--gold);background:var(--golddim)}
+.btn-dw:active{transform:scale(.98)}
+
+/* Macro cards */
+.mc{
+  display:flex;align-items:center;gap:9px;background:var(--bg3);
+  border:1px solid var(--b0);border-radius:var(--r);padding:9px 10px;
+  margin-bottom:6px;transition:border-color .18s;
+}
+.mc:hover{border-color:var(--bgold)}
+.mc-ico{font-size:18px;flex-shrink:0}
+.mc-info{flex:1;min-width:0}
+.mc-name{font-size:12px;font-weight:700;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mc-meta{font-size:9.5px;color:var(--t3);font-family:var(--fm);margin-top:2px}
+.mc-acts{display:flex;gap:4px;flex-shrink:0}
+.btn-xs{
+  padding:4px 8px;border-radius:5px;border:1px solid var(--b1);
+  background:transparent;color:var(--t2);font-size:10px;font-weight:700;
+  font-family:var(--ff);cursor:pointer;transition:all .15s;
+}
+.btn-xs.go{border-color:var(--greenbr);color:var(--green);background:var(--greend)}
+.btn-xs.del{border-color:var(--redbr);color:var(--red);background:var(--redd)}
+.btn-xs:hover{opacity:.8}
+.recbar{
+  display:none;align-items:center;gap:7px;
+  background:var(--redd);border:1px solid var(--redbr);
+  border-radius:var(--r);padding:7px 10px;font-size:11px;color:var(--red);
+  margin-bottom:8px;font-family:var(--fm);
+}
+.recbar.on{display:flex}
+.rec-dot{width:7px;height:7px;border-radius:50%;background:var(--red);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.savebar{display:none;gap:6px;margin-bottom:8px}
+.mprog{display:none;margin-bottom:8px}
+.mprog-bg{height:3px;background:var(--bg3);border-radius:99px;overflow:hidden;border:1px solid var(--b0)}
+.mprog-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--green));width:0;transition:width .3s;border-radius:99px}
+.mprog-txt{font-size:9.5px;color:var(--t3);font-family:var(--fm);margin-top:3px}
+
+/* Fill grid */
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.fg label{display:flex;flex-direction:column;gap:3px}
+.fg label span{font-size:9px;font-weight:700;color:var(--t4);text-transform:uppercase;letter-spacing:.5px;font-family:var(--fm)}
+.fg-full{grid-column:1/-1}
+
+/* Cert stuff */
+.cert-drop{
+  border:2px dashed rgba(201,168,76,.2);border-radius:var(--rl);
+  padding:18px 12px;text-align:center;cursor:pointer;
+  background:rgba(201,168,76,.03);transition:all .2s;position:relative;
+}
+.cert-drop:hover,.cert-drop.drag{border-color:var(--gold);background:var(--golddim)}
+.cert-drop input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.cert-drop-ico{font-size:22px;margin-bottom:6px}
+.cert-drop-main{font-size:11.5px;font-weight:700;color:var(--t1);margin-bottom:3px}
+.cert-drop-sub{font-size:10px;color:var(--t3)}
+.cert-row{
+  display:flex;align-items:center;gap:8px;background:var(--bg3);
+  border:1px solid var(--b0);border-radius:var(--r);padding:8px 10px;
+  margin-bottom:5px;cursor:pointer;transition:border-color .18s;
+}
+.cert-row:hover,.cert-row.sel{border-color:var(--bgold)}
+.cr-ico{font-size:14px;flex-shrink:0}
+.cr-info{flex:1;min-width:0}
+.cr-name{font-size:11.5px;font-weight:700;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cr-meta{font-size:9px;color:var(--t3);font-family:var(--fm);margin-top:2px}
+.cr-badge{font-size:8px;font-weight:700;padding:2px 6px;border-radius:99px;background:var(--greend);color:var(--green);border:1px solid var(--greenbr);text-transform:uppercase;letter-spacing:.5px}
+.cr-actions{display:flex;gap:3px;flex-shrink:0}
+.cr-btn{
+  width:22px;height:22px;border-radius:5px;border:1px solid var(--b1);
+  background:transparent;color:var(--t3);cursor:pointer;font-size:11px;
+  display:flex;align-items:center;justify-content:center;transition:all .18s;
+}
+.cr-btn:hover{border-color:var(--bgold);color:var(--gold)}
+.cr-btn.del:hover{border-color:var(--redbr);color:var(--red)}
+
+/* Chat IA */
+.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 90px)}
+.chat-key{display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-shrink:0}
+.key-dot{width:7px;height:7px;border-radius:50%;background:var(--b1);flex-shrink:0;transition:all .3s}
+.key-dot.ok{background:var(--green);box-shadow:0 0 6px var(--green)}
+.key-dot.err{background:var(--red)}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;flex-shrink:0}
+.chip{
+  padding:3px 9px;background:var(--bg3);border:1px solid var(--b0);
+  border-radius:99px;font-size:10px;color:var(--t2);cursor:pointer;
+  transition:all .18s;font-family:var(--fm);font-weight:500;
+}
+.chip:hover{border-color:var(--bgold);color:var(--gold);background:var(--golddim)}
+.chat-msgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:2px 0}
+.chat-msgs::-webkit-scrollbar{width:3px}
+.chat-msgs::-webkit-scrollbar-thumb{background:var(--t4);border-radius:99px}
+.msg{display:flex;flex-direction:column;gap:3px}
+.msg-u{align-items:flex-end}.msg-b{align-items:flex-start}
+.bubble{max-width:92%;padding:8px 12px;border-radius:10px;font-size:11.5px;line-height:1.7}
+.msg-u .bubble{background:rgba(91,164,245,.15);border:1px solid rgba(91,164,245,.25);color:var(--t1)}
+.msg-b .bubble{background:var(--bg3);border:1px solid var(--b1);color:var(--t1)}
+.msg-time{font-size:9px;color:var(--t3);font-family:var(--fm);padding:0 2px}
+.chat-input-row{display:flex;gap:6px;padding-top:8px;flex-shrink:0}
+.chat-input-row textarea{
+  flex:1;resize:none;background:var(--bg3);border:1px solid var(--b1);
+  border-radius:var(--r);padding:8px 10px;color:var(--t1);font-size:11.5px;
+  font-family:var(--ff);outline:none;height:36px;max-height:100px;
+  transition:border-color .2s;line-height:1.5;
+}
+.chat-input-row textarea:focus{border-color:var(--bgold)}
+.cs{width:36px;height:36px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:var(--r);color:#05100a;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.cs:hover{box-shadow:0 4px 16px rgba(201,168,76,.4)}
+.cc{width:36px;height:36px;background:var(--redd);border:1px solid var(--redbr);border-radius:var(--r);color:var(--red);font-size:13px;cursor:pointer;display:none;align-items:center;justify-content:center;flex-shrink:0}
+.scursor{display:inline-block;width:2px;height:12px;background:var(--gold);margin-left:2px;animation:blink2 .7s infinite;vertical-align:middle}
+@keyframes blink2{0%,100%{opacity:1}50%{opacity:0}}
+
+/* Download toggles */
+.mon-card{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--bg3);border:1px solid var(--b0);border-radius:var(--r);
+  padding:10px 12px;cursor:pointer;transition:border-color .18s;margin-bottom:6px;
+}
+.mon-card:hover{border-color:var(--bgold)}
+.mn{font-size:12px;font-weight:700;color:var(--t1)}
+.md{font-size:10px;color:var(--t3);font-family:var(--fm);margin-top:2px}
+.toggle{width:34px;height:19px;border-radius:99px;background:var(--bg3);border:1px solid var(--b1);position:relative;transition:all .22s;flex-shrink:0}
+.toggle.on{background:var(--green);border-color:var(--green)}
+.toggle::after{content:'';position:absolute;top:2px;left:2px;width:13px;height:13px;border-radius:50%;background:#fff;transition:transform .22s cubic-bezier(.34,1.56,.64,1)}
+.toggle.on::after{transform:translateX(15px)}
+.logBox{background:var(--bg);border:1px solid var(--b0);border-radius:var(--r);height:100px;overflow-y:auto;padding:7px;margin-top:7px}
+.logBox::-webkit-scrollbar{width:3px}
+.logBox::-webkit-scrollbar-thumb{background:var(--t4);border-radius:99px}
+.lr{display:flex;gap:7px;margin-bottom:2px}
+.lt{font-size:9px;color:var(--t3);font-family:var(--fm);flex-shrink:0}
+.lm{font-size:10px;font-family:var(--fm)}
+.lm.ok{color:var(--green)}.lm.warn{color:var(--orange)}.lm.err{color:var(--red)}.lm.info{color:var(--t2)}
+
+/* ─────────────────────────────────────────────────────────
+   CONFIGURAÇÕES MODAL
+───────────────────────────────────────────────────────── */
+#cfgOverlay{
+  position:fixed;inset:0;background:rgba(2,5,14,.8);
+  backdrop-filter:blur(8px);z-index:500;
+  display:none;align-items:center;justify-content:center;
+}
+#cfgOverlay.open{display:flex}
+#cfgModal{
+  width:560px;max-height:88vh;overflow-y:auto;
+  background:var(--panel2);border:1px solid var(--b2);
+  border-radius:var(--rxl);box-shadow:0 40px 100px rgba(0,0,0,.7);
+  animation:popIn .22s cubic-bezier(.34,1.4,.64,1);
+}
+@keyframes popIn{from{opacity:0;transform:scale(.93) translateY(8px)}to{opacity:1;transform:none}}
+#cfgModal::-webkit-scrollbar{width:4px}
+#cfgModal::-webkit-scrollbar-thumb{background:var(--t4);border-radius:99px}
+.cfg-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 24px 16px;border-bottom:1px solid var(--b0);
+  position:sticky;top:0;background:var(--panel2);z-index:1;
+}
+.cfg-title{display:flex;align-items:center;gap:10px}
+.cfg-title-ico{
+  width:32px;height:32px;background:var(--goldmed);border:1px solid var(--bgold);
+  border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;
+}
+.cfg-title span{font-size:15px;font-weight:800;letter-spacing:-.3px}
+.cfg-close{
+  width:28px;height:28px;border-radius:7px;border:1px solid var(--b1);
+  background:transparent;color:var(--t3);cursor:pointer;font-size:14px;
+  display:flex;align-items:center;justify-content:center;transition:all .18s;
+}
+.cfg-close:hover{border-color:var(--redbr);color:var(--red);background:var(--redd)}
+.cfg-body{padding:20px 24px;display:flex;flex-direction:column;gap:20px}
+.cfg-group{display:flex;flex-direction:column;gap:10px}
+.cfg-group-title{
+  font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--t3);
+  text-transform:uppercase;font-family:var(--fm);
+  padding-bottom:8px;border-bottom:1px solid var(--b0);
+}
+.cfg-row{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:10px 12px;background:var(--bg3);border:1px solid var(--b0);
+  border-radius:var(--r);transition:border-color .18s;
+}
+.cfg-row:hover{border-color:rgba(255,255,255,.1)}
+.cfg-row-info{flex:1}
+.cfg-row-label{font-size:12px;font-weight:700;color:var(--t1)}
+.cfg-row-desc{font-size:10.5px;color:var(--t3);margin-top:3px;line-height:1.5;font-family:var(--fm)}
+.cfg-ctrl{flex-shrink:0}
+.sw{
+  width:40px;height:22px;border-radius:99px;background:var(--bg3);border:1px solid var(--b1);
+  position:relative;cursor:pointer;transition:all .22s;
+}
+.sw.on{background:var(--green);border-color:var(--green)}
+.sw::after{content:'';position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .22s cubic-bezier(.34,1.56,.64,1)}
+.sw.on::after{transform:translateX(18px)}
+.cfg-sel,.cfg-num{
+  background:var(--bg);border:1px solid var(--b1);border-radius:6px;
+  padding:5px 10px;color:var(--t1);font-size:11px;font-family:var(--fm);
+  outline:none;transition:border-color .2s;
+}
+.cfg-sel:focus,.cfg-num:focus{border-color:var(--bgold)}
+.cfg-range{-webkit-appearance:none;width:110px;height:3px;border-radius:99px;background:var(--bg3);outline:none;cursor:pointer;border:1px solid var(--b1)}
+.cfg-range::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--gold);cursor:pointer;border:2px solid var(--bg);box-shadow:0 0 6px rgba(201,168,76,.5)}
+.cfg-color{width:32px;height:26px;border-radius:6px;border:1px solid var(--b1);cursor:pointer;padding:2px;background:transparent}
+.cfg-badge{font-size:9.5px;font-weight:700;padding:3px 8px;border-radius:99px;background:var(--greend);color:var(--green);border:1px solid var(--greenbr);font-family:var(--fm)}
+.cfg-badge.warn{background:var(--oranged);color:var(--orange);border-color:rgba(251,146,60,.3)}
+.cfg-actbtn{
+  padding:5px 12px;border-radius:6px;border:1px solid var(--b1);
+  background:transparent;color:var(--t2);font-size:11px;font-weight:700;font-family:var(--ff);cursor:pointer;transition:all .18s;
+}
+.cfg-actbtn:hover{border-color:var(--bgold);color:var(--gold);background:var(--golddim)}
+.cfg-actbtn.danger:hover{border-color:var(--redbr);color:var(--red);background:var(--redd)}
+.cfg-foot{
+  padding:14px 24px;border-top:1px solid var(--b0);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.cfg-ver{font-size:10px;color:var(--t4);font-family:var(--fm)}
+.cfg-save{
+  padding:8px 20px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:var(--r);
+  color:#05100a;font-size:12px;font-weight:800;font-family:var(--ff);cursor:pointer;transition:all .2s;
+}
+.cfg-save:hover{box-shadow:0 4px 20px rgba(201,168,76,.4);transform:translateY(-1px)}
+
+/* ─────────────────────────────────────────────────────────
+   COMMAND PALETTE
+───────────────────────────────────────────────────────── */
+#cmdOverlay{
+  position:fixed;inset:0;background:rgba(2,5,14,.65);
+  backdrop-filter:blur(6px);z-index:600;
+  display:none;align-items:flex-start;justify-content:center;padding-top:80px;
+}
+#cmdOverlay.open{display:flex}
+#cmdPalette{
+  width:580px;background:var(--panel2);
+  border:1px solid var(--b2);border-radius:var(--rxl);
+  box-shadow:0 40px 100px rgba(0,0,0,.7);
+  overflow:hidden;animation:popIn .18s ease;
+}
+.cmd-inp-wrap{
+  display:flex;align-items:center;gap:12px;
+  padding:16px 18px;border-bottom:1px solid var(--b0);
+}
+.cmd-ico{font-size:15px;color:var(--t3);flex-shrink:0}
+.cmd-inp{
+  flex:1;background:transparent;border:none;outline:none;
+  font-size:14px;color:var(--t1);font-family:var(--fm);
+}
+.cmd-inp::placeholder{color:var(--t3)}
+.cmd-hint{font-size:10px;color:var(--t4);font-family:var(--fm);flex-shrink:0}
+.cmd-results{max-height:380px;overflow-y:auto;padding:8px}
+.cmd-results::-webkit-scrollbar{width:3px}
+.cmd-results::-webkit-scrollbar-thumb{background:var(--t4);border-radius:99px}
+.cmd-group-label{font-size:9px;font-weight:700;color:var(--t4);text-transform:uppercase;letter-spacing:1.5px;font-family:var(--fm);padding:8px 10px 4px}
+.cmd-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 10px;border-radius:var(--r);cursor:pointer;transition:all .12s;
+}
+.cmd-item:hover,.cmd-item.sel{background:var(--goldmed);border:1px solid var(--bgold)}
+.cmd-item{border:1px solid transparent}
+.cmd-item-ico{
+  width:28px;height:28px;border-radius:7px;background:var(--bg3);border:1px solid var(--b0);
+  display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;
+}
+.cmd-item-name{font-size:12.5px;font-weight:700;color:var(--t1)}
+.cmd-item-sub{font-size:10px;color:var(--t3);font-family:var(--fm);margin-top:1px}
+.cmd-item-kbd{margin-left:auto;display:flex;gap:3px;flex-shrink:0}
+.cmd-item-kbd kbd{
+  background:var(--bg);border:1px solid var(--b1);border-bottom:2px solid var(--b2);
+  border-radius:4px;padding:2px 6px;font-size:9.5px;color:var(--t3);font-family:var(--fm);
+}
+.cmd-footer{padding:10px 18px;border-top:1px solid var(--b0);display:flex;gap:14px;font-size:10px;color:var(--t4);font-family:var(--fm)}
+.cmd-footer kbd{background:var(--bg);border:1px solid var(--b1);border-radius:3px;padding:1px 5px;margin-right:3px}
+
+/* ─────────────────────────────────────────────────────────
+   NOTIFICAÇÕES
+───────────────────────────────────────────────────────── */
+#notifPanel{
+  position:fixed;top:52px;right:60px;width:340px;
+  background:var(--panel2);border:1px solid var(--b2);
+  border-radius:var(--rl);box-shadow:var(--shd);z-index:400;
+  display:none;overflow:hidden;animation:popIn .18s ease;
+}
+#notifPanel.open{display:block}
+.notif-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 14px;border-bottom:1px solid var(--b0);
+}
+.notif-head h3{font-size:12.5px;font-weight:800}
+.notif-clear{font-size:10px;color:var(--t3);background:none;border:none;cursor:pointer;font-family:var(--fm);transition:color .15s}
+.notif-clear:hover{color:var(--gold)}
+.notif-item{
+  display:flex;gap:10px;padding:11px 14px;border-bottom:1px solid var(--b0);
+  cursor:pointer;transition:background .15s;
+}
+.notif-item:hover{background:var(--glass)}
+.notif-item:last-child{border-bottom:none}
+.ni-ico{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;border:1px solid transparent}
+.ni-ico.gold{background:var(--golddim);border-color:var(--bgold)}
+.ni-ico.red{background:var(--redd);border-color:var(--redbr)}
+.ni-ico.green{background:var(--greend);border-color:var(--greenbr)}
+.ni-title{font-size:11.5px;font-weight:700;color:var(--t1);margin-bottom:2px}
+.ni-sub{font-size:10px;color:var(--t3);font-family:var(--fm);line-height:1.5}
+.ni-time{font-size:9px;color:var(--t4);font-family:var(--fm);margin-top:3px}
+
+/* ─────────────────────────────────────────────────────────
+   STATUS BAR (linha 3, colunas 1-3)
+───────────────────────────────────────────────────────── */
+#statusbar{
+  grid-row:3;grid-column:1/-1;
+  background:rgba(3,6,14,.98);
+  border-top:1px solid var(--b0);
+  display:flex;align-items:center;padding:0 8px 0 14px;
+  gap:0;font-size:10.5px;font-family:var(--fm);
+  position:relative;z-index:7;
+}
+#statusbar::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,168,76,.2) 40%,rgba(91,164,245,.15) 70%,transparent);
+}
+.sb-item{
+  display:flex;align-items:center;gap:5px;color:var(--t3);
+  padding:0 10px;cursor:pointer;height:28px;transition:color .15s;
+  border-right:1px solid var(--b0);
+}
+.sb-item:first-child{border-left:none;padding-left:2px}
+.sb-item:hover{color:var(--t1)}
+.sb-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.sb-dot.on{background:var(--green);box-shadow:0 0 5px var(--green)}
+.sb-dot.warn{background:var(--orange)}
+.sb-dot.off{background:var(--t4)}
+.sb-right{margin-left:auto;display:flex;align-items:center;gap:0}
+.sb-item.ver{border:none;color:var(--t4);cursor:default;font-size:9.5px}
+.sb-item.ver:hover{color:var(--t4)}
+
+/* ─────────────────────────────────────────────────────────
+   SIDEBAR CERTIFICADOS (quando seção ativa)
+───────────────────────────────────────────────────────── */
+.sb-cert-section{display:none;flex-direction:column;flex:1;overflow:hidden}
+.sb-cert-section.on{display:flex}
+.sb-nav-section{display:none;flex-direction:column;flex:1;overflow:hidden}
+.sb-nav-section.on{display:flex}
+
+/* ─────────────────────────────────────────────────────────
+   TOAST
+───────────────────────────────────────────────────────── */
+#toast{
+  position:fixed;bottom:36px;left:50%;
+  transform:translateX(-50%) translateY(8px);
+  background:var(--panel2);border:1px solid var(--bgold);
+  color:var(--t1);padding:7px 16px;border-radius:99px;
+  font-size:11.5px;font-weight:600;opacity:0;pointer-events:none;
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:9999;
+  white-space:nowrap;box-shadow:var(--shd);font-family:var(--ff);
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.err{border-color:var(--redbr);color:var(--red)}
+#toast.ok{border-color:var(--greenbr);color:var(--green)}
+
+/* ─────────────────────────────────────────────────────────
+   LOADING BAR
+───────────────────────────────────────────────────────── */
+#loadingBar{
+  position:fixed;top:48px;left:56px;right:0;height:2px;
+  background:linear-gradient(90deg,var(--gold),var(--green));
+  transform:scaleX(0);transform-origin:left;transition:transform .3s;z-index:999;opacity:0;
+}
+#loadingBar.on{transform:scaleX(1);opacity:1}
+
+/* ─────────────────────────────────────────────────────────
+   ANIMAÇÕES ENTRADA
+───────────────────────────────────────────────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.home-hero{animation:fadeUp .35s ease both}
+.stats-ribbon .stat-item:nth-child(1){animation:fadeUp .3s .03s ease both}
+.stats-ribbon .stat-item:nth-child(2){animation:fadeUp .3s .06s ease both}
+.stats-ribbon .stat-item:nth-child(3){animation:fadeUp .3s .09s ease both}
+.stats-ribbon .stat-item:nth-child(4){animation:fadeUp .3s .12s ease both}
+.stats-ribbon .stat-item:nth-child(5){animation:fadeUp .3s .15s ease both}
+.portal-card:nth-child(1){animation:fadeUp .3s .10s ease both}
+.portal-card:nth-child(2){animation:fadeUp .3s .14s ease both}
+.portal-card:nth-child(3){animation:fadeUp .3s .18s ease both}
+.portal-card:nth-child(4){animation:fadeUp .3s .22s ease both}
+.portal-card:nth-child(5){animation:fadeUp .3s .26s ease both}
+.portal-card:nth-child(6){animation:fadeUp .3s .30s ease both}
+.portal-card:nth-child(7){animation:fadeUp .3s .34s ease both}
+.portal-card:nth-child(8){animation:fadeUp .3s .38s ease both}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- ═══════════════════════════════════════════════════════
+     ICON RAIL
+═══════════════════════════════════════════════════════ -->
+<nav id="rail">
+  <div class="rail-logo" id="railLogo">
+    <svg width="40" height="40" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="rl-bg" cx="38%" cy="30%" r="70%">
+          <stop offset="0%"  stop-color="#1a1400"/>
+          <stop offset="40%" stop-color="#080808"/>
+          <stop offset="100%" stop-color="#020204"/>
+        </radialGradient>
+        <linearGradient id="rl-bolt" x1="195" y1="105" x2="310" y2="408" gradientUnits="userSpaceOnUse">
+          <stop offset="0%"   stop-color="#FFFBEA"/>
+          <stop offset="12%"  stop-color="#FFE878"/>
+          <stop offset="30%"  stop-color="#F5C842"/>
+          <stop offset="52%"  stop-color="#D4962A"/>
+          <stop offset="72%"  stop-color="#B87418"/>
+          <stop offset="100%" stop-color="#6A3A04"/>
+        </linearGradient>
+        <linearGradient id="rl-spec" x1="220" y1="118" x2="268" y2="350" gradientUnits="userSpaceOnUse">
+          <stop offset="0%"   stop-color="white" stop-opacity=".5"/>
+          <stop offset="50%"  stop-color="white" stop-opacity=".1"/>
+          <stop offset="100%" stop-color="white" stop-opacity="0"/>
+        </linearGradient>
+        <radialGradient id="rl-dome" cx="50%" cy="8%" r="65%">
+          <stop offset="0%"   stop-color="white" stop-opacity=".28"/>
+          <stop offset="100%" stop-color="white" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="rl-rim" x1="72" y1="72" x2="440" y2="440" gradientUnits="userSpaceOnUse">
+          <stop offset="0%"   stop-color="#FFE878"/>
+          <stop offset="25%"  stop-color="#C9A84C"/>
+          <stop offset="50%"  stop-color="#FFD060"/>
+          <stop offset="75%"  stop-color="#8A5E10"/>
+          <stop offset="100%" stop-color="#C9A84C"/>
+        </linearGradient>
+        <filter id="rl-glow" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="16" result="b"/>
+          <feColorMatrix in="b" type="matrix" values="1 0.8 0 0 0  0.7 0.5 0 0 0  0 0 0.1 0 0  0 0 0 0.5 0"/>
+        </filter>
+        <filter id="rl-bglow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="10" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="rl-shadow">
+          <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#0A0600" flood-opacity=".6"/>
+        </filter>
+        <radialGradient id="rl-warm" cx="50%" cy="22%" r="55%">
+          <stop offset="0%"   stop-color="#C9A84C" stop-opacity=".2"/>
+          <stop offset="100%" stop-color="#C9A84C" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="rl-vig" cx="50%" cy="105%" r="60%">
+          <stop offset="0%"   stop-color="black" stop-opacity=".5"/>
+          <stop offset="100%" stop-color="black" stop-opacity="0"/>
+        </radialGradient>
+        <clipPath id="rl-clip">
+          <rect x="72" y="72" width="368" height="368" rx="90"/>
+        </clipPath>
+      </defs>
+      <!-- Outer glow -->
+      <rect x="40" y="40" width="432" height="432" rx="110" fill="#C9A84C" filter="url(#rl-glow)" opacity=".45"/>
+      <!-- Body with shadow -->
+      <g filter="url(#rl-shadow)">
+        <rect x="72" y="72" width="368" height="368" rx="90" fill="url(#rl-bg)"/>
+      </g>
+      <!-- Clipped inner -->
+      <g clip-path="url(#rl-clip)">
+        <rect x="72" y="72" width="368" height="368" fill="url(#rl-bg)"/>
+        <rect x="72" y="72" width="368" height="368" fill="url(#rl-warm)"/>
+        <!-- Bolt glow halo -->
+        <path d="M286 105L152 282H233L192 411L359 218H272L286 105Z" fill="#D4962A" filter="url(#rl-bglow)" opacity=".75"/>
+        <!-- Bolt -->
+        <path d="M286 105L152 282H233L192 411L359 218H272L286 105Z" fill="url(#rl-bolt)" stroke="#FFE890" stroke-width="7" stroke-linejoin="round"/>
+        <path d="M286 105L152 282H233L192 411L359 218H272L286 105Z" fill="url(#rl-spec)"/>
+        <!-- Glass dome -->
+        <ellipse cx="256" cy="148" rx="148" ry="80" fill="url(#rl-dome)"/>
+        <!-- Top arc -->
+        <path d="M128 112 Q256 78 384 112" stroke="white" stroke-width="2" stroke-linecap="round" fill="none" opacity=".3"/>
+        <!-- Vignette -->
+        <rect x="72" y="72" width="368" height="368" fill="url(#rl-vig)"/>
+      </g>
+      <!-- Gold rim -->
+      <rect x="72" y="72" width="368" height="368" rx="90" fill="none" stroke="url(#rl-rim)" stroke-width="5"/>
+      <rect x="79" y="79" width="354" height="354" rx="85" fill="none" stroke="#FFE060" stroke-width="1.5" opacity=".25"/>
+    </svg>
+  </div>
+
+  <button class="ri ri-gold on" id="railHome" title="Home" data-section="home">⌂</button>
+  <button class="ri ri-blue" id="railPortais" title="Portais Fiscais" data-section="portais">🌐</button>
+  <button class="ri ri-green" id="railCerts" title="Certificados Digitais" data-section="certs">🔏</button>
+  <button class="ri ri-orange" id="railMacros" title="Macros e Automações" data-section="macros">⚙</button>
+
+  <div class="rail-sep"></div>
+
+  <button class="ri ri-gold" id="railNFe" title="Conferência NF-e × SEFAZ">⚖️</button>
+  <button class="ri ri-red" id="railSefaz" title="SEFAZ Automação — Acesso com certificado">🔌</button>
+  <button class="ri ri-teal" id="railDash" title="Dashboard Fiscal">▦</button>
+  <button class="ri ri-blue" id="railDominio" title="Integração Domínio">D</button>
+
+  <div class="rail-sep"></div>
+
+  <button class="ri" id="railIA" title="Agente IA · Léo" style="background:transparent;border:none;overflow:visible;width:40px;height:40px">
+    <div class="ia-relief" style="width:40px;height:40px">
+      <div class="ia-face">🧠</div>
+      <div class="ia-shd"></div>
+      <div class="ia-proj"></div>
+    </div>
+  </button>
+  <button class="ri ri-orange" id="railDown" title="Downloads e Monitor">⬇
+    <span class="ri-badge" id="railDownBadge" style="display:none">!</span>
+  </button>
+
+  <div style="margin-top:auto"></div>
+  <button class="ri ri-purple" id="railUsers" title="Gerenciar Usuários">👥</button>
+  <button class="ri ri-slate" id="railHelp" title="Ajuda e Tutorial">❓</button>
+  <button class="ri ri-slate" id="railSettings" title="Configurações">⚙</button>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════
+     SIDEBAR
+═══════════════════════════════════════════════════════ -->
+<aside id="sidebar">
+
+  <div class="sb-head">
+    <div class="sb-brand">
+      <div style="width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transform:rotateX(6deg) rotateZ(-1deg);transition:transform .3s cubic-bezier(.34,1.4,.64,1);cursor:pointer" id="sbLogo">
+        <svg width="34" height="34" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="40" y="40" width="432" height="432" rx="110" fill="#C9A84C" opacity=".3" filter="url(#rl-glow)"/>
+          <g filter="url(#rl-shadow)"><rect x="72" y="72" width="368" height="368" rx="90" fill="url(#rl-bg)"/></g>
+          <g clip-path="url(#rl-clip)">
+            <rect x="72" y="72" width="368" height="368" fill="url(#rl-bg)"/>
+            <rect x="72" y="72" width="368" height="368" fill="url(#rl-warm)"/>
+            <path d="M286 105L152 282H233L192 411L359 218H272L286 105Z" fill="#D4962A" filter="url(#rl-bglow)" opacity=".7"/>
+            <path d="M286 105L152 282H233L192 411L359 218H272L286 105Z" fill="url(#rl-bolt)" stroke="#FFE890" stroke-width="7" stroke-linejoin="round"/>
+            <path d="M286 105L152 282H233L192 411L359 218H272L286 105Z" fill="url(#rl-spec)"/>
+            <ellipse cx="256" cy="148" rx="148" ry="80" fill="url(#rl-dome)"/>
+            <rect x="72" y="72" width="368" height="368" fill="url(#rl-vig)"/>
+          </g>
+          <rect x="72" y="72" width="368" height="368" rx="90" fill="none" stroke="url(#rl-rim)" stroke-width="5"/>
+        </svg>
+      </div>
+      <div>
+        <div class="sb-brand-name">FiscoBot <span class="sb-brand-ver">PRO 5.0</span></div>
+        <div class="sb-brand-sub">Automação Fiscal</div>
+      </div>
+    </div>
+
+    <!-- Search / Command palette trigger -->
+    <div class="sb-search" id="searchTrigger">
+      <span class="sb-search-ico">🔍</span>
+      <input id="searchInp" placeholder="Buscar ou executar..." readonly>
+      <span class="sb-search-kbd">⌘K</span>
+    </div>
+  </div>
+
+  <!-- NAV SECTION: principal -->
+  <div class="sb-nav-section on" id="sbNavMain">
+    <div class="sb-scroll">
+      <div class="sb-sec">Principal</div>
+      <button class="nav-item on" data-section="home"><span class="ni-ico">⌂</span> Visão Geral</button>
+      <button class="nav-item" data-section="portais"><span class="ni-ico">🌐</span> Portais Fiscais</button>
+
+      <div class="sb-sec">Ferramentas</div>
+      <button class="nav-item" data-section="macros"><span class="ni-ico">⚙</span> Macros <span class="ni-badge" id="macroCountBadge" style="background:var(--golddim);color:var(--gold);border:1px solid var(--bgold)">0</span></button>
+      <button class="nav-item" data-section="fill"><span class="ni-ico">📝</span> AutoFill</button>
+      <button class="nav-item" data-section="downloads"><span class="ni-ico">⬇</span> Downloads</button>
+      <button class="nav-item" data-section="certs"><span class="ni-ico">🔏</span> Certificados</button>
+      <button class="nav-item" data-section="ia"><div class="ia-relief-sm"><div class="ia-face-sm">🧠</div></div> Agente IA · Léo</button>
+
+      <div class="sb-sec">Módulos</div>
+      <button class="nav-item" onclick="window.open('/conferencia','_blank')"><span class="ni-ico">⚖️</span> Conferência NF-e</button>
+      <button class="nav-item" onclick="window.open('/sefaz','_blank')"><span class="ni-ico">🔌</span> SEFAZ Automação</button>
+      <button class="nav-item" onclick="window.open('/dashboard','_blank')"><span class="ni-ico">▦</span> Dashboard Fiscal</button>
+      <button class="nav-item" onclick="window.open('/dominio','_blank')"><span class="ni-ico">D</span> Integração Domínio</button>
+      <button class="nav-item" onclick="window.open('/usuarios','_blank')"><span class="ni-ico">👥</span> Usuários</button>
+    </div>
+  </div>
+
+  <div class="sb-foot">
+    <!-- Empresa ativa -->
+    <div class="sb-company" id="sbCompany">
+      <div class="sb-co-name" id="sbCoName">Sem empresa selecionada</div>
+      <div class="sb-co-meta">
+        <div class="sb-co-dot"></div>
+        <span id="sbCoMeta">Configure em AutoFill</span>
+      </div>
+    </div>
+    <div class="sb-user-row">
+      <div class="sb-user-av" id="sbUserAv">U</div>
+      <div class="sb-user-info">
+        <div class="sb-user-name">Usuário</div>
+        <div class="sb-user-role">Coordenador Fiscal · v5.0</div>
+      </div>
+    </div>
+  </div>
+
+</aside>
+
+<!-- ═══════════════════════════════════════════════════════
+     TOPBAR
+═══════════════════════════════════════════════════════ -->
+<header id="topbar">
+  <div class="tb-breadcrumb">
+    <span>FiscoBot Pro</span>
+    <span class="sep">/</span>
+    <span class="cur" id="tbCur">Visão Geral</span>
+  </div>
+  <div class="tb-spacer"></div>
+
+  <div class="tb-pill ok" id="tbPillServer"><div class="tp-dot"></div> Servidor OK</div>
+  <div class="tb-pill ok" id="tbPillCert" style="display:none"><div class="tp-dot"></div> Cert. A1</div>
+
+  <div id="tbUser" style="display:flex;align-items:center;gap:8px;padding:0 4px">
+    <div style="width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#05100a;flex-shrink:0" id="tbUserAv">?</div>
+    <span style="font-size:11px;color:var(--t2);font-family:var(--fm);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="tbUserName">—</span>
+    <button class="tb-action" id="btnLogout" title="Sair" onclick="logout()" style="color:var(--red);font-size:13px">⏻</button>
+  </div>
+
+  <button class="tb-action" id="btnNotif" title="Notificações">
+    🔔
+    <span class="tb-notif-badge" id="notifBadge">3</span>
+  </button>
+  <button class="tb-action" id="btnCmd" title="Command Palette (Ctrl+K)">⌘</button>
+  <button class="tb-action" id="btnSettings2" title="Configurações">⚙</button>
+
+  <div id="winControls">
+    <button class="wc-btn" id="wcMin">─</button>
+    <button class="wc-btn" id="wcMax">□</button>
+    <button class="wc-btn close" id="wcClose">✕</button>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════
+     MAIN CONTENT
+═══════════════════════════════════════════════════════ -->
+<div id="main">
+<div id="loadingBar"></div>
+
+<!-- ── HOME ──────────────────────────────────────────── -->
+<div class="main-section on" id="sec-home">
+
+  <div class="home-hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">FiscoBot Pro 5.0 · Automação Fiscal</div>
+      <h1 class="hero-title" id="heroTitle">Operação fiscal<br><span>sob controle.</span></h1>
+      <p class="hero-sub" id="heroSub">Nenhum item crítico identificado. Configure portais e execute automações fiscais com inteligência.</p>
+    </div>
+    <div class="hero-right">
+      <button class="qa-btn" id="btnQuickNFe">⚖️ Conferência NF-e</button>
+      <button class="qa-btn primary" id="btnQuickIA">🧠 Consultar Léo</button>
+    </div>
+  </div>
+
+  <!-- Stats ribbon -->
+  <div class="stats-ribbon">
+    <div class="stat-item">
+      <div class="stat-lbl">Empresas</div>
+      <div class="stat-val" id="stEmpresas">0</div>
+      <div class="stat-meta">perfis salvos</div>
+      <div class="stat-bar" style="width:0%" id="stEmpresasBar"></div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-lbl">Certificados</div>
+      <div class="stat-val" id="stCerts">0</div>
+      <div class="stat-meta">A1 ativos</div>
+      <div class="stat-bar" id="stCertsBar" style="width:0%"></div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-lbl">Macros</div>
+      <div class="stat-val" id="stMacros">0</div>
+      <div class="stat-meta">automações salvas</div>
+      <div class="stat-bar" id="stMacrosBar" style="width:0%"></div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-lbl">Portais</div>
+      <div class="stat-val">8</div>
+      <div class="stat-meta">disponíveis</div>
+      <div class="stat-bar" style="width:100%"></div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-lbl">Status</div>
+      <div class="stat-val" id="stStatus" style="color:var(--green)">OK</div>
+      <div class="stat-meta" id="stStatusMeta">sistema operacional</div>
+      <div class="stat-bar" id="stStatusBar" style="width:100%;background:linear-gradient(90deg,var(--green),var(--gold))"></div>
+    </div>
+  </div>
+
+  <!-- Portais -->
+  <div class="portals-header">
+    <div class="ph-title">Portais Fiscais</div>
+    <div class="ph-count" id="phCount">8 portais disponíveis</div>
+  </div>
+  <div class="portals-grid" id="portalsGrid">
+    <div class="portal-card" data-url="https://cav.receita.fazenda.gov.br">
+      <div class="pc-top"><div class="pc-ico pci-gold">📋</div><div><div class="pc-name">Receita Federal</div><div class="pc-url">cav.receita.fazenda.gov.br</div></div></div>
+      <div class="pc-status"><div class="pc-status-dot"></div> STATUS: OK</div>
+    </div>
+    <div class="portal-card" data-url="https://esocial.gov.br">
+      <div class="pc-top"><div class="pc-ico pci-teal">👥</div><div><div class="pc-name">eSocial</div><div class="pc-url">esocial.gov.br</div></div></div>
+      <div class="pc-status"><div class="pc-status-dot"></div> STATUS: OK</div>
+    </div>
+    <div class="portal-card" data-url="https://www.nfe.fazenda.gov.br/portal">
+      <div class="pc-top"><div class="pc-ico pci-blue">📄</div><div><div class="pc-name">Portal NF-e</div><div class="pc-url">nfe.fazenda.gov.br</div></div></div>
+      <div class="pc-status"><div class="pc-status-dot"></div> STATUS: OK</div>
+    </div>
+    <div class="portal-card" data-url="https://www.sefaz.rs.gov.br">
+      <div class="pc-top"><div class="pc-ico pci-navy">🏛</div><div><div class="pc-name">SEFAZ RS</div><div class="pc-url">sefaz.rs.gov.br</div></div></div>
+      <div class="pc-status"><div class="pc-status-dot"></div> STATUS: OK</div>
+    </div>
+    <div class="portal-card" data-url="https://www.sped.rfb.gov.br">
+      <div class="pc-top"><div class="pc-ico pci-purple">💾</div><div><div class="pc-name">SPED</div><div class="pc-url">sped.rfb.gov.br</div></div></div>
+      <div class="pc-status"><div class="pc-status-dot"></div> STATUS: OK</div>
+    </div>
+    <div class="portal-card" data-url="https://www8.receita.fazenda.gov.br/simplesnacional">
+      <div class="pc-top"><div class="pc-ico pci-green">🟢</div><div><div class="pc-name">Simples Nacional</div><div class="pc-url">simplesnacional.receita</div></div></div>
+      <div class="pc-status"><div class="pc-status-dot"></div> STATUS: OK</div>
+    </div>
+    <div class="portal-card" data-url="https://www.pgfn.fazenda.gov.br">
+      <div class="pc-top"><div class="pc-ico pci-orange">⚖️</div><div><div class="pc-name">PGFN</div><div class="pc-url">pgfn.fazenda.gov.br</div></div></div>
+      <div class="pc-status"><div class="pc-status-dot"></div> STATUS: OK</div>
+    </div>
+    <div class="portal-card" data-url="https://www.gov.br/nfse">
+      <div class="pc-top"><div class="pc-ico pci-cyan">🏙</div><div><div class="pc-name">NFS-e Nacional</div><div class="pc-url">gov.br/nfse</div></div></div>
+      <div class="pc-status"><div class="pc-status-dot"></div> STATUS: OK</div>
+    </div>
+  </div>
+
+  <!-- Bottom feed -->
+  <div class="home-bottom">
+    <div class="feed-panel">
+      <div class="panel-hd">
+        <div><h3>Atividade recente</h3><p>Log em tempo real do FiscoBot</p></div>
+        <button class="btn-xs" id="btnClearLog2">Limpar</button>
+      </div>
+      <div class="panel-body" id="actFeed">
+        <div class="act-item">
+          <div class="act-ico ok">✓</div>
+          <div class="act-body"><div class="act-title">FiscoBot Pro 5.0 iniciado</div><div class="act-meta">Servidor Express · porta 3737</div></div>
+          <div class="act-time" id="startTime"></div>
+        </div>
+      </div>
+    </div>
+    <div class="feed-panel">
+      <div class="panel-hd"><div><h3>Acesso rápido</h3><p>Ferramentas e módulos</p></div></div>
+      <div class="panel-body">
+        <div class="quick-links">
+          <div class="ql-item" onclick="window.open('/conferencia','_blank')">
+            <div class="ql-ico">⚖️</div><div><div class="ql-name">Conferência NF-e × SEFAZ</div><div class="ql-sub">Automático via SIEG Hub</div></div><div class="ql-arr">→</div>
+          </div>
+          <div class="ql-item" onclick="window.open('/dashboard','_blank')">
+            <div class="ql-ico">▦</div><div><div class="ql-name">Dashboard Fiscal</div><div class="ql-sub">KPIs e alertas operacionais</div></div><div class="ql-arr">→</div>
+          </div>
+          <div class="ql-item" onclick="window.open('/dominio','_blank')">
+            <div class="ql-ico">D</div><div><div class="ql-name">Integração Domínio</div><div class="ql-sub">Automações e exportações</div></div><div class="ql-arr">→</div>
+          </div>
+          <div class="ql-item" onclick="switchSection('ia');openDrawer('ia')">
+            <div class="ql-ico" style="background:rgba(168,85,247,.12);border-color:rgba(168,85,247,.3)">🧠</div><div><div class="ql-name">Agente IA · Léo</div><div class="ql-sub">Consultoria fiscal inteligente</div></div><div class="ql-arr">→</div>
+          </div>
+          <div class="ql-item" onclick="window.open('/ajuda','_blank')">
+            <div class="ql-ico">❓</div><div><div class="ql-name">Tutorial FiscoBot Pro</div><div class="ql-sub">Guia completo de uso</div></div><div class="ql-arr">→</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── PORTAIS (seção dedicada) ─────────────────────── -->
+<div class="main-section" id="sec-portais" style="padding:28px">
+  <h2 style="font-size:20px;font-weight:800;margin-bottom:6px">Portais Fiscais</h2>
+  <p style="font-size:12px;color:var(--t2);margin-bottom:20px">Clique para abrir no seu navegador padrão</p>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+    <div class="portal-card" data-url="https://cav.receita.fazenda.gov.br"><div class="pc-top"><div class="pc-ico pci-gold">📋</div><div><div class="pc-name">eCAC</div><div class="pc-url">Receita Federal</div></div></div><div class="pc-status"><div class="pc-status-dot"></div> STATUS: OK</div></div>
+    <div class="portal-card" data-url="https://esocial.gov.br"><div class="pc-top"><div class="pc-ico pci-teal">👥</div><div><div class="pc-name">eSocial</div><div class="pc-url">esocial.gov.br</div></div></div><div class="pc-status"><div class="pc-status-dot"></div> STATUS: OK</div></div>
+    <div class="portal-card" data-url="https://www.nfe.fazenda.gov.br/portal"><div class="pc-top"><div class="pc-ico pci-blue">📄</div><div><div class="pc-name">Portal NF-e</div><div class="pc-url">nfe.fazenda.gov.br</div></div></div><div class="pc-status"><div class="pc-status-dot"></div> STATUS: OK</div></div>
+    <div class="portal-card" data-url="https://www.sefaz.rs.gov.br"><div class="pc-top"><div class="pc-ico pci-navy">🏛</div><div><div class="pc-name">SEFAZ RS</div><div class="pc-url">sefaz.rs.gov.br</div></div></div><div class="pc-status"><div class="pc-status-dot"></div> STATUS: OK</div></div>
+    <div class="portal-card" data-url="https://www.sped.rfb.gov.br"><div class="pc-top"><div class="pc-ico pci-purple">💾</div><div><div class="pc-name">SPED RFB</div><div class="pc-url">sped.rfb.gov.br</div></div></div><div class="pc-status"><div class="pc-status-dot"></div> STATUS: OK</div></div>
+    <div class="portal-card" data-url="https://www8.receita.fazenda.gov.br/simplesnacional"><div class="pc-top"><div class="pc-ico pci-green">🟢</div><div><div class="pc-name">Simples</div><div class="pc-url">Nacional</div></div></div><div class="pc-status"><div class="pc-status-dot"></div> STATUS: OK</div></div>
+    <div class="portal-card" data-url="https://www.pgfn.fazenda.gov.br"><div class="pc-top"><div class="pc-ico pci-orange">⚖️</div><div><div class="pc-name">PGFN</div><div class="pc-url">pgfn.fazenda.gov.br</div></div></div><div class="pc-status"><div class="pc-status-dot"></div> STATUS: OK</div></div>
+    <div class="portal-card" data-url="https://idg.receita.fazenda.gov.br/orientacao/tributaria/declaracoes-e-demonstrativos/dctf-declaracao-de-debitos-e-creditos-tributarios-federais/dctf-web"><div class="pc-top"><div class="pc-ico pci-gold2">📑</div><div><div class="pc-name">DCTF Web</div><div class="pc-url">Receita Federal</div></div></div><div class="pc-status"><div class="pc-status-dot"></div> STATUS: OK</div></div>
+    <div class="portal-card" data-url="https://www.gov.br/nfse"><div class="pc-top"><div class="pc-ico pci-cyan">🏙</div><div><div class="pc-name">NFS-e</div><div class="pc-url">gov.br/nfse</div></div></div><div class="pc-status"><div class="pc-status-dot"></div> STATUS: OK</div></div>
+    <div class="portal-card" data-url="https://www.acesso.gov.br"><div class="pc-top"><div class="pc-ico pci-slate">🔑</div><div><div class="pc-name">Gov.br</div><div class="pc-url">acesso.gov.br</div></div></div><div class="pc-status"><div class="pc-status-dot"></div> STATUS: OK</div></div>
+    <div class="portal-card" data-url="https://servicos.receita.fazenda.gov.br/Servicos/cpf/ConsultaSituacao/ConsultaPublica.asp"><div class="pc-top"><div class="pc-ico pci-indigo">🆔</div><div><div class="pc-name">Consulta CPF</div><div class="pc-url">Receita Federal</div></div></div><div class="pc-status"><div class="pc-status-dot"></div> STATUS: OK</div></div>
+    <div class="portal-card" data-url="https://www.receita.fazenda.gov.br/Aplicacoes/ATCTA/CNPJ/ConsultaPublica.asp"><div class="pc-top"><div class="pc-ico pci-red">🏢</div><div><div class="pc-name">Consulta CNPJ</div><div class="pc-url">Receita Federal</div></div></div><div class="pc-status"><div class="pc-status-dot"></div> STATUS: OK</div></div>
+  </div>
+</div>
+
+<!-- ── CERTS SECTION ────────────────────────────────── -->
+<div class="main-section" id="sec-certs" style="padding:28px;display:flex;flex-direction:column;gap:16px">
+  <div><h2 style="font-size:20px;font-weight:800;margin-bottom:4px">Certificados Digitais</h2><p style="font-size:12px;color:var(--t2)">Gerencie seus certificados A1 e A3</p></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;flex:1;min-height:0">
+    <div style="background:var(--panel);border:1px solid var(--b0);border-radius:var(--rl);padding:20px;display:flex;flex-direction:column;gap:14px">
+      <h3 style="font-size:13px;font-weight:800">Importar certificado</h3>
+      <div class="cert-drop" id="certDropMain">
+        <input type="file" id="certFileMain" accept=".pfx,.p12,.cer,.crt,.pem">
+        <div class="cert-drop-ico">☁️</div>
+        <div class="cert-drop-main"><strong>Arraste e solte</strong> o certificado</div>
+        <div class="cert-drop-sub">ou clique para selecionar · .pfx · .p12 · .cer</div>
+      </div>
+      <input class="dw-inp" id="certPassMain" type="password" placeholder="Senha do certificado A1...">
+      <div style="display:flex;gap:6px">
+        <input class="dw-inp" id="certNameMain" placeholder="certificado.pfx" readonly style="flex:1">
+        <button class="btn-dw gold" id="btnImportCertMain" style="padding:8px 16px">IMPORTAR</button>
+      </div>
+    </div>
+    <div style="background:var(--panel);border:1px solid var(--b0);border-radius:var(--rl);padding:20px;display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <h3 style="font-size:13px;font-weight:800">Certificados ativos</h3>
+        <button class="btn-xs" id="btnExportCertMain" disabled>⬇ Exportar</button>
+      </div>
+      <div id="certListMain" style="flex:1;overflow-y:auto">
+        <div style="color:var(--t3);font-size:11px;font-family:var(--fm);padding:8px">Nenhum certificado importado</div>
+      </div>
+      <div style="padding:12px;background:var(--greend);border:1px solid var(--greenbr);border-radius:var(--r);font-size:11px;color:var(--green);font-family:var(--fm);line-height:1.6">
+        🔒 Arquivos salvos em <code style="color:var(--gold)">%APPDATA%\.fiscobot\certs\</code><br>Senha criptografada com AES-256-GCM
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MACROS SECTION ───────────────────────────────── -->
+<div class="main-section" id="sec-macros" style="padding:28px">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px">
+    <div><h2 style="font-size:20px;font-weight:800;margin-bottom:4px">Macros e Automações</h2><p style="font-size:12px;color:var(--t2)">Grave e execute sequências de ações automaticamente</p></div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <input class="dw-inp" id="delayMs" type="number" value="600" min="100" max="5000" style="width:80px;text-align:center" title="Delay entre passos (ms)">
+      <button class="btn-dw" id="btnRec">⏺ Gravar</button>
+      <button class="btn-dw" id="btnStopRec" disabled>⏹ Parar</button>
+    </div>
+  </div>
+  <div class="recbar" id="recBar"><div class="rec-dot"></div> Gravando — <span id="recSteps">0 passos</span></div>
+  <div class="savebar" id="saveBar"><input class="dw-inp" id="macroNameInp" placeholder="Nome do macro..." style="flex:1"><button class="btn-dw gold btn-xs" id="btnSaveMacro">💾</button><button class="btn-dw btn-xs" id="btnDiscardMacro">✕</button></div>
+  <div class="mprog" id="macroProgress"><div class="mprog-bg"><div class="mprog-fill" id="macroProgressBar"></div></div><div class="mprog-txt" id="macroProgressText">0/0 passos</div></div>
+  <div id="macroList"></div>
+</div>
+
+<!-- ── FILL SECTION ─────────────────────────────────── -->
+<div class="main-section" id="sec-fill" style="padding:28px">
+  <div style="margin-bottom:20px"><h2 style="font-size:20px;font-weight:800;margin-bottom:4px">AutoFill</h2><p style="font-size:12px;color:var(--t2)">Perfis de empresa para preenchimento automático</p></div>
+  <div style="display:grid;grid-template-columns:240px 1fr;gap:16px">
+    <div style="display:flex;gap:6px;margin-bottom:10px;grid-column:1/-1">
+      <select class="dw-inp" id="profileSel" style="flex:1"></select>
+      <button class="btn-dw btn-xs" id="btnNewPrf">+ Novo</button>
+      <button class="btn-dw gold btn-xs" id="btnSavePrf">💾 Salvar</button>
+    </div>
+    <div style="grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+      <label style="display:flex;flex-direction:column;gap:3px"><span style="font-size:9px;font-weight:700;color:var(--t4);text-transform:uppercase;letter-spacing:.5px;font-family:var(--fm)">CNPJ</span><input class="dw-inp" id="f_cnpj" placeholder="00.000.000/0001-00"></label>
+      <label style="display:flex;flex-direction:column;gap:3px"><span style="font-size:9px;font-weight:700;color:var(--t4);text-transform:uppercase;letter-spacing:.5px;font-family:var(--fm)">IE</span><input class="dw-inp" id="f_ie" placeholder="Inscrição Estadual"></label>
+      <label style="display:flex;flex-direction:column;gap:3px"><span style="font-size:9px;font-weight:700;color:var(--t4);text-transform:uppercase;letter-spacing:.5px;font-family:var(--fm)">IM</span><input class="dw-inp" id="f_im" placeholder="Inscrição Municipal"></label>
+      <label style="display:flex;flex-direction:column;gap:3px;grid-column:1/-1"><span style="font-size:9px;font-weight:700;color:var(--t4);text-transform:uppercase;letter-spacing:.5px;font-family:var(--fm)">Razão Social</span><input class="dw-inp" id="f_razao" placeholder="Nome da empresa"></label>
+      <label style="display:flex;flex-direction:column;gap:3px"><span style="font-size:9px;font-weight:700;color:var(--t4);text-transform:uppercase;letter-spacing:.5px;font-family:var(--fm)">E-mail</span><input class="dw-inp" id="f_email" placeholder="contato@empresa.com"></label>
+      <label style="display:flex;flex-direction:column;gap:3px"><span style="font-size:9px;font-weight:700;color:var(--t4);text-transform:uppercase;letter-spacing:.5px;font-family:var(--fm)">Telefone</span><input class="dw-inp" id="f_tel" placeholder="(00) 00000-0000"></label>
+      <label style="display:flex;flex-direction:column;gap:3px"><span style="font-size:9px;font-weight:700;color:var(--t4);text-transform:uppercase;letter-spacing:.5px;font-family:var(--fm)">UF</span><input class="dw-inp" id="f_uf" placeholder="RS"></label>
+      <label style="display:flex;flex-direction:column;gap:3px;grid-column:1/-1"><span style="font-size:9px;font-weight:700;color:var(--t4);text-transform:uppercase;letter-spacing:.5px;font-family:var(--fm)">Endereço</span><input class="dw-inp" id="f_end" placeholder="Logradouro, número"></label>
+      <label style="display:flex;flex-direction:column;gap:3px"><span style="font-size:9px;font-weight:700;color:var(--t4);text-transform:uppercase;letter-spacing:.5px;font-family:var(--fm)">CEP</span><input class="dw-inp" id="f_cep" placeholder="00000-000"></label>
+    </div>
+    <div style="grid-column:1/-1">
+      <button class="btn-dw gold" id="btnFillPage" style="padding:10px 24px">⚡ Preencher página ativa</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── DOWNLOADS SECTION ───────────────────────────── -->
+<div class="main-section" id="sec-downloads" style="padding:28px">
+  <div style="margin-bottom:20px"><h2 style="font-size:20px;font-weight:800;margin-bottom:4px">Monitor de Downloads</h2><p style="font-size:12px;color:var(--t2)">Ative os tipos de arquivo que deseja monitorar</p></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+    <div class="mon-card" data-key="xml"><div><div class="mn">XML NF-e</div><div class="md">Arquivos XML de notas fiscais</div></div><div class="toggle" data-key="xml"></div></div>
+    <div class="mon-card" data-key="darf"><div><div class="mn">DARF</div><div class="md">Guias de pagamento federal</div></div><div class="toggle" data-key="darf"></div></div>
+    <div class="mon-card" data-key="sped"><div><div class="mn">SPED</div><div class="md">Arquivos EFD/ECD/ECF</div></div><div class="toggle" data-key="sped"></div></div>
+    <div class="mon-card" data-key="pdf"><div><div class="mn">PDF</div><div class="md">Relatórios e comprovantes</div></div><div class="toggle" data-key="pdf"></div></div>
+  </div>
+  <div style="background:var(--panel);border:1px solid var(--b0);border-radius:var(--rl);padding:16px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <span style="font-size:12.5px;font-weight:800">Log em tempo real</span>
+      <button class="btn-xs" id="btnClearLog">Limpar</button>
+    </div>
+    <div class="logBox" id="logBox"></div>
+  </div>
+</div>
+
+<!-- ── IA SECTION ───────────────────────────────────── -->
+<div class="main-section" id="sec-ia" style="padding:28px;display:flex;flex-direction:column;gap:14px;height:100%">
+  <div><h2 style="font-size:20px;font-weight:800;margin-bottom:4px">Agente IA · Léo</h2><p style="font-size:12px;color:var(--t2)">Assistente especialista em tributação brasileira</p></div>
+  <div class="chat-wrap" style="height:calc(100% - 80px)">
+    <div class="chat-key">
+      <div class="key-dot" id="apiDot"></div>
+      <input class="dw-inp" id="apiKeyInp" type="password" placeholder="sk-ant-... (Anthropic API Key)" style="flex:1;font-size:11px">
+      <button class="btn-dw gold btn-xs" id="btnSaveKey">✓</button>
+      <button class="btn-dw btn-xs" id="btnClearKey">✕</button>
+    </div>
+    <div class="chips">
+      <div class="chip" data-q="Como calcular o DAS do Simples Nacional?">DAS</div>
+      <div class="chip" data-q="Qual CFOP usar pra venda dentro do estado?">CFOP Dev.</div>
+      <div class="chip" data-q="Como calcular IRPJ no Lucro Presumido?">IRPJ LP</div>
+      <div class="chip" data-q="Qual o prazo pra entregar a EFD-ICMS?">EFD-ICMS</div>
+      <div class="chip" data-q="Como calcular o DIFAL?">DIFAL</div>
+      <div class="chip" data-q="Diferença PIS/COFINS cumulativo e não-cumulativo">PIS/COFINS</div>
+      <div class="chip" data-q="Eventos obrigatórios do eSocial em 2025">eSocial</div>
+      <div class="chip" data-q="NF-e foi cancelada, o que fazer?">NF-e</div>
+    </div>
+    <div class="chat-msgs" id="chatMsgs">
+      <div class="msg msg-b">
+        <div class="bubble" style="border-color:rgba(201,168,76,.2)">👋 <strong style="color:var(--gold)">Léo aqui!</strong> O cara que mora dentro do FiscoBot.<br><br>Pode mandar qualquer dúvida sobre tributação, os portais ou como usar o app. <strong>Fala aí, qual é a boa?</strong></div>
+        <div class="msg-time">Léo · agora</div>
+      </div>
+    </div>
+    <div class="chat-input-row">
+      <textarea id="chatInput" placeholder="Fala aí, o que tá pegando?"></textarea>
+      <button class="cs" id="btnSendChat">↑</button>
+      <button class="cc" id="btnCancelStream">■</button>
+    </div>
+    <div style="margin-top:5px"><button class="btn-xs" id="btnClearChat">↺ Zerar papo</button></div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<!-- ═══════════════════════════════════════════════════════
+     DRAWER (painel lateral flutuante)
+═══════════════════════════════════════════════════════ -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div id="drawer">
+  <div class="dw-tabs">
+    <button class="dw-tab on" data-tab="macros">⚙ Macros</button>
+    <button class="dw-tab" data-tab="fill">📝 Fill</button>
+    <button class="dw-tab" data-tab="down">⬇ Down</button>
+    <button class="dw-tab" data-tab="certs">🔏 Certs</button>
+    <button class="dw-tab" data-tab="ia">🧠 IA</button>
+    <button class="dw-close" id="drawerClose">✕</button>
+  </div>
+  <!-- Drawer content is filled by app.js -->
+  <div class="dw-body" id="drawerBody"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     NOTIFICAÇÕES
+═══════════════════════════════════════════════════════ -->
+<div id="notifPanel">
+  <div class="notif-head">
+    <h3>Notificações</h3>
+    <button class="notif-clear" id="btnClearNotif">Limpar tudo</button>
+  </div>
+  <div id="notifList">
+    <div class="notif-item"><div class="ni-ico gold">⚡</div><div><div class="ni-title">FiscoBot Pro 5.0</div><div class="ni-sub">Sistema iniciado com sucesso. Servidor Express na porta 3737.</div><div class="ni-time">Agora</div></div></div>
+    <div class="notif-item"><div class="ni-ico red">🔏</div><div><div class="ni-title">Certificado A1</div><div class="ni-sub">Nenhum certificado importado. Importe um .pfx para consultas SEFAZ.</div><div class="ni-time">Agora</div></div></div>
+    <div class="notif-item"><div class="ni-ico green">✓</div><div><div class="ni-title">Portais disponíveis</div><div class="ni-sub">8 portais fiscais configurados e prontos para acesso.</div><div class="ni-time">Agora</div></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     CONFIGURAÇÕES MODAL
+═══════════════════════════════════════════════════════ -->
+<div id="cfgOverlay">
+  <div id="cfgModal">
+    <div class="cfg-head">
+      <div class="cfg-title"><div class="cfg-title-ico">⚙</div><span>Configurações · v5.0</span></div>
+      <button class="cfg-close" id="cfgClose">✕</button>
+    </div>
+    <div class="cfg-body">
+      <div class="cfg-group">
+        <div class="cfg-group-title">Aparência</div>
+        <div class="cfg-row"><div class="cfg-row-info"><div class="cfg-row-label">Cor de destaque</div><div class="cfg-row-desc">Cor dourada da interface (aplicada ao vivo)</div></div><div class="cfg-ctrl" style="display:flex;align-items:center;gap:8px"><input type="color" class="cfg-color" id="cfg-accent" value="#c9a84c"><span style="font-size:10.5px;color:var(--t3);font-family:var(--fm)" id="cfg-accent-txt">#c9a84c</span></div></div>
+        <div class="cfg-row"><div class="cfg-row-info"><div class="cfg-row-label">Fundo de estrelas / grid</div><div class="cfg-row-desc">Animação decorativa no fundo da interface</div></div><div class="cfg-ctrl"><div class="sw on" id="cfg-grid" data-key="grid"></div></div></div>
+        <div class="cfg-row"><div class="cfg-row-info"><div class="cfg-row-label">STATUS: OK nos portais</div><div class="cfg-row-desc">Exibe indicador de status em cada card de portal</div></div><div class="cfg-ctrl"><div class="sw on" id="cfg-status" data-key="status"></div></div></div>
+      </div>
+      <div class="cfg-group">
+        <div class="cfg-group-title">Portais</div>
+        <div class="cfg-row"><div class="cfg-row-info"><div class="cfg-row-label">Quantidade de portais na home</div><div class="cfg-row-desc">Cards exibidos na tela principal</div></div><div class="cfg-ctrl"><select class="cfg-sel" id="cfg-portais"><option value="8">8 portais</option><option value="4">4 portais</option><option value="12">12 portais</option></select></div></div>
+      </div>
+      <div class="cfg-group">
+        <div class="cfg-group-title">Macros</div>
+        <div class="cfg-row"><div class="cfg-row-info"><div class="cfg-row-label">Delay padrão entre passos</div><div class="cfg-row-desc">Tempo de espera entre cada ação executada</div></div><div class="cfg-ctrl" style="display:flex;align-items:center;gap:8px"><input type="range" class="cfg-range" id="cfg-delay-range" min="100" max="3000" step="100" value="600"><input type="number" class="cfg-num" id="cfg-delay-num" value="600" min="100" max="3000" step="100" style="width:70px"><span style="font-size:10px;color:var(--t3)">ms</span></div></div>
+        <div class="cfg-row"><div class="cfg-row-info"><div class="cfg-row-label">Flash visual nos elementos</div><div class="cfg-row-desc">Borda dourada nos campos preenchidos</div></div><div class="cfg-ctrl"><div class="sw on" id="cfg-flash" data-key="flash"></div></div></div>
+      </div>
+      <div class="cfg-group">
+        <div class="cfg-group-title">Agente IA · Léo</div>
+        <div class="cfg-row"><div class="cfg-row-info"><div class="cfg-row-label">Modelo</div><div class="cfg-row-desc">Modelo Claude usado pelo Léo</div></div><div class="cfg-ctrl"><select class="cfg-sel" id="cfg-model"><option value="claude-sonnet-4-6">Sonnet 4.6 ⚡</option><option value="claude-opus-4-6">Opus 4.6 🧠</option><option value="claude-haiku-4-5-20251001">Haiku 4.5 🚀</option></select></div></div>
+        <div class="cfg-row"><div class="cfg-row-info"><div class="cfg-row-label">Tokens máximos</div><div class="cfg-row-desc">Tamanho máximo da resposta do Léo</div></div><div class="cfg-ctrl" style="display:flex;align-items:center;gap:8px"><input type="range" class="cfg-range" id="cfg-tokens-range" min="256" max="4096" step="256" value="1024"><input type="number" class="cfg-num" id="cfg-tokens-num" value="1024" style="width:70px"></div></div>
+        <div class="cfg-row"><div class="cfg-row-info"><div class="cfg-row-label">Personalidade</div><div class="cfg-row-desc">Tom das respostas do Léo</div></div><div class="cfg-ctrl"><select class="cfg-sel" id="cfg-tone"><option value="casual">😄 Descontraído</option><option value="formal">💼 Formal</option><option value="tecnico">🔬 Técnico</option></select></div></div>
+      </div>
+      <div class="cfg-group">
+        <div class="cfg-group-title">Sistema</div>
+        <div class="cfg-row"><div class="cfg-row-info"><div class="cfg-row-label">Pasta de dados</div><div class="cfg-row-desc" style="font-family:var(--fm);font-size:9.5px">%APPDATA%\.fiscobot</div></div><div class="cfg-ctrl"><button class="cfg-actbtn" id="btnOpenData">📂 Abrir</button></div></div>
+        <div class="cfg-row"><div class="cfg-row-info"><div class="cfg-row-label">Limpar todos os dados</div><div class="cfg-row-desc">Remove macros, perfis e configurações salvas</div></div><div class="cfg-ctrl"><button class="cfg-actbtn danger" id="btnClearData">🗑 Limpar</button></div></div>
+        <div class="cfg-row"><div class="cfg-row-info"><div class="cfg-row-label">Versão</div><div class="cfg-row-desc">FiscoBot Pro</div></div><div class="cfg-ctrl"><span class="cfg-badge">v 5.0.0</span></div></div>
+      </div>
+    </div>
+    <div class="cfg-foot">
+      <span class="cfg-ver">FiscoBot Pro 5.0.0 · 2026</span>
+      <button class="cfg-save" id="cfgSave">💾 Salvar configurações</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     COMMAND PALETTE
+═══════════════════════════════════════════════════════ -->
+<div id="cmdOverlay">
+  <div id="cmdPalette">
+    <div class="cmd-inp-wrap">
+      <span class="cmd-ico">⌘</span>
+      <input id="cmdInput" class="cmd-inp" placeholder="Buscar portais, ferramentas, ações...">
+      <span class="cmd-hint">ESC para fechar</span>
+    </div>
+    <div class="cmd-results" id="cmdResults"></div>
+    <div class="cmd-footer">
+      <span><kbd>↑↓</kbd> Navegar</span>
+      <span><kbd>Enter</kbd> Executar</span>
+      <span><kbd>Esc</kbd> Fechar</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     STATUS BAR
+═══════════════════════════════════════════════════════ -->
+<footer id="statusbar">
+  <div class="sb-item"><div class="sb-dot on"></div> Servidor local</div>
+  <div class="sb-item" id="sbCertStatus"><div class="sb-dot off"></div> Sem certificado</div>
+  <div class="sb-item" id="sbIAStatus"><div class="sb-dot off"></div> IA inativa</div>
+  <div class="sb-item" onclick="window.open('/conferencia','_blank')"><div class="sb-dot on"></div> NF-e</div>
+  <div class="sb-item" onclick="window.open('/dashboard','_blank')"><div class="sb-dot on"></div> Dashboard</div>
+  <div class="sb-item" onclick="window.open('/dominio','_blank')"><div class="sb-dot on"></div> Domínio</div>
+  <div class="sb-right">
+    <div class="sb-item ver">FiscoBot Pro <span style="color:var(--gold);margin-left:4px">5.0.0</span></div>
+    <div class="sb-item" id="sbTime" style="border-right:none"></div>
+  </div>
+</footer>
+
+<div id="toast"></div>
+
+</div><!-- /app -->
+
+<script>
+// ── Verificação de autenticação ───────────────────
+(async function checkAuth() {
+  const token = sessionStorage.getItem('fb_token') || localStorage.getItem('fb_token');
+  if (!token) { window.location.href = '/login'; return; }
+  try {
+    const r = await fetch('/api/auth/check', { headers: { 'x-fb-token': token } });
+    const d = await r.json();
+    if (!d.ok) { window.location.href = '/login'; return; }
+    const user = d.user || {};
+    const avEl = document.getElementById('tbUserAv');
+    const nmEl = document.getElementById('tbUserName');
+    if (avEl && user.nome) avEl.textContent = user.nome.charAt(0).toUpperCase();
+    if (nmEl && user.email) nmEl.textContent = user.email;
+  } catch { window.location.href = '/login'; }
+})();
+
+// ── Logout ────────────────────────────────────────
+async function logout() {
+  const token = sessionStorage.getItem('fb_token') || localStorage.getItem('fb_token');
+  try {
+    await fetch('/api/auth/logout', {
+      method:'POST', headers:{'Content-Type':'application/json','x-fb-token':token||''},
+      body: JSON.stringify({ token }),
+    });
+  } catch {}
+  sessionStorage.removeItem('fb_token'); sessionStorage.removeItem('fb_user');
+  localStorage.removeItem('fb_token');   localStorage.removeItem('fb_user');
+  window.location.href = '/login';
+}
+
+// Sidebar logo hover
+document.getElementById('sbLogo')?.addEventListener('mouseenter',()=>{
+  document.getElementById('sbLogo').style.transform='translateY(-3px) rotateX(4deg) scale(1.08)';
+});
+document.getElementById('sbLogo')?.addEventListener('mouseleave',()=>{
+  document.getElementById('sbLogo').style.transform='rotateX(6deg) rotateZ(-1deg)';
+});
+
+// Portal cards 3D tilt on mouse move — não sobrescreve transform do CSS
+document.querySelectorAll('.portal-card').forEach(card=>{
+  let isHovered=false;
+  card.addEventListener('mouseenter',()=>{isHovered=true});
+  card.addEventListener('mousemove',e=>{
+    if(!isHovered)return;
+    const r=card.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-.5;
+    const y=(e.clientY-r.top)/r.height-.5;
+    // usa CSS custom property para evitar conflito com :hover
+    card.style.setProperty('--tilt-x',`${(-y*5).toFixed(1)}deg`);
+    card.style.setProperty('--tilt-y',`${(x*5).toFixed(1)}deg`);
+    card.style.transform=`translateY(-4px) rotateX(${(-y*5).toFixed(1)}deg) rotateY(${(x*5).toFixed(1)}deg)`;
+  });
+  card.addEventListener('mouseleave',()=>{
+    isHovered=false;
+    card.style.transform='';
+  });
+});
+
+// Rail icon sparkle on click
+document.querySelectorAll('.ri').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const spark=document.createElement('div');
+    spark.style.cssText=`position:absolute;width:6px;height:6px;border-radius:50%;background:rgba(255,230,100,.9);pointer-events:none;z-index:20;top:50%;left:50%;transform:translate(-50%,-50%);animation:ripple3d .4s ease forwards`;
+    if(!document.getElementById('ripple3dStyle')){
+      const s=document.createElement('style');s.id='ripple3dStyle';
+      s.textContent='@keyframes ripple3d{0%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) scale(3.5)}}';
+      document.head.appendChild(s);
+    }
+    btn.appendChild(spark);
+    setTimeout(()=>spark.remove(),400);
+  });
+});
+
+document.getElementById('startTime').textContent=new Date().toTimeString().slice(0,5);
+
+// Section switch
+function switchSection(id){
+  document.querySelectorAll('.main-section').forEach(s=>{
+    s.classList.remove('on');
+    s.style.display='';
+  });
+  const sec=document.getElementById('sec-'+id);
+  if(sec){sec.classList.add('on')}
+  // Atualiza estado 'on' preservando as classes de cor 3D
+  document.querySelectorAll('.nav-item[data-section]').forEach(n=>{n.classList.toggle('on',n.dataset.section===id)})
+  document.querySelectorAll('.ri[data-section]').forEach(r=>{r.classList.toggle('on',r.dataset.section===id)})
+  const labels={'home':'Visão Geral','portais':'Portais Fiscais','certs':'Certificados','macros':'Macros','fill':'AutoFill','downloads':'Downloads','ia':'Agente IA · Léo'}
+  const c=document.getElementById('tbCur');if(c)c.textContent=labels[id]||id
+}
+document.querySelectorAll('[data-section]').forEach(el=>{
+  el.addEventListener('click',()=>switchSection(el.dataset.section))
+})
+switchSection('home')
+
+// Drawer
+function openDrawer(tab){
+  document.getElementById('drawer').classList.add('open')
+  document.getElementById('drawerOverlay').classList.add('open')
+  if(tab){document.querySelectorAll('.dw-tab').forEach(t=>{t.classList.toggle('on',t.dataset.tab===tab)})}
+}
+document.getElementById('drawerClose').addEventListener('click',()=>{
+  document.getElementById('drawer').classList.remove('open')
+  document.getElementById('drawerOverlay').classList.remove('open')
+})
+document.getElementById('drawerOverlay').addEventListener('click',()=>{
+  document.getElementById('drawer').classList.remove('open')
+  document.getElementById('drawerOverlay').classList.remove('open')
+})
+document.querySelectorAll('.dw-tab[data-tab]').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.dw-tab').forEach(x=>x.classList.remove('on'))
+    t.classList.add('on')
+  })
+})
+
+// Notifications
+const notifPanel=document.getElementById('notifPanel')
+document.getElementById('btnNotif').addEventListener('click',e=>{
+  e.stopPropagation();notifPanel.classList.toggle('open')
+})
+document.getElementById('btnClearNotif').addEventListener('click',()=>{
+  document.getElementById('notifList').innerHTML='<div style="padding:16px;text-align:center;color:var(--t3);font-size:11px;font-family:var(--fm)">Sem notificações</div>'
+  document.getElementById('notifBadge').style.display='none'
+  document.getElementById('btnNotif').style.position='relative'
+  notifPanel.classList.remove('open')
+})
+document.addEventListener('click',e=>{if(!notifPanel.contains(e.target)&&e.target.id!=='btnNotif')notifPanel.classList.remove('open')})
+
+// Settings modal
+const cfgOverlay=document.getElementById('cfgOverlay')
+function openSettings(){cfgOverlay.classList.add('open')}
+document.getElementById('cfgClose').addEventListener('click',()=>cfgOverlay.classList.remove('open'))
+cfgOverlay.addEventListener('click',e=>{if(e.target===cfgOverlay)cfgOverlay.classList.remove('open')})
+document.getElementById('btnSettings2').addEventListener('click',openSettings)
+document.getElementById('railSettings').addEventListener('click',openSettings)
+
+// Quick nav
+document.getElementById('railNFe').addEventListener('click',()=>window.open('/conferencia','_blank'))
+document.getElementById('railSefaz').addEventListener('click',()=>window.open('/sefaz','_blank'))
+document.getElementById('railDash').addEventListener('click',()=>window.open('/dashboard','_blank'))
+document.getElementById('railDominio').addEventListener('click',()=>window.open('/dominio','_blank'))
+document.getElementById('railHelp').addEventListener('click',()=>window.open('/ajuda','_blank'))
+document.getElementById('railUsers').addEventListener('click',()=>window.open('/usuarios','_blank'))
+document.getElementById('railIA').addEventListener('click',()=>switchSection('ia'))
+document.getElementById('railDown').addEventListener('click',()=>switchSection('downloads'))
+document.getElementById('railCerts').addEventListener('click',()=>switchSection('certs'))
+document.getElementById('railMacros').addEventListener('click',()=>switchSection('macros'))
+document.getElementById('btnQuickNFe').addEventListener('click',()=>window.open('/conferencia','_blank'))
+document.getElementById('btnQuickIA').addEventListener('click',()=>switchSection('ia'))
+
+// Electron controls
+if(window.fiscobotApp?.isElectron){
+  const wc=document.getElementById('winControls');if(wc)wc.style.display='flex'
+  document.getElementById('wcMin').addEventListener('click',()=>window.fiscobotApp.minimize())
+  document.getElementById('wcMax').addEventListener('click',()=>window.fiscobotApp.maximize())
+  document.getElementById('wcClose').addEventListener('click',()=>window.fiscobotApp.hide())
+}
+
+// Color picker live
+document.getElementById('cfg-accent').addEventListener('input',e=>{
+  const v=e.target.value
+  document.getElementById('cfg-accent-txt').textContent=v
+  document.documentElement.style.setProperty('--gold',v)
+  document.documentElement.style.setProperty('--gold2',v)
+  document.documentElement.style.setProperty('--golddim',v+'18')
+  document.documentElement.style.setProperty('--goldmed',v+'30')
+  document.documentElement.style.setProperty('--bgold',v+'55')
+})
+// Sync sliders
+const dr=document.getElementById('cfg-delay-range'),dn=document.getElementById('cfg-delay-num')
+const tr=document.getElementById('cfg-tokens-range'),tn=document.getElementById('cfg-tokens-num')
+dr?.addEventListener('input',()=>{if(dn)dn.value=dr.value})
+dn?.addEventListener('input',()=>{if(dr)dr.value=dn.value})
+tr?.addEventListener('input',()=>{if(tn)tn.value=tr.value})
+tn?.addEventListener('input',()=>{if(tr)tr.value=tn.value})
+// SW toggles
+document.querySelectorAll('#cfgModal .sw').forEach(sw=>sw.addEventListener('click',()=>sw.classList.toggle('on')))
+// Status toggle live
+document.getElementById('cfg-status')?.addEventListener('click',()=>{
+  const show=document.getElementById('cfg-status').classList.contains('on')
+  document.querySelectorAll('.pc-status').forEach(el=>el.style.display=show?'flex':'none')
+})
+
+// Search trigger → command palette
+document.getElementById('searchTrigger').addEventListener('click',openCmd)
+document.getElementById('searchInp').addEventListener('focus',openCmd)
+
+// Keyboard shortcuts
+document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key==='k'){e.preventDefault();openCmd()}
+  if(e.key==='Escape'){
+    document.getElementById('cmdOverlay').classList.remove('open')
+    cfgOverlay.classList.remove('open')
+    notifPanel.classList.remove('open')
+    document.getElementById('drawer').classList.remove('open')
+    document.getElementById('drawerOverlay').classList.remove('open')
+  }
+})
+
+// Portal cards
+document.querySelectorAll('.portal-card[data-url]').forEach(c=>{
+  c.addEventListener('click',()=>{
+    if(typeof navigate==='function') navigate(c.dataset.url)
+    else window.open(c.dataset.url,'_blank')
+  })
+})
+
+// Quick links da home
+document.querySelectorAll('.ql-item[onclick]').forEach(el=>{
+  // já tem onclick inline
+})
+
+// ── COMMAND PALETTE ─────────────────────────────────────
+const CMD_ITEMS=[
+  {ico:'📋',name:'Receita Federal / eCAC',sub:'cav.receita.fazenda.gov.br',action:()=>window.open('https://cav.receita.fazenda.gov.br','_blank'),kbd:[]},
+  {ico:'👥',name:'eSocial',sub:'esocial.gov.br',action:()=>window.open('https://esocial.gov.br','_blank'),kbd:[]},
+  {ico:'📄',name:'Portal NF-e',sub:'nfe.fazenda.gov.br',action:()=>window.open('https://www.nfe.fazenda.gov.br/portal','_blank'),kbd:[]},
+  {ico:'🏛',name:'SEFAZ RS',sub:'sefaz.rs.gov.br',action:()=>window.open('https://www.sefaz.rs.gov.br','_blank'),kbd:[]},
+  {ico:'💾',name:'SPED RFB',sub:'sped.rfb.gov.br',action:()=>window.open('https://www.sped.rfb.gov.br','_blank'),kbd:[]},
+  {ico:'🟢',name:'Simples Nacional',sub:'Acesso ao PGDAS-D',action:()=>window.open('https://www8.receita.fazenda.gov.br/simplesnacional','_blank'),kbd:[]},
+  {ico:'⚖️',name:'Conferência NF-e × SEFAZ',sub:'Automático via SIEG Hub',action:()=>window.open('/conferencia','_blank'),kbd:['C']},
+  {ico:'🔌',name:'SEFAZ Automação',sub:'Status, NF-e, Cadastro com certificado A1',action:()=>window.open('/sefaz','_blank'),kbd:['S']},
+  {ico:'▦',name:'Dashboard Fiscal',sub:'KPIs e alertas operacionais',action:()=>window.open('/dashboard','_blank'),kbd:['D']},
+  {ico:'D',name:'Integração Domínio',sub:'Módulos e automações',action:()=>window.open('/dominio','_blank'),kbd:[]},
+  {ico:'🧠',name:'Agente IA · Léo',sub:'Consultoria fiscal inteligente',action:()=>switchSection('ia'),kbd:['I']},
+  {ico:'⚙',name:'Macros e Automações',sub:'Gravar e executar macros',action:()=>switchSection('macros'),kbd:['M']},
+  {ico:'📝',name:'AutoFill',sub:'Preencher formulários automaticamente',action:()=>switchSection('fill'),kbd:[]},
+  {ico:'🔏',name:'Certificados Digitais',sub:'Importar e gerenciar certificados A1',action:()=>switchSection('certs'),kbd:[]},
+  {ico:'⬇',name:'Monitor de Downloads',sub:'XML, DARF, SPED, PDF',action:()=>switchSection('downloads'),kbd:[]},
+  {ico:'👥',name:'Gerenciar Usuários',sub:'Controle de acesso ao FiscoBot Pro',action:()=>window.open('/usuarios','_blank'),kbd:['U']},
+  {ico:'❓',name:'Ajuda e Tutorial',sub:'Guia completo do FiscoBot Pro',action:()=>window.open('/ajuda','_blank'),kbd:[]},
+  {ico:'⚙',name:'Configurações',sub:'Aparência, IA, macros, sistema',action:openSettings,kbd:[]},
+]
+let cmdSel=0,cmdFiltered=[...CMD_ITEMS]
+function openCmd(){
+  const ov=document.getElementById('cmdOverlay')
+  ov.classList.add('open')
+  const inp=document.getElementById('cmdInput')
+  inp.value=''; inp.focus()
+  cmdFiltered=[...CMD_ITEMS]; cmdSel=0
+  renderCmd()
+}
+function renderCmd(){
+  const res=document.getElementById('cmdResults')
+  if(!cmdFiltered.length){res.innerHTML='<div style="padding:20px;text-align:center;color:var(--t3);font-size:11.5px;font-family:var(--fm)">Nenhum resultado encontrado</div>';return}
+  res.innerHTML='<div class="cmd-group-label">Ações disponíveis</div>'+cmdFiltered.map((item,i)=>`
+    <div class="cmd-item${i===cmdSel?' sel':''}" data-idx="${i}">
+      <div class="cmd-item-ico">${item.ico}</div>
+      <div><div class="cmd-item-name">${item.name}</div><div class="cmd-item-sub">${item.sub}</div></div>
+      ${item.kbd.length?`<div class="cmd-item-kbd">${item.kbd.map(k=>`<kbd>${k}</kbd>`).join('')}</div>`:''}
+    </div>`).join('')
+  res.querySelectorAll('.cmd-item').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const idx=parseInt(el.dataset.idx)
+      if(cmdFiltered[idx]){cmdFiltered[idx].action();document.getElementById('cmdOverlay').classList.remove('open')}
+    })
+    el.addEventListener('mouseenter',()=>{
+      cmdSel=parseInt(el.dataset.idx)
+      res.querySelectorAll('.cmd-item').forEach((x,i)=>x.classList.toggle('sel',i===cmdSel))
+    })
+  })
+}
+document.getElementById('cmdInput').addEventListener('input',e=>{
+  const q=e.target.value.toLowerCase()
+  cmdFiltered=CMD_ITEMS.filter(item=>item.name.toLowerCase().includes(q)||item.sub.toLowerCase().includes(q))
+  cmdSel=0; renderCmd()
+})
+document.getElementById('cmdOverlay').addEventListener('click',e=>{if(e.target.id==='cmdOverlay')e.target.classList.remove('open')})
+document.getElementById('cmdInput').addEventListener('keydown',e=>{
+  if(e.key==='ArrowDown'){e.preventDefault();cmdSel=Math.min(cmdSel+1,cmdFiltered.length-1);renderCmd()}
+  if(e.key==='ArrowUp'){e.preventDefault();cmdSel=Math.max(cmdSel-1,0);renderCmd()}
+  if(e.key==='Enter'&&cmdFiltered[cmdSel]){cmdFiltered[cmdSel].action();document.getElementById('cmdOverlay').classList.remove('open')}
+})
+document.getElementById('btnCmd').addEventListener('click',openCmd)
+</script>
+<script src="/app.js"></script>
+</body>
+</html>

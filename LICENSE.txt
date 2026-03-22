@@ -1,0 +1,22 @@
+FISCOBOT — LICENÇA DE USO
+=========================
+
+Copyright (c) 2026 — Uso Interno
+
+Este software foi desenvolvido para automação de processos fiscais.
+
+TERMOS DE USO:
+- Uso permitido para fins internos da organização
+- Proibida redistribuição sem autorização
+- Sem garantias expressas ou implícitas
+
+O FiscoBot é uma ferramenta de automação que interage com portais
+públicos do governo brasileiro (SEFAZ, Receita Federal, eSocial, SPED).
+O uso deve estar em conformidade com os termos de uso de cada portal.
+
+AVISO: Esta ferramenta não armazena dados fiscais sensíveis em servidores
+externos. Todos os dados ficam localmente na máquina do usuário em:
+  %APPDATA%\FiscoBot\
+
+API Key da Anthropic (para o Agente IA) é criptografada localmente
+com AES-256-GCM e nunca é transmitida a terceiros.

@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SEFAZ Automação · FiscoBot Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#050a14;--bg2:#070f1e;--bg3:#0a1628;--bg4:#0d1e36;
+  --panel:rgba(9,17,32,.96);--panel2:rgba(11,22,40,.98);
+  --b0:rgba(120,160,220,.07);--b1:rgba(120,160,220,.13);--b2:rgba(120,160,220,.22);
+  --bgold:rgba(201,168,76,.3);--bgoldhi:rgba(201,168,76,.5);
+  --gold:#c9a84c;--gold2:#e2c46a;--golddim:rgba(201,168,76,.09);--goldmed:rgba(201,168,76,.18);
+  --green:#2dd4aa;--greend:rgba(45,212,170,.1);--greenbr:rgba(45,212,170,.25);
+  --red:#ff6b8a;--redd:rgba(255,107,138,.1);--redbr:rgba(255,107,138,.25);
+  --orange:#fb923c;--oranged:rgba(251,146,60,.1);
+  --blue:#5ba4f5;--blued:rgba(91,164,245,.1);--bluebr:rgba(91,164,245,.25);
+  --t1:#ecf2ff;--t2:#8aa4cc;--t3:#4a6080;--t4:#2a3a55;
+  --ff:'Syne',sans-serif;--fm:'JetBrains Mono',monospace;
+  --r:9px;--rl:13px;--rxl:18px;
+  --shd:0 20px 56px rgba(0,0,0,.45);
+}
+html,body{height:100%;background:var(--bg);color:var(--t1);font-family:var(--ff);overflow:hidden}
+body{background-image:
+  radial-gradient(ellipse 70% 45% at 50% 0%,rgba(201,168,76,.07),transparent 55%),
+  linear-gradient(rgba(201,168,76,.018) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(201,168,76,.018) 1px,transparent 1px);
+  background-size:auto,52px 52px,52px 52px}
+
+/* ── Layout ────────────────────────────────── */
+#shell{display:grid;grid-template-rows:50px 1fr;height:100vh}
+
+/* ── Topbar ─────────────────────────────────── */
+#topbar{
+  background:rgba(5,10,20,.95);border-bottom:1px solid var(--b1);
+  backdrop-filter:blur(20px);display:flex;align-items:center;
+  padding:0 22px;gap:12px;position:relative;z-index:10;
+}
+#topbar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,168,76,.4) 35%,rgba(91,164,245,.2) 70%,transparent)}
+.tb-back{display:flex;align-items:center;gap:7px;padding:5px 11px;border-radius:8px;
+  border:1px solid var(--b1);background:transparent;color:var(--t2);font-size:11.5px;
+  font-weight:600;cursor:pointer;font-family:var(--ff);transition:all .15s;text-decoration:none}
+.tb-back:hover{border-color:var(--bgold);color:var(--gold);background:var(--golddim)}
+.tb-div{width:1px;height:20px;background:var(--b1)}
+.tb-title{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:800;letter-spacing:-.3px}
+.tb-ico{width:28px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gold2));
+  border-radius:7px;display:flex;align-items:center;justify-content:center;
+  font-size:13px;box-shadow:0 0 14px rgba(201,168,76,.4)}
+.tb-sp{flex:1}
+.tb-pill{display:flex;align-items:center;gap:5px;padding:4px 11px;border-radius:99px;
+  font-size:10.5px;font-weight:700;font-family:var(--fm);border:1px solid transparent}
+.tb-pill.ok{background:var(--greend);border-color:var(--greenbr);color:var(--green)}
+.tb-pill.warn{background:var(--oranged);border-color:rgba(251,146,60,.3);color:var(--orange)}
+.tb-pill.off{background:var(--redd);border-color:var(--redbr);color:var(--red)}
+.tp-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:pls 2s infinite}
+@keyframes pls{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* ── Body ───────────────────────────────────── */
+#body{display:grid;grid-template-columns:300px 1fr;overflow:hidden}
+
+/* ── Sidebar config ─────────────────────────── */
+#sidebar{
+  background:var(--panel);border-right:1px solid var(--b1);
+  display:flex;flex-direction:column;overflow-y:auto;padding:18px 14px;gap:14px;
+}
+#sidebar::-webkit-scrollbar{width:3px}
+#sidebar::-webkit-scrollbar-thumb{background:var(--t4);border-radius:99px}
+
+.cfg-sec{font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--t4);
+  text-transform:uppercase;font-family:var(--fm);margin-bottom:7px}
+.cfg-card{background:var(--panel2);border:1px solid var(--b0);border-radius:var(--rl);padding:14px}
+.cfg-field{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.cfg-field label{font-size:9.5px;font-weight:700;color:var(--t4);text-transform:uppercase;
+  letter-spacing:.8px;font-family:var(--fm)}
+.inp{width:100%;background:var(--bg3);border:1px solid var(--b1);border-radius:var(--r);
+  padding:8px 10px;color:var(--t1);font-size:12px;font-family:var(--fm);outline:none;transition:border-color .2s}
+.inp:focus{border-color:var(--bgold)}
+.inp::placeholder{color:var(--t3)}
+select.inp option{background:var(--bg3)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  border:none;cursor:pointer;border-radius:var(--r);font-size:12px;font-weight:700;
+  font-family:var(--ff);color:var(--t1);transition:all .18s;padding:8px 14px;white-space:nowrap}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn:active:not(:disabled){transform:scale(.98)}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#06100a;
+  box-shadow:0 4px 18px rgba(201,168,76,.25)}
+.btn-gold:hover:not(:disabled){box-shadow:0 6px 26px rgba(201,168,76,.45);transform:translateY(-1px)}
+.btn-ghost{background:transparent;border:1px solid var(--b1);color:var(--t2)}
+.btn-ghost:hover:not(:disabled){border-color:var(--bgold);color:var(--gold);background:var(--golddim)}
+.btn-green{background:linear-gradient(135deg,#059669,var(--green));color:#022416}
+.btn-green:hover:not(:disabled){box-shadow:0 4px 16px rgba(45,212,170,.3);transform:translateY(-1px)}
+.btn-full{width:100%}
+
+/* Cert badge */
+.cert-badge{display:flex;align-items:center;gap:8px;background:var(--bg3);
+  border:1px solid var(--b0);border-radius:var(--r);padding:8px 10px;margin-bottom:6px}
+.cert-dot{width:6px;height:6px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 6px var(--green);flex-shrink:0}
+.cert-name{font-size:11px;color:var(--t2);font-family:var(--fm);flex:1;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cert-type{font-size:9px;font-weight:700;font-family:var(--fm);padding:1px 6px;
+  border-radius:99px;background:var(--greend);color:var(--green);border:1px solid var(--greenbr)}
+
+/* UF select grid */
+.uf-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.uf-btn{padding:5px 4px;border-radius:6px;border:1px solid var(--b0);background:transparent;
+  color:var(--t3);font-size:10px;font-weight:700;font-family:var(--fm);cursor:pointer;
+  transition:all .15s;text-align:center}
+.uf-btn:hover{border-color:var(--bgold);color:var(--gold);background:var(--golddim)}
+.uf-btn.on{background:var(--goldmed);border-color:var(--bgold);color:var(--gold)}
+
+/* ── Main panel ─────────────────────────────── */
+#main{overflow-y:auto;display:flex;flex-direction:column;gap:0}
+#main::-webkit-scrollbar{width:4px}
+#main::-webkit-scrollbar-thumb{background:var(--t4);border-radius:99px}
+
+/* Tabs */
+#tabbar{
+  display:flex;border-bottom:1px solid var(--b1);background:rgba(5,10,20,.9);
+  padding:0 24px;flex-shrink:0;position:sticky;top:0;z-index:5;
+  backdrop-filter:blur(16px);
+}
+.tab{padding:12px 16px;border:none;background:transparent;color:var(--t3);
+  font-size:12px;font-weight:700;font-family:var(--ff);cursor:pointer;
+  border-bottom:2px solid transparent;transition:all .18s;white-space:nowrap}
+.tab:hover{color:var(--t1)}
+.tab.on{color:var(--gold);border-bottom-color:var(--gold)}
+
+.tab-panel{display:none;flex-direction:column;gap:16px;padding:22px 24px;flex:1}
+.tab-panel.on{display:flex}
+
+/* Section header */
+.sec-hd{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:12px;gap:12px}
+.sec-hd h2{font-size:16px;font-weight:800;letter-spacing:-.3px}
+.sec-hd p{font-size:11.5px;color:var(--t2);margin-top:3px}
+
+/* ── Status UF cards ─────────────────────────── */
+.uf-grid-main{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:10px;
+}
+.uf-card{
+  background:var(--panel);border:1px solid var(--b0);border-radius:var(--rl);
+  padding:14px 12px;position:relative;overflow:hidden;
+  transition:all .2s cubic-bezier(.34,1.4,.64,1);cursor:default;
+}
+.uf-card:hover{border-color:var(--bgold);transform:translateY(-2px);box-shadow:var(--shd)}
+.uf-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.uf-name{font-size:15px;font-weight:800;letter-spacing:-.3px}
+.uf-status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;transition:all .3s}
+.uf-status-dot.online{background:var(--green);box-shadow:0 0 8px var(--green)}
+.uf-status-dot.offline{background:var(--red)}
+.uf-status-dot.checking{background:var(--orange);animation:pls 1s infinite}
+.uf-status-dot.idle{background:var(--t4)}
+.uf-status-label{font-size:10px;font-weight:700;font-family:var(--fm);color:var(--t3);margin-bottom:4px}
+.uf-motivo{font-size:9.5px;color:var(--t3);font-family:var(--fm);line-height:1.5;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.uf-ms{font-size:9px;color:var(--t4);font-family:var(--fm);margin-top:6px}
+.uf-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--green),transparent);
+  transform:scaleX(0);transition:transform .3s}
+.uf-card.online::after{transform:scaleX(1)}
+.uf-card.offline::after{background:linear-gradient(90deg,var(--red),transparent);transform:scaleX(1)}
+
+/* Summary strip */
+.summary-strip{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:4px;
+}
+.sum-card{background:var(--panel);border:1px solid var(--b0);border-radius:var(--rl);
+  padding:14px 16px;text-align:center}
+.sum-val{font-size:28px;font-weight:800;letter-spacing:-1px;line-height:1;margin-bottom:4px}
+.sum-lbl{font-size:9.5px;font-weight:700;color:var(--t3);text-transform:uppercase;
+  letter-spacing:1px;font-family:var(--fm)}
+
+/* ── NF-e consulta ──────────────────────────── */
+.nfe-form{background:var(--panel);border:1px solid var(--b0);border-radius:var(--rl);padding:20px}
+.nfe-result{background:var(--panel2);border:1px solid var(--b0);border-radius:var(--rl);
+  padding:16px;margin-top:12px;display:none}
+.nfe-result.show{display:block}
+.result-row{display:flex;align-items:center;justify-content:space-between;
+  padding:9px 0;border-bottom:1px solid var(--b0)}
+.result-row:last-child{border-bottom:none}
+.result-key{font-size:11px;color:var(--t3);font-family:var(--fm)}
+.result-val{font-size:12px;font-weight:700;color:var(--t1);font-family:var(--fm)}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:99px;
+  font-size:10px;font-weight:700;font-family:var(--fm);text-transform:uppercase;
+  letter-spacing:.3px;border:1px solid transparent}
+.b-green{background:var(--greend);color:var(--green);border-color:var(--greenbr)}
+.b-red{background:var(--redd);color:var(--red);border-color:var(--redbr)}
+.b-yellow{background:var(--oranged);color:var(--orange);border-color:rgba(251,146,60,.25)}
+.b-gray{background:rgba(148,163,184,.08);color:#94a3b8;border-color:rgba(148,163,184,.15)}
+.b-gold{background:var(--golddim);color:var(--gold);border-color:var(--bgold)}
+
+/* ── Cadastro CNPJ ──────────────────────────── */
+.cad-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cad-card{background:var(--panel);border:1px solid var(--b0);border-radius:var(--rl);padding:18px}
+.cad-result{background:var(--panel2);border:1px solid var(--b0);border-radius:var(--rl);
+  padding:16px;margin-top:12px;grid-column:1/-1;display:none}
+.cad-result.show{display:block}
+
+/* ── Log histórico ──────────────────────────── */
+.log-wrap{background:var(--panel);border:1px solid var(--b0);border-radius:var(--rl);overflow:hidden;flex:1}
+.log-header{display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;border-bottom:1px solid var(--b0)}
+.log-list{overflow-y:auto;max-height:500px;padding:10px}
+.log-list::-webkit-scrollbar{width:3px}
+.log-list::-webkit-scrollbar-thumb{background:var(--t4);border-radius:99px}
+.log-item{display:flex;align-items:flex-start;gap:10px;padding:8px 10px;
+  border-radius:8px;border:1px solid transparent;margin-bottom:5px;transition:all .15s}
+.log-item:hover{background:rgba(255,255,255,.02);border-color:var(--b0)}
+.log-ico{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;
+  justify-content:center;font-size:11px;flex-shrink:0;border:1px solid transparent}
+.log-ico.ok{background:var(--greend);border-color:var(--greenbr)}
+.log-ico.err{background:var(--redd);border-color:var(--redbr)}
+.log-ico.warn{background:var(--oranged);border-color:rgba(251,146,60,.25)}
+.log-ico.info{background:var(--blued);border-color:var(--bluebr)}
+.log-body{flex:1;min-width:0}
+.log-title{font-size:11.5px;font-weight:700;color:var(--t1);margin-bottom:2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.log-meta{font-size:10px;color:var(--t3);font-family:var(--fm)}
+.log-time{font-size:9.5px;color:var(--t4);font-family:var(--fm);flex-shrink:0;margin-top:2px}
+
+/* ── Loading bar ─────────────────────────────── */
+#loadBar{height:2px;background:transparent;position:fixed;top:50px;left:0;right:0;z-index:20;transition:opacity .3s}
+#loadBarFill{height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--green));transition:width .4s ease;border-radius:99px}
+
+/* ── Toast ───────────────────────────────────── */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(8px);
+  background:var(--panel2);border:1px solid var(--bgold);color:var(--t1);
+  padding:7px 18px;border-radius:99px;font-size:11.5px;font-weight:600;
+  opacity:0;pointer-events:none;transition:all .3s cubic-bezier(.34,1.56,.64,1);
+  z-index:999;white-space:nowrap;box-shadow:var(--shd);font-family:var(--ff)}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.ok{border-color:var(--greenbr);color:var(--green)}
+#toast.err{border-color:var(--redbr);color:var(--red)}
+
+/* Animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.uf-card{animation:fadeUp .3s ease both}
+</style>
+</head>
+<body>
+<div id="shell">
+
+<!-- ── TOPBAR ─────────────────────────────────── -->
+<header id="topbar">
+  <a class="tb-back" href="/">← FiscoBot</a>
+  <div class="tb-div"></div>
+  <div class="tb-title">
+    <div class="tb-ico">⚡</div>
+    SEFAZ Automação
+  </div>
+  <div class="tb-sp"></div>
+  <div class="tb-pill off" id="pillCert"><div class="tp-dot"></div> Sem certificado</div>
+  <div class="tb-pill ok" id="pillSefaz"><div class="tp-dot"></div> SEFAZ Nacional</div>
+</header>
+
+<div id="body">
+
+<!-- ── SIDEBAR ────────────────────────────────── -->
+<aside id="sidebar">
+
+  <!-- Certificado ativo -->
+  <div>
+    <div class="cfg-sec">Certificado Digital A1</div>
+    <div class="cfg-card">
+      <div id="certListSide">
+        <div style="font-size:11px;color:var(--t3);font-family:var(--fm)">Verificando...</div>
+      </div>
+      <div style="margin-top:8px;display:flex;gap:6px">
+        <select class="inp" id="certSelect" style="flex:1;font-size:11px"></select>
+      </div>
+      <div style="margin-top:6px;font-size:9.5px;color:var(--t3);font-family:var(--fm);
+        background:var(--greend);border:1px solid var(--greenbr);border-radius:6px;padding:7px 8px;line-height:1.6">
+        🔒 TLS mútuo — seu certificado autentica automaticamente em todos os webservices SEFAZ
+      </div>
+    </div>
+  </div>
+
+  <!-- UF padrão -->
+  <div>
+    <div class="cfg-sec">Estado padrão (UF)</div>
+    <div class="cfg-card">
+      <div class="cfg-field">
+        <select class="inp" id="ufSelect">
+          <option value="35">SP — São Paulo</option>
+          <option value="43" selected>RS — Rio Grande do Sul</option>
+          <option value="31">MG — Minas Gerais</option>
+          <option value="41">PR — Paraná</option>
+          <option value="42">SC — Santa Catarina</option>
+          <option value="26">PE — Pernambuco</option>
+          <option value="52">GO — Goiás</option>
+          <option value="51">MT — Mato Grosso</option>
+          <option value="50">MS — Mato Grosso do Sul</option>
+          <option value="29">BA — Bahia</option>
+          <option value="13">AM — Amazonas</option>
+          <option value="23">CE — Ceará</option>
+          <option value="svrs">SVRS — Nacional</option>
+        </select>
+      </div>
+      <button class="btn btn-ghost btn-full" id="btnStatusUF" style="font-size:11.5px">
+        📡 Verificar status da UF
+      </button>
+    </div>
+  </div>
+
+  <!-- Ações rápidas -->
+  <div>
+    <div class="cfg-sec">Ações Rápidas</div>
+    <div style="display:flex;flex-direction:column;gap:7px">
+      <button class="btn btn-gold btn-full" id="btnPingAll">
+        ⚡ Ping todos os estados
+      </button>
+      <button class="btn btn-green btn-full" id="btnConferencia" onclick="window.open('/conferencia','_blank')">
+        ⚖️ Conferência NF-e × SEFAZ
+      </button>
+      <button class="btn btn-ghost btn-full" onclick="window.open('https://www.nfe.fazenda.gov.br/portal','_blank')">
+        🌐 Abrir Portal NF-e
+      </button>
+      <button class="btn btn-ghost btn-full" onclick="window.open('https://www.sefaz.rs.gov.br','_blank')">
+        🏛 Abrir SEFAZ RS
+      </button>
+    </div>
+  </div>
+
+  <!-- Info -->
+  <div style="margin-top:auto;background:var(--panel2);border:1px solid var(--b0);border-radius:var(--rl);padding:12px">
+    <div style="font-size:9px;font-weight:700;color:var(--t4);text-transform:uppercase;letter-spacing:1.5px;font-family:var(--fm);margin-bottom:8px">Segurança</div>
+    <div style="font-size:10.5px;color:var(--t3);font-family:var(--fm);line-height:1.7">
+      ✓ TLS 1.2/1.3 mútuo<br>
+      ✓ Certificado A1 local<br>
+      ✓ Sem intermediários<br>
+      ✓ Direto ao WebService SEFAZ
+    </div>
+  </div>
+
+</aside>
+
+<!-- ── MAIN ───────────────────────────────────── -->
+<div id="main">
+
+  <!-- Loading bar -->
+  <div id="loadBar"><div id="loadBarFill"></div></div>
+
+  <!-- Tab bar -->
+  <div id="tabbar">
+    <button class="tab on" data-tab="status">📡 Status dos Estados</button>
+    <button class="tab" data-tab="nfe">🔍 Consultar NF-e</button>
+    <button class="tab" data-tab="cnpj">🏢 Cadastro CNPJ</button>
+    <button class="tab" data-tab="log">📋 Histórico</button>
+  </div>
+
+  <!-- ══ TAB: STATUS ══════════════════════════════ -->
+  <div class="tab-panel on" id="tab-status">
+    <div class="sec-hd">
+      <div>
+        <h2>Status dos WebServices SEFAZ</h2>
+        <p>Verificação em tempo real via autenticação TLS mútua com seu certificado A1</p>
+      </div>
+      <button class="btn btn-gold" id="btnPingAll2">⚡ Verificar todos</button>
+    </div>
+
+    <!-- KPIs -->
+    <div class="summary-strip">
+      <div class="sum-card"><div class="sum-val" id="sumTotal" style="color:var(--t2)">—</div><div class="sum-lbl">Estados</div></div>
+      <div class="sum-card"><div class="sum-val" id="sumOnline" style="color:var(--green)">—</div><div class="sum-lbl">Online</div></div>
+      <div class="sum-card"><div class="sum-val" id="sumOffline" style="color:var(--red)">—</div><div class="sum-lbl">Offline/Erro</div></div>
+      <div class="sum-card"><div class="sum-val" id="sumMs" style="color:var(--gold)">—</div><div class="sum-lbl">Média (ms)</div></div>
+    </div>
+
+    <div class="uf-grid-main" id="ufGrid">
+      <!-- Populated by JS -->
+      <div style="grid-column:1/-1;color:var(--t3);font-size:12px;font-family:var(--fm);padding:20px;text-align:center">
+        Clique em <strong style="color:var(--gold)">⚡ Verificar todos</strong> para consultar o status de cada estado via seu certificado A1.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TAB: NF-e ════════════════════════════════ -->
+  <div class="tab-panel" id="tab-nfe">
+    <div class="sec-hd">
+      <div>
+        <h2>Consultar NF-e na SEFAZ</h2>
+        <p>Consulta situação da NF-e via WebService com TLS mútuo automático</p>
+      </div>
+    </div>
+
+    <div class="nfe-form">
+      <div class="cfg-field" style="margin-bottom:12px">
+        <label>Chave de Acesso (44 dígitos)</label>
+        <input class="inp" id="nfeChave" type="text" maxlength="48"
+          placeholder="00000000000000000000000000000000000000000000"
+          style="font-size:12px;letter-spacing:.5px">
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-gold" id="btnConsultarNFe" style="padding:9px 20px">
+          🔍 Consultar na SEFAZ
+        </button>
+        <button class="btn btn-ghost" id="btnLimparNFe">✕ Limpar</button>
+      </div>
+
+      <!-- Resultado -->
+      <div class="nfe-result" id="nfeResult">
+        <div class="result-row">
+          <span class="result-key">Status SEFAZ</span>
+          <span class="result-val" id="rStatus">—</span>
+        </div>
+        <div class="result-row">
+          <span class="result-key">cStat</span>
+          <span class="result-val" id="rCStat" style="font-family:var(--fm)">—</span>
+        </div>
+        <div class="result-row">
+          <span class="result-key">Motivo</span>
+          <span class="result-val" id="rMotivo" style="max-width:60%;text-align:right;font-size:11px">—</span>
+        </div>
+        <div class="result-row">
+          <span class="result-key">Chave consultada</span>
+          <span class="result-val" id="rChave" style="font-family:var(--fm);font-size:10px;max-width:60%;text-align:right;word-break:break-all">—</span>
+        </div>
+        <div class="result-row">
+          <span class="result-key">UF</span>
+          <span class="result-val" id="rUF">—</span>
+        </div>
+        <div class="result-row">
+          <span class="result-key">Consultado em</span>
+          <span class="result-val" id="rDataHora" style="font-family:var(--fm);font-size:10.5px">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Consulta em lote -->
+    <div class="nfe-form" style="margin-top:0">
+      <div class="sec-hd" style="margin-bottom:12px">
+        <div><h3 style="font-size:14px;font-weight:800">Consulta em lote</h3><p style="font-size:11px;color:var(--t2)">Cole uma chave por linha</p></div>
+      </div>
+      <textarea class="inp" id="nfeLote" rows="5"
+        placeholder="35240112345678000195550010000012341234567890&#10;35240198765432000100550010000056785678901234&#10;..."
+        style="resize:vertical;font-size:11px;line-height:1.7"></textarea>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button class="btn btn-gold" id="btnConsultarLote">⚡ Consultar lote</button>
+      </div>
+
+      <!-- Progress + results table -->
+      <div id="loteProgress" style="display:none;margin-top:12px">
+        <div style="display:flex;justify-content:space-between;font-size:10.5px;font-family:var(--fm);color:var(--t3);margin-bottom:5px">
+          <span id="loteInfo">Aguardando...</span>
+          <span id="lotePct">0%</span>
+        </div>
+        <div style="height:4px;background:var(--bg3);border-radius:99px;border:1px solid var(--b0);overflow:hidden">
+          <div id="loteFill" style="height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--green));border-radius:99px;transition:width .4s ease"></div>
+        </div>
+      </div>
+      <div id="loteTable" style="display:none;margin-top:12px;overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:11px">
+          <thead><tr>
+            <th style="padding:8px 10px;text-align:left;font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;border-bottom:2px solid var(--b1);font-family:var(--fm);font-weight:700">Chave (parcial)</th>
+            <th style="padding:8px 10px;text-align:left;font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;border-bottom:2px solid var(--b1);font-family:var(--fm);font-weight:700">Status SEFAZ</th>
+            <th style="padding:8px 10px;text-align:left;font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;border-bottom:2px solid var(--b1);font-family:var(--fm);font-weight:700">cStat</th>
+            <th style="padding:8px 10px;text-align:left;font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;border-bottom:2px solid var(--b1);font-family:var(--fm);font-weight:700">Motivo</th>
+          </tr></thead>
+          <tbody id="loteBody"></tbody>
+        </table>
+        <div style="display:flex;justify-content:flex-end;margin-top:8px">
+          <button class="btn btn-ghost" id="btnExportLote" style="font-size:11px">⬇ Exportar CSV</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TAB: CNPJ ════════════════════════════════ -->
+  <div class="tab-panel" id="tab-cnpj">
+    <div class="sec-hd">
+      <div>
+        <h2>Consulta Cadastral CNPJ</h2>
+        <p>ConsultaCadastro4 via SEFAZ — verifica habilitação para emissão de NF-e</p>
+      </div>
+    </div>
+
+    <div class="cad-grid">
+      <div class="cad-card">
+        <div class="cfg-field">
+          <label>CNPJ</label>
+          <input class="inp" id="cadCNPJ" type="text" maxlength="18"
+            placeholder="00.000.000/0001-00">
+        </div>
+        <div class="cfg-field">
+          <label>UF da empresa</label>
+          <select class="inp" id="cadUF">
+            <option value="35">SP</option><option value="43" selected>RS</option>
+            <option value="31">MG</option><option value="41">PR</option>
+            <option value="42">SC</option><option value="26">PE</option>
+            <option value="52">GO</option><option value="51">MT</option>
+            <option value="50">MS</option><option value="29">BA</option>
+            <option value="13">AM</option><option value="23">CE</option>
+            <option value="svrs">SVRS</option>
+          </select>
+        </div>
+        <button class="btn btn-gold btn-full" id="btnConsultarCNPJ">
+          🔍 Consultar cadastro SEFAZ
+        </button>
+      </div>
+
+      <div class="cad-card" id="cadInfoCard">
+        <div style="font-size:12px;color:var(--t3);font-family:var(--fm);text-align:center;padding:20px 0">
+          Preencha o CNPJ e clique em Consultar
+        </div>
+      </div>
+
+      <div class="cad-result" id="cadResult">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div>
+            <div class="result-row" style="flex-direction:column;gap:2px;align-items:flex-start">
+              <span class="result-key">Razão Social</span>
+              <span class="result-val" id="cadNome" style="font-size:13px">—</span>
+            </div>
+            <div class="result-row" style="flex-direction:column;gap:2px;align-items:flex-start">
+              <span class="result-key">Nome Fantasia</span>
+              <span class="result-val" id="cadFant">—</span>
+            </div>
+            <div class="result-row"><span class="result-key">IE</span><span class="result-val" id="cadIE" style="font-family:var(--fm)">—</span></div>
+            <div class="result-row"><span class="result-key">IEST</span><span class="result-val" id="cadIEST" style="font-family:var(--fm)">—</span></div>
+          </div>
+          <div>
+            <div class="result-row"><span class="result-key">NF-e habilitada</span><span class="result-val" id="cadCredNFe">—</span></div>
+            <div class="result-row"><span class="result-key">CT-e habilitada</span><span class="result-val" id="cadCredCTe">—</span></div>
+            <div class="result-row"><span class="result-key">Regime</span><span class="result-val" id="cadRegime">—</span></div>
+            <div class="result-row"><span class="result-key">Situação SEFAZ</span><span class="result-val" id="cadSit">—</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TAB: LOG ══════════════════════════════════ -->
+  <div class="tab-panel" id="tab-log">
+    <div class="sec-hd">
+      <div><h2>Histórico de Consultas</h2><p>Registro de todas as operações SEFAZ desta sessão</p></div>
+      <button class="btn btn-ghost" id="btnClearLog" style="font-size:11px">✕ Limpar</button>
+    </div>
+    <div class="log-wrap">
+      <div class="log-list" id="logList">
+        <div style="padding:20px;text-align:center;color:var(--t3);font-size:12px;font-family:var(--fm)">
+          Nenhuma consulta realizada ainda
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+</div><!-- /body -->
+</div><!-- /shell -->
+
+<div id="toast"></div>
+
+<script>
+'use strict';
+
+// ── Helpers ──────────────────────────────────────────
+const $ = id => document.getElementById(id);
+
+function toast(msg, type='', dur=2800) {
+  const t=$('toast'); t.textContent=msg;
+  t.className=type?`show ${type}`:'show';
+  clearTimeout(t._t); t._t=setTimeout(()=>t.className='',dur);
+}
+
+function addLog(title, meta='', type='info') {
+  const list=$('logList');
+  // Remove placeholder
+  const ph=list.querySelector('[style*="text-align:center"]');
+  if(ph)ph.remove();
+  const icons={ok:'✓',err:'✕',warn:'⚠',info:'ℹ'};
+  const now=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  const el=document.createElement('div'); el.className='log-item';
+  el.innerHTML=`<div class="log-ico ${type}">${icons[type]||'ℹ'}</div>
+    <div class="log-body"><div class="log-title">${title}</div>${meta?`<div class="log-meta">${meta}</div>`:''}</div>
+    <div class="log-time">${now}</div>`;
+  list.insertBefore(el, list.firstChild);
+  while(list.children.length>50) list.removeChild(list.lastChild);
+}
+
+function setLoad(pct) {
+  const f=$('loadBarFill');
+  if(!f)return;
+  if(pct>=100){f.style.width='100%';setTimeout(()=>{f.style.width='0%';},$('loadBar').style.opacity=0,800);}
+  else{$('loadBar').style.opacity=1;f.style.width=pct+'%';}
+}
+
+function fmtCNPJ(v){ const n=(v||'').replace(/\D/g,'');if(n.length!==14)return v;return n.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,'$1.$2.$3/$4-$5');}
+function getUF(cuf){ const m={'35':'SP','43':'RS','31':'MG','41':'PR','42':'SC','26':'PE','52':'GO','51':'MT','50':'MS','29':'BA','13':'AM','23':'CE','svrs':'Nacional'};return m[cuf]||cuf;}
+
+// ── Tabs ──────────────────────────────────────────────
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('on'));
+    tab.classList.add('on');
+    $('tab-'+tab.dataset.tab)?.classList.add('on');
+  });
+});
+
+// ── Carrega certificados ──────────────────────────────
+async function loadCerts() {
+  try {
+    const r=await fetch('/api/certs'); const d=await r.json();
+    const certs=d.certs||[];
+    const side=$('certListSide'), sel=$('certSelect'), pill=$('pillCert');
+
+    if(!certs.length){
+      side.innerHTML='<div style="font-size:11px;color:var(--red);font-family:var(--fm)">⚠ Nenhum certificado importado.<br>Acesse FiscoBot → Certificados.</div>';
+      pill.className='tb-pill off'; pill.innerHTML='<div class="tp-dot"></div> Sem certificado';
+      sel.innerHTML='<option value="">Nenhum certificado</option>';
+      return;
+    }
+
+    side.innerHTML=certs.map(c=>`
+      <div class="cert-badge">
+        <div class="cert-dot"></div>
+        <div class="cert-name" title="${c.name}">${c.name}</div>
+        <span class="cert-type">${c.type||'A1'}</span>
+      </div>`).join('');
+
+    sel.innerHTML=`<option value="">Automático (primeiro A1)</option>`+
+      certs.map(c=>`<option value="${c.name}">${c.name}</option>`).join('');
+
+    pill.className='tb-pill ok';
+    pill.innerHTML=`<div class="tp-dot"></div> Cert. A1 (${certs.length})`;
+    addLog(`${certs.length} certificado(s) A1 carregado(s)`,'TLS mútuo disponível','ok');
+  } catch(e) {
+    addLog('Erro ao carregar certificados',e.message,'err');
+  }
+}
+
+function getCertName(){ return $('certSelect')?.value||''; }
+function getUFSel(){    return $('ufSelect')?.value||'43'; }
+
+// ── STATUS ÚNICO UF ───────────────────────────────────
+$('btnStatusUF').addEventListener('click', async ()=>{
+  const cuf=getUFSel(), ufNome=getUF(cuf);
+  $('btnStatusUF').disabled=true; $('btnStatusUF').textContent='Verificando...';
+  setLoad(30);
+  try {
+    const r=await fetch('/api/sefaz/status-uf',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({cuf,certName:getCertName()})});
+    const d=await r.json();
+    setLoad(100);
+    if(d.online){
+      toast(`✓ SEFAZ ${ufNome} online — ${d.tMed||'—'}ms`,'ok');
+      addLog(`SEFAZ ${ufNome} online`,`${d.motivo} · ${d.tMed||'—'}ms · ${d.host}`,'ok');
+    } else {
+      toast(`SEFAZ ${ufNome}: ${d.status}`,'err');
+      addLog(`SEFAZ ${ufNome} — ${d.status}`,d.motivo,'err');
+    }
+  } catch(e){ toast('Erro: '+e.message,'err'); setLoad(0); }
+  finally{ $('btnStatusUF').disabled=false; $('btnStatusUF').textContent='📡 Verificar status da UF'; }
+});
+
+// ── PING TODOS ────────────────────────────────────────
+async function pingAll() {
+  const grid=$('ufGrid');
+  grid.innerHTML=''; // clear
+
+  const UFS=[
+    {cuf:'35',uf:'SP'},{cuf:'43',uf:'RS'},{cuf:'31',uf:'MG'},{cuf:'41',uf:'PR'},
+    {cuf:'42',uf:'SC'},{cuf:'26',uf:'PE'},{cuf:'52',uf:'GO'},{cuf:'51',uf:'MT'},
+    {cuf:'50',uf:'MS'},{cuf:'29',uf:'BA'},{cuf:'13',uf:'AM'},{cuf:'23',uf:'CE'},
+    {cuf:'svrs',uf:'SVRS'},
+  ];
+
+  // Cria cards vazios com estado "checking"
+  const cards={};
+  UFS.forEach(({cuf,uf})=>{
+    const card=document.createElement('div'); card.className='uf-card';
+    card.style.animationDelay=(UFS.indexOf({cuf,uf})*0.04)+'s';
+    card.innerHTML=`
+      <div class="uf-card-header">
+        <div class="uf-name">${uf}</div>
+        <div class="uf-status-dot checking" id="dot-${cuf}"></div>
+      </div>
+      <div class="uf-status-label" id="status-${cuf}">Verificando...</div>
+      <div class="uf-motivo" id="motivo-${cuf}">—</div>
+      <div class="uf-ms" id="ms-${cuf}"></div>`;
+    grid.appendChild(card);
+    cards[cuf]=card;
+  });
+
+  let online=0, offline=0, totalMs=0, count=0;
+
+  [$('btnPingAll'),$('btnPingAll2')].forEach(b=>{if(b){b.disabled=true;b.textContent='Verificando...'}});
+  addLog('Ping iniciado — todos os estados','Consultando via TLS mútuo com certificado A1','info');
+
+  try {
+    const res=await fetch('/api/sefaz/ping-all',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({certName:getCertName()})});
+
+    if(!res.ok){ const d=await res.json(); toast('Erro: '+(d.error||'falha'),'err'); return; }
+
+    const reader=res.body.getReader(), dec=new TextDecoder();
+    let buf='', ev='';
+
+    while(true){
+      const {done,value}=await reader.read(); if(done)break;
+      buf+=dec.decode(value,{stream:true});
+      const lines=buf.split('\n'); buf=lines.pop();
+      for(const line of lines){
+        if(line.startsWith('event: ')){ev=line.slice(7).trim();continue;}
+        if(!line.startsWith('data: '))continue;
+        try{
+          const d=JSON.parse(line.slice(6));
+          if(ev==='uf'){
+            const cuf=Object.keys(cards).find(k=>getUF(k)===d.uf||k===d.uf)||d.uf;
+            const card=cards[cuf]||cards['svrs'];
+            const dot=$(`dot-${cuf}`)||$(`dot-svrs`);
+            const stEl=$(`status-${cuf}`)||$(`status-svrs`);
+            const moEl=$(`motivo-${cuf}`)||$(`motivo-svrs`);
+            const msEl=$(`ms-${cuf}`)||$(`ms-svrs`);
+            if(d.online){online++;card.classList.add('online');}
+            else{offline++;card.classList.add('offline');}
+            if(dot){dot.className='uf-status-dot '+(d.online?'online':'offline');}
+            if(stEl)stEl.textContent=d.status;
+            if(moEl)moEl.textContent=d.motivo||'—';
+            if(msEl)msEl.textContent=d.ms?`${d.ms}ms`:'';
+            count++;
+            if(d.ms){totalMs+=d.ms;}
+            setLoad(Math.round((count/UFS.length)*100));
+            // Update summary
+            $('sumOnline').textContent=online;
+            $('sumOffline').textContent=offline;
+            $('sumTotal').textContent=count;
+            $('sumMs').textContent=count>0?Math.round(totalMs/count)+'ms':'—';
+          }
+          if(ev==='done'){
+            addLog(`Ping concluído — ${online}/${UFS.length} online`,`Média: ${Math.round(totalMs/count)}ms`,'ok');
+            toast(`✓ ${online} estado(s) online, ${offline} com problema`,'ok');
+          }
+          if(ev==='erro'){
+            toast(d.mensagem,'err',5000);
+            addLog('Erro no ping',d.mensagem,'err');
+          }
+        }catch{}
+      }
+    }
+  } catch(e){ toast('Erro de conexão: '+e.message,'err'); }
+  finally{
+    [$('btnPingAll'),$('btnPingAll2')].forEach(b=>{if(b){b.disabled=false;b.textContent='⚡ Verificar todos';}});
+  }
+}
+
+$('btnPingAll').addEventListener('click', pingAll);
+$('btnPingAll2').addEventListener('click', pingAll);
+
+// ── CONSULTAR NF-e ────────────────────────────────────
+$('btnConsultarNFe').addEventListener('click', async ()=>{
+  const chave=($('nfeChave')?.value||'').replace(/\D/g,'');
+  if(chave.length!==44){ toast('Chave deve ter exatamente 44 dígitos','err'); return; }
+
+  $('btnConsultarNFe').disabled=true; $('btnConsultarNFe').textContent='Consultando...';
+  setLoad(40);
+
+  try {
+    const r=await fetch('/api/sefaz/consulta-nfe',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({chave,certName:getCertName()})});
+    const d=await r.json();
+    setLoad(100);
+
+    const result=$('nfeResult'); result.classList.add('show');
+    const statusCls={'Autorizada':'b-green','Cancelada':'b-red','Denegada':'b-red',
+      'Inutilizada':'b-yellow','Não encontrada':'b-gray','Sem certificado':'b-gray'};
+    $('rStatus').innerHTML=`<span class="badge ${statusCls[d.status]||'b-gray'}">${d.status}</span>`;
+    $('rCStat').textContent=d.cStat||'—';
+    $('rMotivo').textContent=d.motivo||'—';
+    $('rChave').textContent=chave;
+    $('rUF').textContent=getUF(chave.substring(0,2));
+    $('rDataHora').textContent=new Date().toLocaleString('pt-BR');
+
+    const type=d.status==='Autorizada'?'ok':d.status==='Cancelada'||d.status==='Denegada'?'err':'warn';
+    addLog(`NF-e consultada: ${d.status}`,`Chave: ${chave.slice(0,10)}... · cStat: ${d.cStat||'—'}`,type);
+    toast(`NF-e: ${d.status}`, type==='ok'?'ok':type==='err'?'err':'', 3000);
+  } catch(e){ toast('Erro: '+e.message,'err'); addLog('Erro na consulta NF-e',e.message,'err'); }
+  finally{ $('btnConsultarNFe').disabled=false; $('btnConsultarNFe').textContent='🔍 Consultar na SEFAZ'; }
+});
+
+$('btnLimparNFe').addEventListener('click',()=>{
+  if($('nfeChave'))$('nfeChave').value='';
+  $('nfeResult')?.classList.remove('show');
+});
+
+// Formata chave enquanto digita
+$('nfeChave')?.addEventListener('input', e=>{
+  e.target.value=e.target.value.replace(/\D/g,'').slice(0,44);
+});
+
+// ── CONSULTA EM LOTE ──────────────────────────────────
+let loteResults=[];
+
+$('btnConsultarLote').addEventListener('click', async ()=>{
+  const raw=($('nfeLote')?.value||'').trim();
+  const chaves=raw.split('\n').map(l=>l.replace(/\D/g,'')).filter(c=>c.length===44);
+  if(!chaves.length){ toast('Nenhuma chave válida encontrada','err'); return; }
+
+  loteResults=[];
+  $('btnConsultarLote').disabled=true; $('btnConsultarLote').textContent='Consultando...';
+  $('loteProgress').style.display='block';
+  $('loteTable').style.display='none';
+  $('loteBody').innerHTML='';
+  $('loteInfo').textContent=`0 / ${chaves.length} consultadas`;
+  $('lotePct').textContent='0%';
+  $('loteFill').style.width='0%';
+
+  addLog(`Lote iniciado — ${chaves.length} chaves`,'Consultando via SEFAZ WebService','info');
+
+  try {
+    const res=await fetch('/api/sefaz/consultar-lote',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({chaves,certName:getCertName()})});
+
+    const reader=res.body.getReader(), dec=new TextDecoder();
+    let buf='', ev='';
+
+    while(true){
+      const {done,value}=await reader.read(); if(done)break;
+      buf+=dec.decode(value,{stream:true});
+      const lines=buf.split('\n'); buf=lines.pop();
+      for(const line of lines){
+        if(line.startsWith('event: ')){ev=line.slice(7).trim();continue;}
+        if(!line.startsWith('data: '))continue;
+        try{
+          const d=JSON.parse(line.slice(6));
+          if(ev==='resultado'){
+            const done=d.idx+1, total=d.total;
+            const pct=Math.round((done/total)*100);
+            $('loteInfo').textContent=`${done} / ${total} consultadas`;
+            $('lotePct').textContent=pct+'%';
+            $('loteFill').style.width=pct+'%';
+            loteResults.push(d);
+            const cls={'Autorizada':'b-green','Cancelada':'b-red','Denegada':'b-red'}[d.status]||'b-gray';
+            const tr=document.createElement('tr');
+            tr.innerHTML=`<td style="padding:8px 10px;border-bottom:1px solid rgba(120,160,220,.07);font-family:var(--fm);font-size:10.5px;color:var(--t2)">${d.chave.slice(0,15)}…</td>
+              <td style="padding:8px 10px;border-bottom:1px solid rgba(120,160,220,.07)"><span class="badge ${cls}">${d.status}</span></td>
+              <td style="padding:8px 10px;border-bottom:1px solid rgba(120,160,220,.07);font-family:var(--fm);font-size:10.5px;color:var(--t3)">${d.cStat||'—'}</td>
+              <td style="padding:8px 10px;border-bottom:1px solid rgba(120,160,220,.07);font-size:10.5px;color:var(--t2)">${(d.motivo||'').slice(0,50)}</td>`;
+            $('loteBody').appendChild(tr);
+          }
+          if(ev==='concluido'){
+            $('loteTable').style.display='block';
+            const ok=loteResults.filter(x=>x.status==='Autorizada').length;
+            addLog(`Lote concluído: ${d.total} notas`,`${ok} autorizadas · ${d.total-ok} com divergência`,'ok');
+            toast(`✓ ${d.total} NF-e consultadas — ${ok} autorizadas`,'ok');
+          }
+          if(ev==='erro-global'){ toast(d.mensagem,'err',5000); addLog('Erro no lote',d.mensagem,'err'); }
+        }catch{}
+      }
+    }
+  } catch(e){ toast('Erro: '+e.message,'err'); }
+  finally{ $('btnConsultarLote').disabled=false; $('btnConsultarLote').textContent='⚡ Consultar lote'; }
+});
+
+// Exportar lote CSV
+$('btnExportLote')?.addEventListener('click',()=>{
+  if(!loteResults.length)return;
+  const lines=['Chave;Status SEFAZ;cStat;Motivo',
+    ...loteResults.map(r=>[r.chave,r.status,r.cStat||'',r.motivo||''].join(';'))];
+  const blob=new Blob(['\ufeff'+lines.join('\n')],{type:'text/csv;charset=utf-8;'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`nfe_lote_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  toast('CSV exportado!','ok');
+});
+
+// ── CONSULTA CADASTRO CNPJ ────────────────────────────
+// Formata CNPJ
+$('cadCNPJ')?.addEventListener('input',e=>{
+  let v=e.target.value.replace(/\D/g,'');
+  if(v.length>14)v=v.slice(0,14);
+  e.target.value=fmtCNPJ(v);
+});
+
+$('btnConsultarCNPJ').addEventListener('click', async ()=>{
+  const cnpj=($('cadCNPJ')?.value||'').replace(/\D/g,'');
+  const cuf=$('cadUF')?.value||'43';
+  if(cnpj.length!==14){ toast('CNPJ deve ter 14 dígitos','err'); return; }
+
+  $('btnConsultarCNPJ').disabled=true; $('btnConsultarCNPJ').textContent='Consultando...';
+  setLoad(50);
+  $('cadResult').classList.remove('show');
+
+  try {
+    const r=await fetch('/api/sefaz/consulta-cadastro',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({cnpj:fmtCNPJ(cnpj),cuf,certName:getCertName()})});
+    const d=await r.json();
+    setLoad(100);
+
+    if(d.xNome){
+      $('cadNome').textContent=d.xNome||'—';
+      $('cadFant').textContent=d.xFant||'—';
+      $('cadIE').textContent=d.IE||'—';
+      $('cadIEST').textContent=d.IEST||'Não contribuinte';
+      const credNFe={'1':'Credenciado','2':'Credenciado com exceção','3':'Não credenciado','4':'Não contribuinte'}[d.indCredNFe]||d.indCredNFe||'—';
+      const credCTe={'1':'Credenciado','2':'Credenciado com exceção','3':'Não credenciado','4':'Não contribuinte'}[d.indCredCTe]||d.indCredCTe||'—';
+      const badgeNFe=d.indCredNFe==='1'?'b-green':d.indCredNFe==='3'?'b-red':'b-yellow';
+      $('cadCredNFe').innerHTML=`<span class="badge ${badgeNFe}">${credNFe}</span>`;
+      $('cadCredCTe').innerHTML=`<span class="badge ${d.indCredCTe==='1'?'b-green':d.indCredCTe==='3'?'b-red':'b-yellow'}">${credCTe}</span>`;
+      const regime={'1':'Simples Nacional','2':'Simples Nacional (excesso)','3':'Regime Normal'}[d.cRegTrib]||'—';
+      $('cadRegime').textContent=regime;
+      $('cadSit').innerHTML=`<span class="badge ${d.ok?'b-green':'b-red'}">${d.ok?'Habilitado':'Inabilitado'}</span>`;
+      $('cadResult').classList.add('show');
+      $('cadInfoCard').innerHTML=`<div style="text-align:center"><div style="font-size:28px;margin-bottom:8px">🏢</div><div style="font-weight:800;font-size:13px;color:var(--t1);margin-bottom:4px">${d.xNome}</div><div style="font-size:10.5px;color:var(--t3);font-family:var(--fm)">${fmtCNPJ(cnpj)}<br>UF: ${getUF(cuf)}</div></div>`;
+      addLog(`Cadastro ${fmtCNPJ(cnpj)}`,`${d.xNome} · ${d.ok?'Habilitado':'Inabilitado'}`,'ok');
+      toast(`${d.xNome.slice(0,30)} — ${d.ok?'Habilitado':'Inabilitado'}`,'ok');
+    } else {
+      $('cadInfoCard').innerHTML=`<div style="color:var(--red);font-size:12px;padding:20px;font-family:var(--fm)">${d.xMotivo||'CNPJ não encontrado na SEFAZ'}</div>`;
+      addLog(`CNPJ não encontrado: ${fmtCNPJ(cnpj)}`,d.xMotivo||'','err');
+      toast(d.xMotivo||'CNPJ não encontrado','err');
+    }
+  } catch(e){ toast('Erro: '+e.message,'err'); addLog('Erro na consulta cadastro',e.message,'err'); }
+  finally{ $('btnConsultarCNPJ').disabled=false; $('btnConsultarCNPJ').textContent='🔍 Consultar cadastro SEFAZ'; }
+});
+
+$('btnClearLog').addEventListener('click',()=>{
+  $('logList').innerHTML='<div style="padding:20px;text-align:center;color:var(--t3);font-size:12px;font-family:var(--fm)">Nenhuma consulta realizada ainda</div>';
+  toast('Log limpo');
+});
+
+// ── Init ──────────────────────────────────────────────
+loadCerts();
+</script>
+</body>
+</html>

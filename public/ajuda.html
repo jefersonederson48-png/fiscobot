@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ajuda · FiscoBot Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#070d1a;--bg2:#0c1525;--bg3:#111e33;
+  --panel:#0e1a2e;--card:#0f1e35;--cardhov:#152540;
+  --border:rgba(255,255,255,.08);--borderem:rgba(201,168,76,.35);
+  --gold:#c9a84c;--gold2:#e2c46a;--golddim:rgba(201,168,76,.1);
+  --t1:#e8f0ff;--t2:#7a95c0;--t3:#4a6080;--t4:#2a3a55;
+  --green:#34d399;--blue:#60a5fa;--red:#f87171;
+  --ff:'Syne',sans-serif;--fm:'IBM Plex Mono',monospace;
+  --r:10px;--rl:14px;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--ff);background:var(--bg);color:var(--t1);
+  display:flex;min-height:100vh;
+}
+
+/* ── Sidebar nav ─────────────────────────────────── */
+#sidenav{
+  width:220px;flex-shrink:0;position:fixed;top:0;left:0;bottom:0;
+  background:var(--panel);border-right:1px solid var(--border);
+  overflow-y:auto;padding:20px 12px;display:flex;flex-direction:column;gap:4px;
+  z-index:10;
+}
+#sidenav::-webkit-scrollbar{width:3px}
+#sidenav::-webkit-scrollbar-thumb{background:var(--t4);border-radius:99px}
+.nav-logo{
+  display:flex;align-items:center;gap:9px;
+  padding:10px 8px 18px;border-bottom:1px solid var(--border);margin-bottom:8px;
+}
+.nav-logo-ico{
+  width:28px;height:28px;background:linear-gradient(135deg,#c9a84c,#e2c46a);
+  border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;
+}
+.nav-logo span{font-size:13px;font-weight:800;color:var(--t1)}
+.nav-section{font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--t3);text-transform:uppercase;padding:10px 8px 4px}
+.nav-link{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 10px;border-radius:8px;text-decoration:none;
+  font-size:12px;font-weight:600;color:var(--t2);
+  transition:all .2s;cursor:pointer;
+}
+.nav-link:hover{background:var(--card);color:var(--t1)}
+.nav-link.active{background:var(--golddim);color:var(--gold);border:1px solid var(--borderem)}
+.nav-link .ico{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+.nav-back{
+  margin-top:auto;padding-top:16px;border-top:1px solid var(--border);
+  display:flex;align-items:center;gap:8px;
+  padding:14px 8px 0;text-decoration:none;
+  font-size:11px;font-weight:600;color:var(--t3);cursor:pointer;
+  transition:color .2s;
+}
+.nav-back:hover{color:var(--gold)}
+
+/* ── Content ─────────────────────────────────────── */
+#content{
+  margin-left:220px;flex:1;padding:40px 48px;max-width:860px;
+}
+
+/* ── Typography ──────────────────────────────────── */
+.page-hero{
+  display:flex;align-items:center;gap:16px;
+  margin-bottom:40px;padding-bottom:28px;
+  border-bottom:1px solid var(--border);
+}
+.page-hero-ico{
+  width:56px;height:56px;background:linear-gradient(135deg,#c9a84c,#e2c46a);
+  border-radius:14px;display:flex;align-items:center;justify-content:center;
+  font-size:24px;box-shadow:0 0 32px rgba(201,168,76,.35);flex-shrink:0;
+}
+.page-hero h1{font-size:26px;font-weight:800;letter-spacing:-.5px;color:var(--t1);line-height:1.2}
+.page-hero p{font-size:13px;color:var(--t2);margin-top:5px;line-height:1.6}
+
+section{margin-bottom:52px;scroll-margin-top:32px}
+section h2{
+  font-size:18px;font-weight:800;color:var(--t1);letter-spacing:-.3px;
+  margin-bottom:18px;display:flex;align-items:center;gap:10px;
+}
+section h2 .step-num{
+  width:28px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gold2));
+  border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:800;color:#06100a;flex-shrink:0;
+}
+section h2 .step-ico{font-size:18px}
+section h3{font-size:14px;font-weight:700;color:var(--gold);margin:18px 0 8px}
+p{font-size:13px;color:var(--t2);line-height:1.8;margin-bottom:12px}
+p strong{color:var(--t1)}
+p code, li code{
+  font-family:var(--fm);font-size:11px;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:4px;padding:1px 5px;color:var(--gold2);
+}
+
+/* Cards */
+.card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--rl);padding:18px 20px;margin-bottom:12px;
+}
+.card-gold{border-color:var(--borderem);background:var(--golddim)}
+.card-green{border-color:rgba(52,211,153,.25);background:rgba(52,211,153,.05)}
+.card-red{border-color:rgba(248,113,113,.25);background:rgba(248,113,113,.05)}
+
+/* Steps */
+.steps{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.step{
+  display:flex;align-items:flex-start;gap:12px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r);padding:12px 14px;
+}
+.step-n{
+  width:24px;height:24px;background:var(--bg3);border:1px solid var(--border);
+  border-radius:6px;display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:var(--gold);flex-shrink:0;
+  font-family:var(--fm);
+}
+.step-txt{font-size:12.5px;color:var(--t1);line-height:1.6;flex:1}
+.step-txt span{color:var(--t2);font-size:11.5px}
+
+/* Code block */
+pre{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--r);padding:14px 16px;
+  font-family:var(--fm);font-size:11.5px;color:var(--t2);
+  overflow-x:auto;margin:12px 0;line-height:1.7;
+}
+pre .c{color:var(--t3)} /* comment */
+pre .k{color:var(--gold)} /* keyword/highlight */
+pre .v{color:var(--green)} /* value */
+pre .s{color:var(--blue)} /* string */
+pre .ico{font-style:normal}
+
+/* Table */
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:12.5px}
+th{
+  padding:8px 12px;text-align:left;font-size:10px;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;color:var(--t3);
+  border-bottom:2px solid var(--border);
+}
+td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--t2);vertical-align:top}
+td:first-child{color:var(--t1);font-weight:600}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+
+/* Badges */
+.badge{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;
+  letter-spacing:.3px;text-transform:uppercase;
+}
+.badge-gold{background:var(--golddim);color:var(--gold);border:1px solid var(--borderem)}
+.badge-green{background:rgba(52,211,153,.12);color:var(--green);border:1px solid rgba(52,211,153,.25)}
+.badge-red{background:rgba(248,113,113,.1);color:var(--red);border:1px solid rgba(248,113,113,.25)}
+.badge-blue{background:rgba(96,165,250,.1);color:var(--blue);border:1px solid rgba(96,165,250,.25)}
+
+/* Tip box */
+.tip{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:12px 14px;border-radius:var(--r);margin:14px 0;
+}
+.tip.info{background:rgba(96,165,250,.07);border:1px solid rgba(96,165,250,.2)}
+.tip.warn{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.2)}
+.tip.ok{background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.2)}
+.tip-ico{font-size:15px;flex-shrink:0;margin-top:1px}
+.tip-txt{font-size:12px;color:var(--t2);line-height:1.65}
+.tip-txt strong{color:var(--t1)}
+
+/* Screenshot mockup */
+.mockup{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--rl);padding:16px;margin:16px 0;
+  font-family:var(--fm);font-size:11px;color:var(--t3);
+  line-height:1.8;overflow-x:auto;
+}
+.mockup .hl{color:var(--gold);font-weight:600}
+.mockup .gr{color:var(--green)}
+.mockup .bl{color:var(--blue)}
+.mockup .rd{color:var(--red)}
+
+/* Divider */
+hr{border:none;border-top:1px solid var(--border);margin:36px 0}
+
+/* Keyboard key */
+kbd{
+  display:inline-flex;align-items:center;
+  background:var(--bg3);border:1px solid var(--border);
+  border-bottom:2px solid var(--t4);border-radius:5px;
+  padding:2px 7px;font-family:var(--fm);font-size:10.5px;
+  color:var(--t1);
+}
+ul,ol{padding-left:20px;margin:8px 0}
+li{font-size:12.5px;color:var(--t2);line-height:1.8;margin-bottom:4px}
+li strong{color:var(--t1)}
+</style>
+</head>
+<body>
+
+<!-- Sidebar Nav -->
+<nav id="sidenav">
+  <div class="nav-logo">
+    <div class="nav-logo-ico">⚡</div>
+    <span>FiscoBot Pro</span>
+  </div>
+
+  <div class="nav-section">Primeiros passos</div>
+  <a class="nav-link active" href="#arquitetura"><span class="ico">🏗</span> Como funciona</a>
+  <a class="nav-link" href="#instalacao"><span class="ico">📦</span> Instalação</a>
+  <a class="nav-link" href="#interface"><span class="ico">🖥</span> Interface</a>
+
+  <div class="nav-section">Funcionalidades</div>
+  <a class="nav-link" href="#certificados"><span class="ico">🔏</span> Certificados</a>
+  <a class="nav-link" href="#portais"><span class="ico">🌐</span> Portais Fiscais</a>
+  <a class="nav-link" href="#macros"><span class="ico">⚙</span> Macros</a>
+  <a class="nav-link" href="#autofill"><span class="ico">📝</span> AutoFill</a>
+  <a class="nav-link" href="#downloads"><span class="ico">⬇</span> Downloads</a>
+  <a class="nav-link" href="#ia"><span class="ico">🧠</span> Agente IA (Léo)</a>
+  <a class="nav-link" href="#conferencia"><span class="ico">⚖️</span> Conferência NF-e</a>
+  <a class="nav-link" href="#configuracoes"><span class="ico">⚙</span> Configurações</a>
+
+  <div class="nav-section">Referência</div>
+  <a class="nav-link" href="#atalhos"><span class="ico">⌨</span> Atalhos</a>
+  <a class="nav-link" href="#problemas"><span class="ico">🔧</span> Problemas comuns</a>
+
+  <a class="nav-back" href="/" id="btnVoltarApp">← Voltar ao FiscoBot</a>
+</nav>
+
+<!-- Main Content -->
+<main id="content">
+
+  <!-- Hero -->
+  <div class="page-hero">
+    <div class="page-hero-ico">⚡</div>
+    <div>
+      <h1>Tutorial FiscoBot Pro</h1>
+      <p>Guia completo — do zero ao avançado em minutos.</p>
+    </div>
+  </div>
+
+  <!-- ── ARQUITETURA ───────────────────────────────────── -->
+  <section id="arquitetura">
+    <h2><span class="step-ico">🏗</span> Como o FiscoBot funciona</h2>
+    <p>Antes de usar, entenda a arquitetura em 30 segundos:</p>
+    <pre><span class="c"># Quando você clica no atalho:</span>
+
+<span class="k">electron.js</span>    → abre a janela nativa do Windows
+    ↓
+<span class="k">server.js</span>      → sobe um servidor Express na porta 3737
+    ↓
+<span class="k">Janela Electron</span> → carrega http://localhost:3737
+    ↓
+<span class="k">Você</span>           → interage com o painel visual
+    ↓
+<span class="k">Servidor</span>       → executa comandos (SEFAZ, macros, certs...)</pre>
+
+    <p>O servidor <strong>nunca fica visível</strong> — roda em segundo plano. A janela é apenas o painel de controle. Tudo se comunica via HTTP e WebSocket internamente.</p>
+
+    <div class="tip info">
+      <div class="tip-ico">ℹ️</div>
+      <div class="tip-txt"><strong>Por que Electron?</strong> Permite empacotar tudo em um único instalador <code>.exe</code> — sem precisar instalar Node.js, sem abrir terminal, sem localhost visível para o usuário.</div>
+    </div>
+  </section>
+
+  <!-- ── INSTALAÇÃO ────────────────────────────────────── -->
+  <section id="instalacao">
+    <h2><span class="step-num">1</span> Instalação</h2>
+
+    <p><strong>Pré-requisito:</strong> <a href="https://nodejs.org" target="_blank" style="color:var(--blue)">Node.js 18+</a> instalado no Windows.</p>
+
+    <div class="steps">
+      <div class="step"><div class="step-n">1</div><div class="step-txt">Extraia o ZIP em uma pasta permanente <span>(ex: <code>C:\FiscoBot\</code>)</span></div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-txt">Dê duplo clique em <strong>INSTALAR.bat</strong></div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-txt">Aguarde a instalação das dependências <span>(1–3 minutos, baixa ~120MB)</span></div></div>
+      <div class="step"><div class="step-n">4</div><div class="step-txt">O app abre automaticamente e cria um atalho na <strong>Área de Trabalho</strong></div></div>
+    </div>
+
+    <h3>Estrutura de arquivos</h3>
+    <pre><span class="k">fiscobot-electron\</span>
+├── <span class="gr">INSTALAR.bat</span>       <span class="c">← execute isso PRIMEIRO</span>
+├── <span class="gr">rodar.bat</span>          <span class="c">← para abrir depois (sem janela)</span>
+├── <span class="gr">rodar-debug.bat</span>    <span class="c">← se der erro, use este (mostra log)</span>
+├── <span class="gr">DESINSTALAR.bat</span>    <span class="c">← para remover o app</span>
+├── <span class="bl">electron.js</span>        <span class="c">← núcleo Electron (não abra)</span>
+├── <span class="bl">server.js</span>          <span class="c">← servidor Express (não abra)</span>
+├── <span class="bl">preload.js</span>         <span class="c">← ponte segura renderer↔main</span>
+└── <span class="bl">public\</span>
+    ├── <span class="bl">index.html</span>     <span class="c">← interface principal</span>
+    ├── <span class="bl">app.js</span>         <span class="c">← lógica do painel</span>
+    ├── <span class="bl">conferencia.html</span> <span class="c">← ferramenta NF-e × SEFAZ</span>
+    └── <span class="bl">ajuda.html</span>     <span class="c">← você está aqui</span></pre>
+
+    <div class="tip warn">
+      <div class="tip-ico">⚠️</div>
+      <div class="tip-txt"><strong>Não mova a pasta!</strong> Os atalhos apontam para o caminho fixo. Se mover, execute o <code>INSTALAR.bat</code> novamente para recriar os atalhos.</div>
+    </div>
+  </section>
+
+  <!-- ── INTERFACE ─────────────────────────────────────── -->
+  <section id="interface">
+    <h2><span class="step-num">2</span> Conhecendo a Interface</h2>
+
+    <div class="mockup">┌─────────────────────────────────────────────────────────────────┐
+│ <span class="hl">⚡ FiscoBot Pro ⚡</span>          <span class="bl">⚖️  ⬇  ❓  ⚙</span>  <span class="c">[Usuário ▾]</span>  <span class="c">[─][□][✕]</span> │ ← Header
+├──────────────────┬──────────────────────────────────────────────┤
+│                  │                                              │
+│  <span class="hl">Certificados</span>    │         <span class="hl">⚡ FiscoBot Pro</span>                    │
+│                  │  Automação inteligente para acesso           │
+│  ┌────────────┐  │  aos principais portais fiscais              │
+│  │  ☁️ Drop   │  │                                              │
+│  │   zone     │  │    <span class="gr">[ Acessar Receita Federal ]</span>            │
+│  └────────────┘  │                                              │
+│  [cert.pfx][IMP] │  ┌──────────┐ ┌──────────┐ ┌──────────┐   │
+│  [senha...    ]  │  │📋 Receita│ │👥 eSocial│ │📄 NF-e   │   │
+│                  │  │ STATUS:OK│ │ STATUS:OK│ │ STATUS:OK│   │
+│  <span class="hl">Certs Ativos</span>    │  └──────────┘ └──────────┘ └──────────┘   │
+│  ✓ empresa.pfx  │                                              │
+│                  │  ┌──────────┐ ┌──────────┐ ┌──────────┐   │
+│  [Exportar]      │  │🏛 SEFAZ  │ │💾 SPED   │ │🟢 Simples│   │
+│  🔒 Seg. local   │  │ STATUS:OK│ │ STATUS:OK│ │ STATUS:OK│   │
+│                  │  └──────────┘ └──────────┘ └──────────┘   │
+└──────────────────┴──────────────────────────────────────────────┘</div>
+
+    <table>
+      <tr><th>Área</th><th>Função</th></tr>
+      <tr><td>Sidebar esquerda</td><td>Gerencia certificados digitais A1/A3</td></tr>
+      <tr><td>Área central</td><td>Cards de acesso rápido aos portais fiscais</td></tr>
+      <tr><td>Header</td><td>Ferramentas e configurações do app</td></tr>
+      <tr><td>Botão ☰</td><td>Abre o painel lateral com Macros, Fill, Downloads e IA</td></tr>
+    </table>
+  </section>
+
+  <!-- ── CERTIFICADOS ──────────────────────────────────── -->
+  <section id="certificados">
+    <h2><span class="step-num">3</span> <span class="step-ico">🔏</span> Certificados Digitais</h2>
+    <p>O certificado digital é necessário para a <strong>consulta SEFAZ real</strong> e para acessar portais que exigem autenticação. O FiscoBot suporta certificados <strong>A1</strong> (arquivo <code>.pfx</code> ou <code>.p12</code>).</p>
+
+    <div class="steps">
+      <div class="step"><div class="step-n">1</div><div class="step-txt">Localize seu arquivo <strong>.pfx</strong> ou <strong>.p12</strong> no computador</div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-txt"><strong>Arraste</strong> o arquivo para a área tracejada da sidebar esquerda — ou clique na área para abrir o explorador</div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-txt">Digite a <strong>senha do certificado</strong> no campo abaixo da área de drop</div></div>
+      <div class="step"><div class="step-n">4</div><div class="step-txt">Clique em <strong>IMPORTAR</strong> — o certificado aparece na lista com badge verde ✓</div></div>
+    </div>
+
+    <div class="card card-gold">
+      <p style="margin:0;font-size:12.5px"><strong>🔒 Segurança:</strong> o arquivo fica salvo em <code>%APPDATA%\.fiscobot\certs\</code> com permissão restrita. A senha é criptografada com <strong>AES-256-GCM</strong> e nunca fica em texto puro no disco.</p>
+    </div>
+
+    <h3>Gerenciar certificados</h3>
+    <p>Na lista de certificados ativos, cada item tem dois botões:</p>
+    <table>
+      <tr><th>Botão</th><th>Ação</th></tr>
+      <tr><td>⬇</td><td>Baixa o arquivo do certificado</td></tr>
+      <tr><td>✕</td><td>Remove o certificado do FiscoBot (não apaga o original)</td></tr>
+    </table>
+    <p>Clique em um certificado para selecioná-lo (borda dourada) e depois em <strong>Exportar / Baixar</strong>.</p>
+  </section>
+
+  <!-- ── PORTAIS ───────────────────────────────────────── -->
+  <section id="portais">
+    <h2><span class="step-num">4</span> <span class="step-ico">🌐</span> Portais Fiscais</h2>
+    <p>Clique em qualquer card na tela principal para abrir o portal no seu <strong>navegador padrão</strong>.</p>
+
+    <table>
+      <tr><th>Portal</th><th>URL</th><th>Para que serve</th></tr>
+      <tr><td>📋 Receita Federal</td><td>receita.fazenda.gov.br</td><td>eCAC, CNPJ, DCTF, IRPF/PJ</td></tr>
+      <tr><td>👥 eSocial</td><td>esocial.gov.br</td><td>Eventos trabalhistas S-12xx, S-22xx</td></tr>
+      <tr><td>📄 Portal NF-e</td><td>nfe.fazenda.gov.br</td><td>Emissão, cancelamento, consulta NF-e</td></tr>
+      <tr><td>🏛 SEFAZ RS</td><td>sefaz.rs.gov.br</td><td>ICMS, SPED, GIA RS</td></tr>
+      <tr><td>💾 SPED</td><td>sped.rfb.gov.br</td><td>Transmissão EFD/ECD/ECF</td></tr>
+      <tr><td>🟢 Simples Nacional</td><td>8.receita.fazenda.gov.br</td><td>PGDAS-D, DAS, parcelamentos</td></tr>
+    </table>
+
+    <div class="tip info">
+      <div class="tip-ico">💡</div>
+      <div class="tip-txt">O portal abre no navegador onde seu certificado e sessão já estão configurados — o FiscoBot não interfere com sua autenticação nos portais.</div>
+    </div>
+  </section>
+
+  <!-- ── MACROS ────────────────────────────────────────── -->
+  <section id="macros">
+    <h2><span class="step-num">5</span> <span class="step-ico">⚙</span> Macros</h2>
+    <p>Macro = sequência de cliques e digitações que o app repete automaticamente. Ideal para tarefas repetitivas como preencher filtros, gerar relatórios ou navegar por menus complexos.</p>
+
+    <h3>Gravar um macro</h3>
+    <div class="steps">
+      <div class="step"><div class="step-n">1</div><div class="step-txt">Clique em <strong>☰</strong> no header para abrir o painel lateral</div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-txt">Vá na aba <strong>⚙ Macros</strong></div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-txt">Clique em <strong>⏺ Gravar</strong> — a barra vermelha indica que está gravando</div></div>
+      <div class="step"><div class="step-n">4</div><div class="step-txt">Execute as ações desejadas no painel <span>(cliques em botões, preenchimento de campos...)</span></div></div>
+      <div class="step"><div class="step-n">5</div><div class="step-txt">Clique em <strong>⏹ Parar</strong></div></div>
+      <div class="step"><div class="step-n">6</div><div class="step-txt">Digite um nome para o macro e clique em <strong>💾</strong></div></div>
+    </div>
+
+    <div class="mockup">  <span class="rd">⏺ Gravando — 3 passos</span>
+
+  <span class="hl">[⏺ Gravar]</span>  <span class="gr">[⏹ Parar]</span>  <span class="c">[600 ms ↕]</span>
+
+  <span class="c">──────────────────────────</span>
+  ⚙  <span class="hl">Login eCAC</span>            3 passos · 600ms · 15/03/2025
+     <span class="gr">[▶ Rodar]</span>  <span class="rd">[✕]</span>
+
+  📑  <span class="hl">Gerar DARF</span>            8 passos · 800ms · 10/03/2025
+     <span class="gr">[▶ Rodar]</span>  <span class="rd">[✕]</span></div>
+
+    <h3>Executar um macro</h3>
+    <p>Clique em <strong>▶ Rodar</strong> ao lado do macro salvo. A barra de progresso mostra cada passo sendo executado.</p>
+
+    <h3>Campo de delay (ms)</h3>
+    <p>Controla a velocidade entre cada passo. Valores recomendados:</p>
+    <table>
+      <tr><th>Delay</th><th>Quando usar</th></tr>
+      <tr><td><code>300ms</code></td><td>Ações simples em páginas rápidas</td></tr>
+      <tr><td><code>600ms</code></td><td>Padrão — funciona na maioria dos portais</td></tr>
+      <tr><td><code>1200ms</code></td><td>Portais lentos ou com validação assíncrona</td></tr>
+    </table>
+  </section>
+
+  <!-- ── AUTOFILL ──────────────────────────────────────── -->
+  <section id="autofill">
+    <h2><span class="step-num">6</span> <span class="step-ico">📝</span> AutoFill</h2>
+    <p>Salva os dados das suas empresas e preenche formulários automaticamente, detectando campos por nome, ID e placeholder.</p>
+
+    <h3>Criar um perfil de empresa</h3>
+    <div class="steps">
+      <div class="step"><div class="step-n">1</div><div class="step-txt">Clique em <strong>☰ → 📝 Fill</strong></div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-txt">Preencha os campos: CNPJ, Razão Social, IE, IM, e-mail, telefone, endereço, CEP, UF</div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-txt">Clique em <strong>💾</strong> para salvar o perfil</div></div>
+      <div class="step"><div class="step-n">4</div><div class="step-txt">Para usar em outro perfil: clique em <strong>+</strong> para limpar e criar um novo</div></div>
+    </div>
+
+    <h3>Preencher uma página</h3>
+    <div class="steps">
+      <div class="step"><div class="step-n">1</div><div class="step-txt">Selecione o perfil desejado no menu suspenso</div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-txt">Clique em <strong>⚡ Preencher Página</strong></div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-txt">Os campos compatíveis ficam com borda dourada por 600ms confirmando o preenchimento</div></div>
+    </div>
+
+    <div class="tip info">
+      <div class="tip-ico">💡</div>
+      <div class="tip-txt">O AutoFill detecta campos por palavras-chave: <code>cnpj</code>, <code>razao</code>, <code>email</code>, <code>telefone</code>, <code>cep</code>, etc. Funciona em português com variações de grafia.</div>
+    </div>
+  </section>
+
+  <!-- ── DOWNLOADS ─────────────────────────────────────── -->
+  <section id="downloads">
+    <h2><span class="step-num">7</span> <span class="step-ico">⬇</span> Monitor de Downloads</h2>
+    <p>Monitora e registra downloads por tipo de arquivo.</p>
+
+    <div class="steps">
+      <div class="step"><div class="step-n">1</div><div class="step-txt">Clique em <strong>☰ → ⬇ Down</strong> (ou no botão ⬇ do header)</div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-txt">Ative os monitores clicando nos cards: <strong>XML NF-e</strong>, <strong>DARF</strong>, <strong>SPED</strong>, <strong>PDF</strong></div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-txt">O log em tempo real registra todas as atividades com timestamp</div></div>
+    </div>
+
+    <table>
+      <tr><th>Monitor</th><th>Monitora</th></tr>
+      <tr><td>XML NF-e</td><td>Arquivos XML de notas fiscais</td></tr>
+      <tr><td>DARF</td><td>Guias de pagamento federal</td></tr>
+      <tr><td>SPED</td><td>Arquivos EFD/ECD/ECF</td></tr>
+      <tr><td>PDF</td><td>Relatórios e comprovantes</td></tr>
+    </table>
+  </section>
+
+  <!-- ── AGENTE IA ─────────────────────────────────────── -->
+  <section id="ia">
+    <h2><span class="step-num">8</span> <span class="step-ico">🧠</span> Agente IA — Léo</h2>
+    <p>O <strong>Léo</strong> é um assistente especialista em tributação brasileira integrado ao FiscoBot. Responde dúvidas sobre Simples Nacional, ICMS, NF-e, eSocial, SPED e muito mais — com tom descontraído e direto.</p>
+
+    <h3>Configuração inicial (obrigatória)</h3>
+    <div class="steps">
+      <div class="step"><div class="step-n">1</div><div class="step-txt">Acesse <a href="https://console.anthropic.com" target="_blank" style="color:var(--blue)">console.anthropic.com</a> e crie uma conta</div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-txt">Vá em <strong>API Keys → Create Key</strong> e copie a chave (começa com <code>sk-ant-</code>)</div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-txt">No FiscoBot: <strong>☰ → 🧠 IA</strong></div></div>
+      <div class="step"><div class="step-n">4</div><div class="step-txt">Cole a chave no campo e clique em <strong>✓</strong> — a bolinha fica verde quando a key é válida</div></div>
+    </div>
+
+    <h3>Usando o Léo</h3>
+    <p>Use os <strong>chips de atalho</strong> (DAS, DIFAL, IRPJ LP...) para perguntas frequentes, ou digite livremente no campo de texto. Pressione <kbd>Enter</kbd> para enviar ou <kbd>Shift</kbd>+<kbd>Enter</kbd> para quebrar linha.</p>
+
+    <div class="card card-gold">
+      <p style="margin:0;font-size:12.5px"><strong>💡 Exemplos de perguntas:</strong><br>
+      "Como calcular o DAS de uma empresa no Anexo III com receita de R$ 80.000?"<br>
+      "Qual o CFOP correto para remessa de bonificação dentro do estado?"<br>
+      "Posso creditar PIS/COFINS sobre energia elétrica no regime não-cumulativo?"</p>
+    </div>
+
+    <h3>Modelos disponíveis (Configurações → Agente IA)</h3>
+    <table>
+      <tr><th>Modelo</th><th>Características</th></tr>
+      <tr><td>Sonnet 4.6 ⚡</td><td>Padrão — equilíbrio entre velocidade e qualidade</td></tr>
+      <tr><td>Opus 4.6 🧠</td><td>Respostas mais elaboradas para casos complexos</td></tr>
+      <tr><td>Haiku 4.5 🚀</td><td>Mais rápido para perguntas simples</td></tr>
+    </table>
+  </section>
+
+  <!-- ── CONFERÊNCIA NF-e ──────────────────────────────── -->
+  <section id="conferencia">
+    <h2><span class="step-num">9</span> <span class="step-ico">⚖️</span> Conferência NF-e × SEFAZ</h2>
+    <p>Compara as notas do seu sistema (Domínio, TOTVS, etc.) com a situação real na SEFAZ, detectando automaticamente divergências.</p>
+
+    <h3>Como usar</h3>
+    <div class="steps">
+      <div class="step"><div class="step-n">1</div><div class="step-txt">Clique no ícone <strong>⚖️</strong> no header</div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-txt">Exporte um relatório CSV do seu sistema com as colunas: <code>chave</code>, <code>número</code>, <code>empresa</code>, <code>cnpj</code>, <code>valor</code>, <code>data</code>, <code>status</code></div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-txt">Arraste o arquivo para a tela ou clique para selecionar</div></div>
+      <div class="step"><div class="step-n">4</div><div class="step-txt">Clique em <strong>🔍 Consultar SEFAZ</strong> — o app consulta cada nota usando seu certificado A1</div></div>
+      <div class="step"><div class="step-n">5</div><div class="step-txt">Analise o relatório e exporte as divergências em CSV</div></div>
+    </div>
+
+    <h3>Níveis de divergência</h3>
+    <table>
+      <tr><th>Nível</th><th>Significado</th><th>Ação sugerida</th></tr>
+      <tr><td><span class="badge badge-red">🔴 Crítico</span></td><td>Nota ativa no sistema mas cancelada/denegada na SEFAZ</td><td>Regularização imediata — risco fiscal alto</td></tr>
+      <tr><td><span class="badge" style="background:rgba(245,158,11,.1);color:#f59e0b;border:1px solid rgba(245,158,11,.25)">🟠 Atenção</span></td><td>Nota não encontrada na SEFAZ</td><td>Verificar chave de acesso e reemissão</td></tr>
+      <tr><td><span class="badge badge-blue">🔵 Revisar</span></td><td>Erro na consulta ou status divergente</td><td>Consultar manualmente no portal</td></tr>
+      <tr><td><span class="badge badge-green">✅ OK</span></td><td>Status confere entre sistema e SEFAZ</td><td>Nenhuma ação necessária</td></tr>
+    </table>
+
+    <div class="tip warn">
+      <div class="tip-ico">⚠️</div>
+      <div class="tip-txt"><strong>Certificado obrigatório:</strong> a consulta real à SEFAZ exige um certificado A1 importado na sidebar. Sem certificado, a consulta falha com erro "Sem certificado".</div>
+    </div>
+  </section>
+
+  <!-- ── CONFIGURAÇÕES ─────────────────────────────────── -->
+  <section id="configuracoes">
+    <h2><span class="step-num">10</span> <span class="step-ico">⚙</span> Configurações</h2>
+    <p>Clique no ícone <strong>⚙</strong> no header. As configurações são salvas automaticamente e persistem entre reinicializações.</p>
+
+    <table>
+      <tr><th>Seção</th><th>O que configura</th></tr>
+      <tr><td>Geral</td><td>Tema (escuro/navy), <strong>cor de destaque</strong> ao vivo via color picker, idioma, fundo de estrelas</td></tr>
+      <tr><td>Portais</td><td>Abrir em nova aba, mostrar/esconder badge STATUS: OK, quantidade de cards</td></tr>
+      <tr><td>Macros</td><td>Delay padrão via slider, flash visual nos campos, confirmação antes de rodar</td></tr>
+      <tr><td>Agente IA</td><td>Modelo (Sonnet/Opus/Haiku), tokens máximos, tom do Léo, tamanho do histórico</td></tr>
+      <tr><td>Sistema</td><td>Porta do servidor, iniciar com Windows, abrir pasta de dados, <strong>limpar todos os dados</strong></td></tr>
+    </table>
+
+    <div class="tip ok">
+      <div class="tip-ico">✅</div>
+      <div class="tip-txt">O <strong>color picker</strong> na seção Geral muda a cor dourada do app em tempo real — sem precisar salvar para ver o resultado.</div>
+    </div>
+  </section>
+
+  <!-- ── ATALHOS ───────────────────────────────────────── -->
+  <section id="atalhos">
+    <h2><span class="step-ico">⌨</span> Referência Rápida</h2>
+
+    <h3>Ícones do Header</h3>
+    <table>
+      <tr><th>Ícone</th><th>Função</th></tr>
+      <tr><td>☰ (hambúrguer)</td><td>Abre/fecha o painel lateral (Macros, Fill, Down, IA)</td></tr>
+      <tr><td>⚖️</td><td>Conferência NF-e × SEFAZ</td></tr>
+      <tr><td>⬇</td><td>Atalho direto para o monitor de downloads</td></tr>
+      <tr><td>❓</td><td>Tutorial e ajuda (você está aqui)</td></tr>
+      <tr><td>⚙</td><td>Configurações do app</td></tr>
+      <tr><td>Usuário ▾</td><td>Abre o Agente IA (Léo)</td></tr>
+      <tr><td>─</td><td>Minimiza a janela</td></tr>
+      <tr><td>□</td><td>Maximiza / restaura a janela</td></tr>
+      <tr><td>✕</td><td>Minimiza para a bandeja (não encerra)</td></tr>
+    </table>
+
+    <h3>Bandeja do Sistema</h3>
+    <p>O ícone ⚡ fica na bandeja (canto inferior direito do Windows). Clique com botão direito para ver as opções:</p>
+    <table>
+      <tr><th>Opção</th><th>Ação</th></tr>
+      <tr><td>📋 Abrir FiscoBot</td><td>Traz a janela de volta</td></tr>
+      <tr><td>🌐 Abrir no navegador</td><td>Acessa localhost:3737 no Chrome/Firefox</td></tr>
+      <tr><td>🚪 Sair do FiscoBot</td><td>Encerra completamente o app e o servidor</td></tr>
+    </table>
+  </section>
+
+  <!-- ── PROBLEMAS COMUNS ──────────────────────────────── -->
+  <section id="problemas">
+    <h2><span class="step-ico">🔧</span> Problemas Comuns</h2>
+
+    <div class="card" style="margin-bottom:10px">
+      <h3 style="margin:0 0 6px;color:var(--red)">O app não abre ao clicar no atalho</h3>
+      <p style="margin:0">Execute <code>rodar-debug.bat</code> — ele mostra o terminal com a mensagem de erro exata. Geralmente é ausência do Node.js ou <code>node_modules</code> corrompido.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:10px">
+      <h3 style="margin:0 0 6px;color:var(--red)">Mensagem "Porta 3737 já em uso"</h3>
+      <p style="margin:0">O FiscoBot já está rodando em segundo plano. Procure o ícone ⚡ na bandeja do sistema (canto inferior direito do Windows) e dê duplo clique para abrir a janela.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:10px">
+      <h3 style="margin:0 0 6px;color:var(--red)">Certificado não é aceito (erro ao importar)</h3>
+      <p style="margin:0">Verifique: (1) o arquivo é <code>.pfx</code> ou <code>.p12</code>; (2) a senha está correta; (3) o certificado não expirou. Tente abrir o <code>.pfx</code> no Windows para confirmar a senha.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:10px">
+      <h3 style="margin:0 0 6px;color:var(--red)">Léo não responde / erro no chat</h3>
+      <p style="margin:0">A bolinha ao lado do campo de API Key deve estar <span style="color:var(--green)">verde</span>. Se estiver cinza, a key não foi salva. Se estiver <span style="color:var(--red)">vermelha</span>, a key é inválida — verifique se começa com <code>sk-ant-</code>.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:10px">
+      <h3 style="margin:0 0 6px;color:var(--red)">Consulta SEFAZ retorna "Sem certificado"</h3>
+      <p style="margin:0">Importe um certificado A1 (<code>.pfx</code>) na sidebar esquerda antes de usar a Conferência NF-e. A consulta SEFAZ exige autenticação mútua TLS.</p>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 6px;color:var(--red)">Macro não executa os passos corretamente</h3>
+      <p style="margin:0">Aumente o delay (ex: de 600ms para 1200ms) em Configurações → Macros. Portais governamentais costumam ter validações lentas que precisam de mais tempo entre os passos.</p>
+    </div>
+
+    <div class="tip info" style="margin-top:20px">
+      <div class="tip-ico">📞</div>
+      <div class="tip-txt"><strong>Ainda com problema?</strong> Execute <code>rodar-debug.bat</code>, copie o erro que aparecer no terminal e consulte o Léo no app — ele conhece a arquitetura e pode ajudar a diagnosticar.</div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+// Destaca link ativo na nav ao rolar
+const sections = document.querySelectorAll('section[id]');
+const links     = document.querySelectorAll('.nav-link[href^="#"]');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      links.forEach(l => {
+        l.classList.toggle('active', l.getAttribute('href') === '#'+id);
+      });
+    }
+  });
+}, { rootMargin:'-30% 0px -60% 0px' });
+
+sections.forEach(s => observer.observe(s));
+
+// Scroll suave nos links
+links.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior:'smooth' });
+  });
+});
+
+// Botão voltar
+document.getElementById('btnVoltarApp').addEventListener('click', () => {
+  window.location.href = '/';
+});
+</script>
+</body>
+</html>
