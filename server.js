@@ -1255,9 +1255,6 @@ wss.on('connection', ws => {
 // ── Inicia ────────────────────────────────────────
 server.on('error', e => {
   if (e.code==='EADDRINUSE') {
-    if (!process.env.FISCOBOT_ELECTRON) {
-      exec('start http://localhost:3737');
-    }
     process.exit(0);
   }
 });
@@ -1265,8 +1262,4 @@ server.on('error', e => {
 server.listen(PORT, '0.0.0.0', () => {
   ensureDefaultAdmin();
   loadSessions();
-  // No modo Electron, o electron.js cuida de abrir a janela
-  if (!process.env.FISCOBOT_ELECTRON && process.platform === 'win32') {
-    exec('start http://localhost:3737/login');
-  }
 });

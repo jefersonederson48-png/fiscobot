@@ -5,6 +5,8 @@ const path  = require('path');
 const http  = require('http');
 const isDev = process.argv.includes('--dev');
 const PORT  = 3737;
+const CLOUD_URL = 'https://fiscobot.onrender.com';
+const USE_CLOUD = true; // Altere para false para usar o servidor local do seu PC
 
 // ── Single instance lock ──────────────────────────
 // Se já existe uma instância rodando, foca ela e encerra esta
@@ -66,8 +68,9 @@ function createWindow() {
   // Remove menu padrão (F10, Alt etc.)
   Menu.setApplicationMenu(null);
 
-  // Carrega o app via servidor Express interno
-  mainWindow.loadURL(`http://127.0.0.1:${PORT}`);
+  // Carrega o app via Servidor na Nuvem ou Local conforme configurado acima
+  const targetURL = USE_CLOUD ? `${CLOUD_URL}/login` : `http://127.0.0.1:${PORT}`;
+  mainWindow.loadURL(targetURL);
 
   // Mostra a janela após carregar
   mainWindow.once('ready-to-show', () => {

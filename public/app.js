@@ -20,7 +20,8 @@ async function apiPost(path,body) {
 // ── WebSocket ─────────────────────────────────────────────
 let ws;
 function connectWS() {
-  ws = new WebSocket(`ws://localhost:${location.port}`);
+  const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+  ws = new WebSocket(`${protocol}//${location.host}`);
   ws.addEventListener('message', ({data}) => {
     try {
       const {event, data:d} = JSON.parse(data);
